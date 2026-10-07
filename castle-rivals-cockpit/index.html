@@ -14,7 +14,7 @@
   --good:#0ca30c; --good-ink:#006300; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
   --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#4a3aa7; --s8:#e34948;
   --r1:#b7d3f1; --r2:#6ea3e2; --r3:#2a78d6; --r4:#143f7d;   /* ordered ramp: lowest -> highest bucket */
-  --font:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --font:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif; --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,"PingFang SC","Microsoft YaHei","Noto Sans SC",monospace;
   --r:6px; --shadow:0 1px 2px rgba(20,21,19,.06);
 }
 @media (prefers-color-scheme: dark){
@@ -81,6 +81,7 @@ aside.side{grid-column:1;grid-row:1 / span 4;position:sticky;top:0;align-self:st
 .myview{margin-top:14px;padding-top:12px;border-top:1px solid var(--grid)}.vbtns{display:flex;gap:6px;margin-top:6px}.vbtns button{appearance:none;border:1px solid var(--axis);background:var(--surface);color:var(--ink-2);font:500 12px var(--font);padding:6px 8px;border-radius:var(--r);cursor:pointer;flex:1}.vbtns button:first-child{color:var(--accent-ink);border-color:var(--accent)}
 a{color:var(--accent-ink)}
 h1,h2,h3{margin:0;text-wrap:balance}
+.hright{display:flex;align-items:center;gap:14px}.seg.lang{font-size:0}.seg.lang button{font:600 12px/1 var(--mono);padding:6px 10px}
 .eyebrow{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;padding-block:22px 14px}
 .top h1{font-size:22px;font-weight:600;letter-spacing:-.01em}
@@ -143,6 +144,7 @@ details.fold .sub{margin-top:6px}
 .tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font:400 12px var(--mono);padding:6px 8px;border-radius:4px;white-space:nowrap;z-index:3;display:none;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .tip b{font-weight:500;display:block;margin-bottom:2px}
 .tip .row{display:flex;gap:10px;justify-content:space-between}
+.tip .note{white-space:normal;max-width:340px;margin-top:5px;padding-top:4px;border-top:1px solid rgba(255,255,255,.18);opacity:.8;font-size:11px;line-height:1.35}
 .tbl{overflow:auto;max-height:520px;margin-top:4px}
 table{border-collapse:collapse;width:100%;font:400 12px var(--mono);font-variant-numeric:tabular-nums}
 th,td{padding:4px 8px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
@@ -151,6 +153,8 @@ th{color:var(--muted);font-weight:500;position:sticky;top:0;background:var(--sur
 td.bar{position:relative}
 td.bar span{position:absolute;left:6px;top:3px;bottom:3px;background:var(--crit);opacity:.18;border-radius:2px}
 td.bar span.b{background:var(--accent)}td.bar span.f{background:var(--s2)}
+td.bar span.g{background:var(--s3)}
+td.bar span.n{background:var(--muted)}
 .svgtext{font-family:var(--mono);font-size:11px;fill:var(--muted)}
 .card .dot{display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--cat,var(--s1));vertical-align:-1px;margin-right:7px}
 .card h3 .q{font-weight:400;color:var(--muted);font-size:12.5px;margin-left:8px}
@@ -267,13 +271,692 @@ table.hm{font:400 11.5px var(--mono);border-collapse:separate;border-spacing:2px
       <div class="eyebrow">Voodoo · Midcore PvP Cockpit</div>
       <h1>Midcore PvP Cockpit</h1>
     </div>
-    <div class="meta" id="meta"></div>
+    <div class="hright"><div class="seg lang" id="f-lang" role="group" aria-label="Language"><button type="button" data-v="en" aria-pressed="true">EN</button><button type="button" data-v="zh" aria-pressed="false">中文</button></div><div class="meta" id="meta"></div></div>
   </header>
   <div class="fnote-top" id="fnote"></div>
   <nav class="jump" id="jump" aria-label="Sections"></nav>
 
   <div id="root"><div class="status">Loading data…</div></div>
 </div>
+<script>window.ZH_DICT = {
+"Bars: players who reached each arena (% of the cohort), split into those who moved on, those still there and active, and those who stopped there — no match cap: every match counts, unlike the chart above; installs {0} – {1}. Red line (right axis): arena churn — of the players who reached the arena, the share who stopped there — highest arena is this one and no match for {2}+ days. Players still at the arena but active in the last {3} days are in progress, not churn; to make that call fairly the card counts installs up to {4} only (every player has had {5} days to come back). Not shown for the top arena (nothing to progress to) or for arenas reached by fewer than {6} players. Lower panel: win rate of all matches played in that arena.": "柱：到达各竞技场的玩家（占批次 %），拆分为继续前进的、仍在此处且活跃的、以及止步于此的 — 不设对战上限：每一局都计入，与上图不同；安装 {0} – {1}。红线（右轴）：竞技场流失率 — 到达该竞技场的玩家中止步于此的占比 — 最高竞技场为此处且 {2}+ 天无对战。仍在该竞技场但最近 {3} 天活跃的玩家算进行中，不算流失；为公平判断，本卡只统计到 {4} 为止的安装（每位玩家都有 {5} 天可以回来）。最高竞技场（无处可进）和到达人数少于 {6} 的竞技场不显示。下图：该竞技场全部对战的胜率。",
+"Bars: players who reached each arena (players), split into those who moved on, those still there and active, and those who stopped there — no match cap: every match counts, unlike the chart above; installs {0} – {1}. Red line (right axis): arena churn — of the players who reached the arena, the share who stopped there — highest arena is this one and no match for {2}+ days. Players still at the arena but active in the last {3} days are in progress, not churn; to make that call fairly the card counts installs up to {4} only (every player has had {5} days to come back). Not shown for the top arena (nothing to progress to) or for arenas reached by fewer than {6} players. Lower panel: win rate of all matches played in that arena.": "柱：到达各竞技场的玩家（人数），拆分为继续前进的、仍在此处且活跃的、以及止步于此的 — 不设对战上限：每一局都计入，与上图不同；安装 {0} – {1}。红线（右轴）：竞技场流失率 — 到达该竞技场的玩家中止步于此的占比 — 最高竞技场为此处且 {2}+ 天无对战。仍在该竞技场但最近 {3} 天活跃的玩家算进行中，不算流失；为公平判断，本卡只统计到 {4} 为止的安装（每位玩家都有 {5} 天可以回来）。最高竞技场（无处可进）和到达人数少于 {6} 的竞技场不显示。下图：该竞技场全部对战的胜率。",
+"rolling {0} days ending {1} · All networks · arrows vs the previous rolling {2} days (±{3} or more). Cohort columns (LTV, ROAS, retention, {4}, RV / FS) use the install cohorts whose day N was completed inside the window; \"–\" = fewer than {5} installs or {6} of UA spend in that cohort set. eCPI = spend ÷ all tracked installs (organics in); Net IAP % = IAP net ÷ (IAP net + ad revenue); ROAS counts UA days (≥ {7}) only. pD120 ROAS = the Autobid model's predicted day-{8} net revenue of the window's install days ÷ their spend (install days with a prediction only).": "截至 {1} 的滚动 {0} 天 · 全部渠道 · 箭头为对比前一个滚动 {2} 天（±{3} 及以上）。批次列（LTV、ROAS、留存、{4}、RV / FS）使用第 N 天在窗口内完成的安装批次；\"–\" = 该批次集合安装少于 {5} 或 UA 投放少于 {6}。eCPI = 投放 ÷ 全部追踪安装（含自然量）；IAP 净收入 % = IAP 净收入 ÷（IAP 净收入 + 广告收入）；ROAS 仅计入有投放的天（≥ {7}）。pD120 ROAS = Autobid 模型预测的窗口内安装日第 {8} 天净收入 ÷ 其投放（仅有预测的安装日）。",
+"this month ending {0} · All networks · arrows vs the previous month (±{1} or more). Cohort columns (LTV, ROAS, retention, {2}, RV / FS) use the install cohorts whose day N was completed inside the window; \"–\" = fewer than {3} installs or {4} of UA spend in that cohort set. eCPI = spend ÷ all tracked installs (organics in); Net IAP % = IAP net ÷ (IAP net + ad revenue); ROAS counts UA days (≥ {5}) only. pD120 ROAS = the Autobid model's predicted day-{6} net revenue of the window's install days ÷ their spend (install days with a prediction only).": "截至 {0} 的本月 · 全部渠道 · 箭头为对比上月（±{1} 及以上）。批次列（LTV、ROAS、留存、{2}、RV / FS）使用第 N 天在窗口内完成的安装批次；\"–\" = 该批次集合安装少于 {3} 或 UA 投放少于 {4}。eCPI = 投放 ÷ 全部追踪安装（含自然量）；IAP 净收入 % = IAP 净收入 ÷（IAP 净收入 + 广告收入）；ROAS 仅计入有投放的天（≥ {5}）。pD120 ROAS = Autobid 模型预测的窗口内安装日第 {6} 天净收入 ÷ 其投放（仅有预测的安装日）。",
+"Distinct buyers in that arena ÷ players whose highest arena is that arena or higher (arenas with ≥ {0} such players). Lower panel: how many players reach each arena — the denominator, and the retention story behind the money. Bars stack one family (or product) on another, so a player buying two families is in two segments; the line is the share who bought anything in that arena. Progression offers only: an offer meant to sell every arena should show a bar in every arena.": "该竞技场的去重购买者 ÷ 最高竞技场为该处或更高的玩家（此类玩家 ≥ {0} 的竞技场）。下图：到达各竞技场的玩家数 — 分母，也是钱背后的留存故事。柱按类别（或商品）堆叠，买了两个类别的玩家会出现在两段；线为该竞技场有任意购买的玩家占比。仅进度礼包：每个竞技场都该卖的礼包，在每个竞技场都应有柱。",
+"Bars: players still playing at match n (% of the cohort), coloured by the arena they were in at that match. Red line (right axis): relative churn — of the players who played match n, the share whose last recorded match it was. Lower panel: win rate of match n (share of those matches the player won — the opponents are bots, so this is the difficulty curve). Scroll right for matches {0}–{1}; the last bar is players with {2}+ matches.": "柱：打到第 n 局仍在玩的玩家（占批次 %），按当局所在竞技场着色。红线（右轴）：相对流失率 — 打了第 n 局的玩家中，这是其最后一局的占比。下图：第 n 局胜率（玩家赢下的比例 — 对手是机器人，所以这就是难度曲线）。向右滚动查看第 {0}–{1} 局；最后一根柱为 {2}+ 局的玩家。",
+"Bars: players still playing at match n (players), coloured by the arena they were in at that match. Red line (right axis): relative churn — of the players who played match n, the share whose last recorded match it was. Lower panel: win rate of match n (share of those matches the player won — the opponents are bots, so this is the difficulty curve). Scroll right for matches {0}–{1}; the last bar is players with {2}+ matches.": "柱：打到第 n 局仍在玩的玩家（人数），按当局所在竞技场着色。红线（右轴）：相对流失率 — 打了第 n 局的玩家中，这是其最后一局的占比。下图：第 n 局胜率（玩家赢下的比例 — 对手是机器人，所以这就是难度曲线）。向右滚动查看第 {0}–{1} 局；最后一根柱为 {2}+ 局的玩家。",
+"rolling {0} days ending {1} · All networks · arrows vs the previous rolling {2} days (±{3} or more). Cohort columns (LTV, ROAS, retention, {4}, RV / FS) use the install cohorts whose day N was completed inside the window; \"–\" = fewer than {5} installs or {6} of UA spend in that cohort set. eCPI = spend ÷ all tracked installs (organics in); Net IAP % = IAP net ÷ (IAP net + ad revenue); ROAS counts UA days (≥ {7}) only.": "截至 {1} 的滚动 {0} 天 · 全部渠道 · 箭头为对比前一个滚动 {2} 天（±{3} 及以上）。批次列（LTV、ROAS、留存、{4}、RV / FS）使用第 N 天在窗口内完成的安装批次；\"–\" = 该批次集合安装少于 {5} 或 UA 投放少于 {6}。eCPI = 投放 ÷ 全部追踪安装（含自然量）；IAP 净收入 % = IAP 净收入 ÷（IAP 净收入 + 广告收入）；ROAS 仅计入有投放的天（≥ {7}）。",
+"this month ending {0} · All networks · arrows vs the previous month (±{1} or more). Cohort columns (LTV, ROAS, retention, {2}, RV / FS) use the install cohorts whose day N was completed inside the window; \"–\" = fewer than {3} installs or {4} of UA spend in that cohort set. eCPI = spend ÷ all tracked installs (organics in); Net IAP % = IAP net ÷ (IAP net + ad revenue); ROAS counts UA days (≥ {5}) only.": "截至 {0} 的本月 · 全部渠道 · 箭头为对比上月（±{1} 及以上）。批次列（LTV、ROAS、留存、{2}、RV / FS）使用第 N 天在窗口内完成的安装批次；\"–\" = 该批次集合安装少于 {3} 或 UA 投放少于 {4}。eCPI = 投放 ÷ 全部追踪安装（含自然量）；IAP 净收入 % = IAP 净收入 ÷（IAP 净收入 + 广告收入）；ROAS 仅计入有投放的天（≥ {5}）。",
+"One row per product family (buyers = distinct players who bought any product of the family; price = average paid), purchases within {0} days of install. Reach (who buys it), depth (how often, how much), role (does it create {1}; when and where it is bought), source. The role tag is rule-based (rules in the definitions) — it is a starting point for the fix / cut / test list, not a verdict on profit.": "每个商品类别一行（购买者 = 买过该类别任意商品的去重玩家；价格 = 平均实付），安装后 {0} 天内的购买。触达（谁买）、深度（多频繁、多少钱）、角色（是否带来新{1}；何时何处购买）、来源。角色标签基于规则（见定义）— 是修改 / 砍掉 / 测试清单的起点，不是对盈利的结论。",
+"Purchases made while the player was in that arena × the product's average price (all purchases, repeats included), ÷ players whose highest arena is that arena or higher; the line is all revenue earned in that arena per player reaching it. Lower panel: how many players reach each arena — the denominator, and the retention story behind the money. Arenas with ≥ {0} players. Progression offers only.": "玩家处于该竞技场时的购买数 × 商品均价（全部购买，含复购），÷ 最高竞技场为该处或更高的玩家；线为该竞技场每到达玩家的全部收入。下图：到达各竞技场的玩家数 — 分母，也是钱背后的留存故事。玩家 ≥ {0} 的竞技场。仅进度礼包。",
+"Distinct buyers in that arena ÷ players whose highest arena is that arena or higher (arenas with ≥ {0} such players). Lower panel: how many players reach each arena — the denominator, and the retention story behind the money. Bars stack one family (or product) on another, so a player buying two families is in two segments; the line is the share who bought anything in that arena.": "该竞技场的去重购买者 ÷ 最高竞技场为该处或更高的玩家（此类玩家 ≥ {0} 的竞技场）。下图：到达各竞技场的玩家数 — 分母，也是钱背后的留存故事。柱按类别（或商品）堆叠，买了两个类别的玩家会出现在两段；线为该竞技场有任意购买的玩家占比。",
+"Purchases made while the player was in that arena × the product's average price (all purchases, repeats included), ÷ players whose highest arena is that arena or higher; the line is all revenue earned in that arena per player reaching it. Lower panel: how many players reach each arena — the denominator, and the retention story behind the money. Arenas with ≥ {0} players.": "玩家处于该竞技场时的购买数 × 商品均价（全部购买，含复购），÷ 最高竞技场为该处或更高的玩家；线为该竞技场每到达玩家的全部收入。下图：到达各竞技场的玩家数 — 分母，也是钱背后的留存故事。玩家 ≥ {0} 的竞技场。",
+"Purchases made while the player was in that arena × the product's average price (all purchases, repeats included); the line is all revenue earned in that arena. Lower panel: how many players reach each arena — the denominator, and the retention story behind the money. Arenas with ≥ {0} players. Progression offers only.": "玩家处于该竞技场时的购买数 × 商品均价（全部购买，含复购）；线为该竞技场的全部收入。下图：到达各竞技场的玩家数 — 分母，也是钱背后的留存故事。玩家 ≥ {0} 的竞技场。仅进度礼包。",
+"Rows = spells grouped by the arena they unlock in; columns = arenas; cell = how much owners field the spell there (dark = most matches, light = rarely). Tried / kept say whether owners ever pick a new spell up and whether it stays in the deck; lvl gap says how far under the deck it arrives. Buildings are not shown.": "行 = 按解锁竞技场分组的法术；列 = 竞技场；格 = 拥有者在该处上阵该法术的程度（深 = 多数对战，浅 = 很少）。尝试 / 保留说明拥有者是否会试用新法术、是否留在卡组；等级差说明它入手时比卡组低多少级。不显示建筑。",
+"Rows = units grouped by the arena they unlock in; columns = arenas; cell = how much owners field the unit there (dark = most matches, light = rarely). Tried / kept say whether owners ever pick a new unit up and whether it stays in the deck; lvl gap says how far under the deck it arrives. Buildings are not shown.": "行 = 按解锁竞技场分组的单位；列 = 竞技场；格 = 拥有者在该处上阵该单位的程度（深 = 多数对战，浅 = 很少）。尝试 / 保留说明拥有者是否会试用新单位、是否留在卡组；等级差说明它入手时比卡组低多少级。不显示建筑。",
+"One row per product, purchases within {0} days of install. Reach (who buys it), depth (how often, how much), role (does it create {1}; when and where it is bought), source. The role tag is rule-based (rules in the definitions) — it is a starting point for the fix / cut / test list, not a verdict on profit.": "每个商品一行，安装后 {0} 天内的购买。触达（谁买）、深度（多频繁、多少钱）、角色（是否带来新{1}；何时何处购买）、来源。角色标签基于规则（见定义）— 是修改 / 砍掉 / 测试清单的起点，不是对盈利的结论。",
+"Each bar = heroes owned by the average player active that arena. Ready = holds the shards for the next level (wildcards not counted); darker orange = ready but the coin balance is below that level's coin cost. Upgraded = upgraded that day. Not enough shards is by design — the hero cannot be upgraded yet.": "每根柱 = 该竞技场活跃玩家平均拥有的英雄数。可升级 = 已持有下一级所需碎片（不计万能卡）；深橙 = 可升级但金币余额低于该级金币成本。已升级 = 当天升级过。碎片不足属设计使然 — 该英雄暂时无法升级。",
+"Per install date: cumulative IAP revenue by day N ÷ {0} who had bought by day N. A point is hidden while fewer than {1} players of that cohort have paid by day N (so a small cohort can show D{2} before D{3}). Rises with the horizon as {4} come back; a flat curve across horizons means one-and-done buying.": "按安装日期：到第 N 天的累计 IAP 收入 ÷ 到第 N 天已购买的{0}。该批次到第 N 天付费玩家少于 {1} 时隐藏该点（因此小批次可能先显示 D{2} 再显示 D{3}）。随周期上升说明{4}会回来复购；各周期持平说明只买一次。",
+"Each bar = heroes owned by the average player active that day. Ready = holds the shards for the next level (wildcards not counted); darker orange = ready but the coin balance is below that level's coin cost. Upgraded = upgraded that day. Not enough shards is by design — the hero cannot be upgraded yet.": "每根柱 = 当天活跃玩家平均拥有的英雄数。可升级 = 已持有下一级所需碎片（不计万能卡）；深橙 = 可升级但金币余额低于该级金币成本。已升级 = 当天升级过。碎片不足属设计使然 — 该英雄暂时无法升级。",
+"Per install date: share of ALL installs who had made two or more purchases by day N — the Soft Launch Tableau \"Repeat Rate\" definition (repeat {0} ÷ installs). It climbs with the horizon by construction and reads together with payer conversion: repeat % ÷ conversion % = the share of {1} who repeat.": "按安装日期：到第 N 天购买两次及以上的用户占全部安装的比例 — Soft Launch Tableau 的\"复购率\"定义（复购{0} ÷ 安装）。它随周期必然上升，需与付费转化率一起看：复购 % ÷ 转化 % = 复购的{1}占比。",
+"Per product: who buys it, how often, whether it creates {0}, when and where it is bought. Then the ladder (who reaches a 2nd, 3rd, 4th purchase and what it is) and purchases per {1} players by arena. Purchases within {2} days of install, same install range / platform / country as the sidebar.": "按商品：谁买、买多频繁、是否带来新{0}、何时何处购买。然后是购买阶梯（谁达到第 2、3、4 次购买及买的是什么）和按竞技场每 {1} 名玩家的购买数。安装后 {2} 天内的购买，安装范围 / 平台 / 国家与侧栏一致。",
+"Per player active that day (or in that arena), {0}. Installs {1} – {2}, data from the UA start ({3}). Payer = received goods from any IAP pack at any time in the window; {4} accounts with impossible wallets (gems > {5} or coins > {6} — cheats / debug builds) are excluded from every chart.": "按当天（或该竞技场）活跃的每位玩家，{0}。安装 {1} – {2}，数据自 UA 开始（{3}）。付费玩家 = 窗口内任何时候从任意 IAP 礼包获得过物品；{4} 个钱包异常的账号（宝石 > {5} 或金币 > {6} — 作弊 / 调试版本）从所有图表中剔除。",
+"Rows = units grouped by the arena they unlock in; columns = arenas; cell = how much owners field the unit there (dark = most matches, light = rarely). Tried / kept say whether owners ever pick a new unit up and whether it stays in the deck; lvl gap says how far under the deck it arrives.": "行 = 按解锁竞技场分组的单位；列 = 竞技场；格 = 拥有者在该处上阵该单位的程度（深 = 多数对战，浅 = 很少）。尝试 / 保留说明拥有者是否会试用新单位、是否留在卡组；等级差说明它入手时比卡组低多少级。",
+"Per player active that day (or in that arena), {0}. Installs {1} – {2}, data from the UA start ({3}). Payer = received goods from any IAP pack at any time in the window; {4} accounts with impossible wallets (gems > {5} or coins > {6} — cheats / debug builds) are excluded.": "按当天（或该竞技场）活跃的每位玩家，{0}。安装 {1} – {2}，数据自 UA 开始（{3}）。付费玩家 = 窗口内任何时候从任意 IAP 礼包获得过物品；{4} 个钱包异常的账号（宝石 > {5} 或金币 > {6} — 作弊 / 调试版本）已剔除。",
+"Per install date: net revenue (IAP net + ad) earned by that cohort up to day N ÷ its UA spend. Hollow point = the cohort is exactly N days old, so the value may still move (the UA data finalises a day with one day of lag); solid points are final. Dashed line =": "按安装日期：该批次到第 N 天的净收入（IAP 净收入 + 广告）÷ 其 UA 投放。空心点 = 批次刚好 N 天，数值仍可能变动（UA 数据延迟一天定稿）；实心点为最终值。虚线 =",
+"Churner = fewer than {0} finished matches and no activity for {1}+ days · retained = reached {2} matches · installs {3} – {4} (cohorts at least {5} days old). Both groups are measured on the same stretch: everything up to the end of match {6}.": "流失玩家 = 完成对战少于 {0} 局且 {1}+ 天无活动 · 留存玩家 = 达到 {2} 局 · 安装 {3} – {4}（批次至少 {5} 天）。两组在相同区间上衡量：直到第 {6} 局结束为止的一切。",
+": the UA team's Autobid model's predicted net revenue of that install date at day {0} ÷ spend — the same figure as the Soft Launch Monitoring pD120 tile; it is re-estimated every day and the newest install day usually has no prediction yet.": "：UA 团队 Autobid 模型预测的该安装日第 {0} 天净收入 ÷ 投放 — 与 Soft Launch Monitoring 的 pD120 指标相同；每天重新估算，最新的安装日通常还没有预测。",
+"Spend-weighted ROAS at each horizon for one fixed set of install days per game (the days old enough for the deepest horizon shown), so the curve is one population paying back over time. Where it crosses {0} is the payback horizon.": "每款游戏固定一组安装日（足够老、能看到最深周期的那些天）在各周期的投放加权 ROAS，因此曲线是同一群人随时间回本的过程。与 {0} 相交处即回本周期。",
+"Install cohorts and calendar days in the sidebar range ({0} – {1}). Payer metrics come from the game's own validated purchase events (exact per player); spend, ad revenue and DAU from the UA data behind the Soft Launch Tableau.": "侧栏范围内的安装批次与自然日（{0} – {1}）。付费指标来自游戏自身的已验证购买事件（按玩家精确）；投放、广告收入与 DAU 来自 Soft Launch Tableau 背后的 UA 数据。",
+"Which builds make up each day's players (game events, both platforms). A new version should take over within a few days; a version that lingers, or a day where one build's share jumps, is where to look when a KPI moves.": "每天的玩家由哪些版本构成（游戏事件，双平台）。新版本应在几天内接管；久久不退的版本，或某个版本占比突然跳升的那天，就是 KPI 变动时该查看的地方。",
+"= everyone else active that day (DAU − new installs), as a share of the day's DAU. A healthy ramp sees the existing layer grow under the new one; a flat existing layer while installs climb means the UA is not sticking.": "= 当天其他活跃玩家（DAU − 新安装），占当日 DAU 的比例。健康的爬坡中，老玩家层在新玩家层下持续增长；安装上升而老玩家层持平，说明买量没有留住人。",
+"One bubble per spell: x = how much its owners actually field it, y = whether fielding it wins more than benching it (same players). Right of the line = adopted; above the line = helps win. Buildings are not shown.": "每个气泡一个法术：x = 拥有者实际上阵的程度，y = 上阵比不上阵更能赢多少（同一批玩家）。线右侧 = 被采用；线上方 = 有助于取胜。不显示建筑。",
+"One bubble per unit: x = how much its owners actually field it, y = whether fielding it wins more than benching it (same players). Right of the line = adopted; above the line = helps win. Buildings are not shown.": "每个气泡一个单位：x = 拥有者实际上阵的程度，y = 上阵比不上阵更能赢多少（同一批玩家）。线右侧 = 被采用；线上方 = 有助于取胜。不显示建筑。",
+"Window D{0} · D{1}. Product IDs are classified by name (gems/coins/wildcards → Currency; starter/offer/pack → Bundles; hero offers & .unit → Heroes / units; battle/forge pass → Pass; no-ads). Hover for the split.": "窗口 D{0} · D{1}。商品 ID 按名称分类（gems/coins/wildcards → 货币；starter/offer/pack → 礼包；hero offers 与 .unit → 英雄 / 单位；battle/forge pass → 通行证；no-ads）。悬停查看拆分。",
+"Where the {0} sit, and where the money sits, by what each payer had spent by day {1} (install days old enough to have lived D{2}: {3} – {4}, {5} {6}). A distribution heavier on the right has a whale tail.": "{0}在哪里、钱在哪里，按每位付费玩家到第 {1} 天的累计消费（已足够老、经历过 D{2} 的安装日：{3} – {4}，{5} {6}）。右侧更重的分布有鲸鱼尾。",
+"Per install date: CPI (line) against net revenue per install earned by day {0}, split into IAP net and ad revenue. Bars above the line = paid back by D{1}; the colour mix says which engine is doing it.": "按安装日期：CPI（线）对比第 {0} 天前每安装净收入，拆分为 IAP 净收入与广告收入。柱高于线 = 到 D{1} 已回本；颜色构成说明靠哪个引擎。",
+"Above the line: build materials earned per player active that arena, by source. Below: spent, by sink. Bars that mirror each other = players spend what they get; a growing top = they are accumulating.": "线上：该竞技场每活跃玩家获得的建筑成本，按来源。线下：消耗，按消耗项。上下对称 = 玩家把获得的都花掉；上方越来越高 = 在累积。",
+"x = days since install (D{0} = install day); each point = players active that day, cut to the sidebar install range, platform and country. Only cohorts old enough to have reached that day are counted.": "x = 安装后天数（D{0} = 安装当天）；每个点 = 当天活跃的玩家，按侧栏的安装范围、平台和国家截取。只统计足够老、已到达该天的批次。",
+"Above the line: build materials earned per player active that day, by source. Below: spent, by sink. Bars that mirror each other = players spend what they get; a growing top = they are accumulating.": "线上：当天每活跃玩家获得的建筑成本，按来源。线下：消耗，按消耗项。上下对称 = 玩家把获得的都花掉；上方越来越高 = 在累积。",
+"Bars = {0} who made an n-th purchase as a share of all {1}, stacked by product family (purchases within {2} days of install). Average wait: 2nd {3} d · 3rd {4} d · 4th+ {5} d after the previous one.": "柱 = 完成第 n 次购买的{0}占全部{1}的比例，按商品类别堆叠（安装后 {2} 天内的购买）。平均间隔：第 2 次 {3} 天 · 第 3 次 {4} 天 · 第 4+ 次 {5} 天（距上一次）。",
+"Above the line: unit shards earned per player active that arena, by source. Below: spent, by sink. Bars that mirror each other = players spend what they get; a growing top = they are accumulating.": "线上：该竞技场每活跃玩家获得的单位碎片，按来源。线下：消耗，按消耗项。上下对称 = 玩家把获得的都花掉；上方越来越高 = 在累积。",
+"Where the {0} sit, and where the money sits, by what each payer had spent by day {1} (install days old enough to have lived D{2}: –, {3} {4}). A distribution heavier on the right has a whale tail.": "{0}在哪里、钱在哪里，按每位付费玩家到第 {1} 天的累计消费（已足够老、经历过 D{2} 的安装日：–，{3} {4}）。右侧更重的分布有鲸鱼尾。",
+"Above the line: hero cards earned per player active that arena, by source. Below: spent, by sink. Bars that mirror each other = players spend what they get; a growing top = they are accumulating.": "线上：该竞技场每活跃玩家获得的英雄卡，按来源。线下：消耗，按消耗项。上下对称 = 玩家把获得的都花掉；上方越来越高 = 在累积。",
+"Above the line: unit shards earned per player active that day, by source. Below: spent, by sink. Bars that mirror each other = players spend what they get; a growing top = they are accumulating.": "线上：当天每活跃玩家获得的单位碎片，按来源。线下：消耗，按消耗项。上下对称 = 玩家把获得的都花掉；上方越来越高 = 在累积。",
+"Above the line: hero cards earned per player active that day, by source. Below: spent, by sink. Bars that mirror each other = players spend what they get; a growing top = they are accumulating.": "线上：当天每活跃玩家获得的英雄卡，按来源。线下：消耗，按消耗项。上下对称 = 玩家把获得的都花掉；上方越来越高 = 在累积。",
+"Above the line: coins earned per player active that arena, by source. Below: spent, by sink. Bars that mirror each other = players spend what they get; a growing top = they are accumulating.": "线上：该竞技场每活跃玩家获得的金币，按来源。线下：消耗，按消耗项。上下对称 = 玩家把获得的都花掉；上方越来越高 = 在累积。",
+"= everyone else active that day (DAU − new installs). A healthy ramp sees the existing layer grow under the new one; a flat existing layer while installs climb means the UA is not sticking.": "= 当天其他活跃玩家（DAU − 新安装）。健康的爬坡中，老玩家层在新玩家层下持续增长；安装上升而老玩家层持平，说明买量没有留住人。",
+"Above the line: gems earned per player active that arena, by source. Below: spent, by sink. Bars that mirror each other = players spend what they get; a growing top = they are accumulating.": "线上：该竞技场每活跃玩家获得的宝石，按来源。线下：消耗，按消耗项。上下对称 = 玩家把获得的都花掉；上方越来越高 = 在累积。",
+"Follow-on to the early-churn analysis: churn rate per arena, the match outcome and progression state at the last session, and the arena-specific levers (difficulty, unlock pacing, economy).": "早期流失分析的延伸：各竞技场流失率、最后一次启动次数的对战结果与进度状态，以及竞技场相关的调节手段（难度、解锁节奏、经济）。",
+"Above the line: coins earned per player active that day, by source. Below: spent, by sink. Bars that mirror each other = players spend what they get; a growing top = they are accumulating.": "线上：当天每活跃玩家获得的金币，按来源。线下：消耗，按消耗项。上下对称 = 玩家把获得的都花掉；上方越来越高 = 在累积。",
+"Above the line: gems earned per player active that day, by source. Below: spent, by sink. Bars that mirror each other = players spend what they get; a growing top = they are accumulating.": "线上：当天每活跃玩家获得的宝石，按来源。线下：消耗，按消耗项。上下对称 = 玩家把获得的都花掉；上方越来越高 = 在累积。",
+"One bubble per unit: x = how much its owners actually field it, y = whether fielding it wins more than benching it (same players). Right of the line = adopted; above the line = helps win.": "每个气泡一个单位：x = 拥有者实际上阵的程度，y = 上阵比不上阵更能赢多少（同一批玩家）。线右侧 = 被采用；线上方 = 有助于取胜。",
+"Which units players field once they own them, whether fielding them wins, and whether new unlocks get adopted or dropped. Installs {0} – {1} (data from the UA start, {2}); bots included.": "玩家拥有单位后是否上阵、上阵是否更容易赢、新解锁的单位被采用还是被放弃。安装 {0} – {1}（数据自 UA 开始，{2}）；含机器人对战。",
+"Net IAP revenue and ad revenue earned each day as a share of the day's total. The IAP share rising while total revenue grows is the midcore monetisation taking over from the ad floor.": "每日 IAP 净收入与广告收入占当日合计的比例。总收入增长的同时 IAP 占比上升，说明中度游戏的内购变现正在接替广告基础盘。",
+"The player's latest tagged app version. Applies to Engagement, Player Churn, Unit Balancing and Economy (game events); Profitability and the UA-data cards are not tagged by version.": "玩家最新标记的应用版本。适用于活跃、玩家流失、单位平衡和经济（游戏事件）；盈利性和 UA 数据卡不按版本标记。",
+"— the UA team's dataset behind the Soft Launch Tableau (Adjust-attributed installs, store-reported revenue). Same numbers the UA managers quote; only D{0} / D{1} / D{2} exist there.": "— UA 团队 Soft Launch Tableau 背后的数据集（Adjust 归因安装、商店上报收入）。与 UA 经理引用的数字一致；那里只有 D{0} / D{1} / D{2}。",
+"Per first-purchase date: share of that day's new {0} who bought again within {1} / {2} / {3} / {4} days. A point appears once every payer of that day has lived the window.": "按首购日期：当天新{0}中在 {1} / {2} / {3} / {4} 天内再次购买的占比。当天所有付费玩家都经历完窗口后才显示该点。",
+"Every selected game is cut to the same install range, platform, country and days-since-install window; only cohorts old enough to have lived the whole window are counted.": "所选的每款游戏都按相同的安装范围、平台、国家和安装后天数窗口截取；只统计足够老、已经历完整窗口的批次。",
+"Share of players (with ≥ {0} finished match, cohorts ≥ {1} days old) who churned before match {2}, by the network Adjust attributed them to. Hover for player counts.": "在第 {2} 局前流失的玩家占比（≥ {0} 局完成、批次 ≥ {1} 天），按 Adjust 归因渠道。悬停查看玩家数。",
+"{0} = players spend everything they get that arena (the currency is the gate). Well below {1} = it accumulates — waiting for another currency, or nothing to buy.": "{0} = 玩家在该竞技场把获得的全部花掉（该货币是瓶颈）。远低于 {1} = 在累积 — 在等另一种货币，或没东西可买。",
+"{0} = players spend everything they get that day (the currency is the gate). Well below {1} = it accumulates — waiting for another currency, or nothing to buy.": "{0} = 玩家当天把获得的全部花掉（该货币是瓶颈）。远低于 {1} = 在累积 — 在等另一种货币，或没东西可买。",
+"{0} player-days, {1}; pooled over the bars in the range (slider). Heroes owned by fewer than 100 player-days are hidden. Sorted by shards ready, not upgraded.": "{0} 玩家·天，{1}；按滑块范围内的柱汇总。拥有者少于 100 玩家·天的英雄已隐藏。按“碎片够升级但未升级”排序。",
+"= every validated purchase the game itself reported (store receipt checked), counted per player — exact, any horizon, but only for players the SDK tracked.": "= 游戏自身上报的每一笔已验证购买（已核对商店收据），按玩家计数 — 精确、任意周期，但仅限 SDK 追踪到的玩家。",
+"Per install date: CPI (spend ÷ tracked installs, organics included) against net revenue per install up to day N. LTV above CPI = the cohort has paid back.": "按安装日期：CPI（投放 ÷ 追踪到的安装，含自然量）对比第 N 天前每安装净收入。LTV 高于 CPI = 该批次已回本。",
+"Cumulative UA spend vs cumulative net revenue since the start of the range. The gap is the money not yet recovered; the lines cross on the payback day.": "自范围起始的累计 UA 投放与累计净收入。差距是尚未收回的钱；两线相交之日即回本日。",
+"Transactions per active player per day since install: unit / skill upgrades and building upgrades, payers vs non-payers. The gap is what paying buys.": "每活跃玩家每安装后天数的交易数：单位 / 技能升级与建筑升级，付费玩家 vs 非付费玩家。差距就是付费买到的东西。",
+"Bar = churners ÷ retained − {0}. Left (blue) = churners did less of it, right (orange) = more. Values on the right are the two group means / shares.": "柱 = 流失玩家 ÷ 留存玩家 − {0}。左（蓝）= 流失玩家做得更少，右（橙）= 更多。右侧数值为两组的均值 / 占比。",
+"Cumulative share of installs that made their first purchase by day k, for one fixed population of install days — the shape of the conversion ramp.": "固定一组安装日的用户中，到第 k 天完成首购的累计占比 — 转化爬坡的形状。",
+"Median and quartiles of coins held after the last transaction of the day, by day since install; dashed = share of players holding fewer than {0}.": "当日最后一笔交易后持有金币的中位数与四分位，按安装后天数；虚线 = 持有少于 {0} 的玩家占比。",
+"Calendar days and install cohorts in the sidebar range ({0} – {1}), All networks. Source: the UA data behind the Soft Launch Monitoring Tableau.": "侧栏范围内的自然日与安装批次（{0} – {1}），全部渠道。来源：Soft Launch Monitoring Tableau 背后的 UA 数据。",
+"Median and quartiles of gems held after the last transaction of the day, by day since install; dashed = share of players holding fewer than {0}.": "当日最后一笔交易后持有宝石的中位数与四分位，按安装后天数；虚线 = 持有少于 {0} 的玩家占比。",
+"Transactions per active player per day since install: hero / spell upgrades and castle constructions, {0} vs {1}. The gap is what paying buys.": "每活跃玩家每安装后天数的交易数：英雄 / 法术升级与城堡建造，{0} vs {1}。差距就是付费买到的东西。",
+"Engagement, Meta and Economy values are averages over the players active that day — they describe who is still there, not the whole cohort.": "活跃、养成与经济的数值是当天活跃玩家的平均 — 描述的是还在的人，不是整个批次。",
+"Transactions per active player per arena: unit / skill upgrades and building upgrades, payers vs non-payers. The gap is what paying buys.": "每活跃玩家每竞技场的交易数：单位 / 技能升级与建筑升级，付费玩家 vs 非付费玩家。差距就是付费买到的东西。",
+"Churned vs retained players compared over the same first matches: pace, match experience, meta actions, device strain, traffic source.": "流失与留存玩家在相同的前几局上对比：节奏、对战体验、养成行为、设备压力、流量来源。",
+"Spend vs revenue by calendar day, cumulative since the start of the range. Bars: net margin = ad revenue + IAP net revenue − spend.": "按自然日的投放与收入，自范围起始累计。柱：净利润 = 广告收入 + IAP 净收入 − 投放。",
+"Transactions per active player per arena: hero / spell upgrades and castle constructions, {0} vs {1}. The gap is what paying buys.": "每活跃玩家每竞技场的交易数：英雄 / 法术升级与城堡建造，{0} vs {1}。差距就是付费买到的东西。",
+"Same buckets, weighted by revenue. Revenue concentrating in {0}+ while most {1} buy once = a small core carrying the cohort.": "同样的分组，按收入加权。收入集中在 {0}+ 而多数{1}只买一次 = 少数核心用户撑起整个批次。",
+"Revenue per daily active user: ad, IAP net and total. Calendar-day view — {0} active that day, whatever their install date.": "每日活跃用户收入：广告、IAP 净收入与合计。自然日视图 — 当天活跃的{0}，不论安装日期。",
+"Coming soon — builds on the match funnel (Engagement), the arena win-rate chart and the Unit Balancing / Economy sections.": "即将上线 — 基于对战漏斗（活跃）、竞技场胜率图以及单位平衡 / 经济板块。",
+"Stability (crash-free rate), frame rate, memory & thermal, server health, load time, version mix — by platform and device.": "稳定性（无崩溃率）、帧率、内存与温控、服务器健康度、加载时间、版本构成 — 按平台与设备。",
+"Which units players field once they own them, whether fielding them wins, and whether new unlocks are adopted or dropped.": "玩家拥有单位后是否上阵、上阵是否更容易赢、新解锁的单位被采用还是被放弃。",
+"Per install date: payers bucketed by what they had spent by day 0. Install days with fewer than 5 payers are skipped.": "按安装日期：付费玩家按第 0 天前的累计消费分组。付费玩家少于 5 的安装日跳过。",
+"Per install date: {0} bucketed by what they had spent by day {1}. Install days with fewer than {2} {3} are skipped.": "按安装日期：{0}按第 {1} 天前的累计消费分组。{2}少于 {3} 的安装日跳过。",
+"Where coins and gems come from and go per active player, wallets held, and what gems are spent on — {0} vs {1}.": "每活跃玩家的金币与宝石从哪里来、花到哪里去、钱包余额，以及宝石买了什么 — {0} vs {1}。",
+"Payer conversion, LTV mix vs CPI, IAP vs ads, payer size and frequency, ARPDAU / ARPPU, product families.": "付费转化率、LTV 构成与 CPI、IAP 与广告、付费规模与频次、ARPDAU / ARPPU、商品类别。",
+"Net IAP revenue and ad revenue earned each day, in dollars (stacked = total net revenue of the day).": "每日 IAP 净收入与广告收入，美元（堆叠 = 当日净收入合计）。",
+"Each bar = {0} of the gems spent in that arena, split by sink. Hover for gems per active player.": "每根柱 = 该竞技场消耗宝石的 {0}，按消耗项拆分。悬停查看每活跃玩家宝石数。",
+"Purchase ladder — % of {0} reaching their 2nd, 3rd and 4th+ purchase, and what each purchase is": "购买阶梯 — 达到第 2、3、4+ 次购买的{0}占比，以及每次买的是什么",
+"Each bar = {0} of the gems spent that day, split by sink. Hover for gems per active player.": "每根柱 = 当天消耗宝石的 {0}，按消耗项拆分。悬停查看每活跃玩家宝石数。",
+"Select more games in the sidebar to add benchmark columns. Percentiles are exact per payer.": "在侧栏选择更多游戏可添加基准列。百分位按付费玩家精确计算。",
+"Spend vs revenue by calendar day. Bars: net margin = ad revenue + IAP net revenue − spend.": "按自然日的投放与收入。柱：净利润 = 广告收入 + IAP 净收入 − 投放。",
+"Once a unit is owned, do players use it, and does it win? · Units & heroes · all arenas": "拥有单位后，玩家会用吗？用了会赢吗？· 单位与英雄 · 全部竞技场",
+"Once a unit is owned, do players use it, and does it win? · Units & heroes · arenas {0}": "拥有单位后，玩家会用吗？用了会赢吗？· 单位与英雄 · 竞技场 {0}",
+"% of players reaching each arena who bought there — progression offers, by product": "到达各竞技场并在该处购买的玩家占比 — 进度礼包，按商品",
+"Early Churn Analysis (First {0} Matches) — churned vs retained, same first matches": "早期流失分析（前 {0} 局）— 流失 vs 留存，相同前几局",
+"Save the current filters, window and chart toggles as what this browser opens with": "把当前的筛选、窗口和图表开关保存为此浏览器的默认打开状态",
+"Once a spell is owned, do players use it, and does it win? · Spells · all arenas": "拥有法术后，玩家会用吗？用了会赢吗？· 法术 · 全部竞技场",
+"Once a spell is owned, do players use it, and does it win? · Spells · arenas {0}": "拥有法术后，玩家会用吗？用了会赢吗？· 法术 · 竞技场 {0}",
+"What churners did differently through match {0} · {1} churners vs {2} retained": "到第 {0} 局为止流失玩家的不同之处 · {1} 名流失 vs {2} 名留存",
+"Churn by Arena — where mid-game players leave, why, and what would keep them": "按竞技场流失 — 中期玩家在哪里离开、为什么、怎样留住",
+"New units by arena — do players adopt them or drop them? · Units & heroes": "各竞技场的新单位 — 玩家是采用还是放弃？· 单位与英雄",
+"Retention, playtime, games and sessions per day, match-by-match survival.": "留存、游戏时长、每日对战与启动次数、逐对战存活。",
+"Too few player-days in this range for a per-hero split — widen the range.": "该范围内玩家·天太少，无法按英雄拆分 — 请扩大范围。",
+"Cohort = installs in the selected range who finished at least one match.": "批次 = 所选范围内至少完成一局的安装用户。",
+"Per install date: share of installs that made a first purchase by day N.": "按安装日期：到第 N 天完成首次购买的安装用户占比。",
+"Revenue per player reaching each arena — progression offers, by product": "每到达玩家收入 — 进度礼包，按商品",
+"Heroes owned per player — ready to upgrade, upgraded, or waiting · {0}": "每位玩家拥有的英雄 — 可升级、已升级或等待中 · {0}",
+"Once a unit is owned, do players use it, and does it win? · all arenas": "拥有单位后，玩家会用吗？用了会赢吗？· 全部竞技场",
+"Once a unit is owned, do players use it, and does it win? · arenas {0}": "拥有单位后，玩家会用吗？用了会赢吗？· 竞技场 {0}",
+"Per install date: first-paying users by day N ÷ tracked installs, from": "按安装日期：第 N 天前的首次付费用户 ÷ 追踪到的安装，来源",
+"% of players reaching each arena who bought there, by product family": "到达各竞技场并在该处购买的玩家占比，按商品类别",
+"IAP review — product scorecard, purchase ladder, purchases by arena": "IAP 复盘 — 内购产品评估、购买阶梯、按竞技场购买",
+"New spells by arena — do players adopt them or drop them? · Spells": "各竞技场的新法术 — 玩家是采用还是放弃？· 法术",
+"Per install date: {0} bucketed by number of purchases by day {1}.": "按安装日期：{0}按第 {1} 天前的购买次数分组。",
+"No install day with ≥ {0} {1} that has lived D{2} in this slice": "此切片下没有 {0} ≥ {1} 且经历过 D{2} 的安装日",
+"Progression pace — unit and building upgrades per active player": "进度节奏 — 每活跃玩家的单位与建筑升级",
+"Progression pace — upgrades and constructions per active player": "进度节奏 — 每活跃玩家的升级与建造",
+"{0} — product scorecard · {1} {2} · {3} · installs {4} – {5}": "{0} — 内购产品评估 · {1} {2} · {3} · 安装 {4} – {5}",
+"Select at least one game in the sidebar and press Refresh.": "请在侧栏至少选择一款游戏并点击刷新。",
+"Revenue per player reaching each arena, by product family": "每到达玩家收入，按商品类别",
+"Build materials: earned vs spent per active player · {0}": "建筑成本：每活跃玩家获得 vs 消耗 · {0}",
+"Forget the saved view and go back to the cockpit default": "忘记已保存的视图，回到驾驶舱默认",
+"New units by arena — do players adopt them or drop them?": "各竞技场的新单位 — 玩家是采用还是放弃？",
+"Same buckets, weighted by revenue: where the money sits.": "同样的分组，按收入加权：钱在哪里。",
+"Spend vs revenue by day, Dx ROAS, CPI vs LTV, payback.": "按日投放与收入、Dx ROAS、CPI 与 LTV、回本。",
+"Left the game for {0}+ min before finishing match {1}": "在完成第 {1} 局前离开游戏 {0}+ 分钟",
+"Unit shards: earned vs spent per active player · {0}": "单位碎片：每活跃玩家获得 vs 消耗 · {0}",
+"Hero cards: earned vs spent per active player · {0}": "英雄卡：每活跃玩家获得 vs 消耗 · {0}",
+"Spells unlocked in the arena · avg tried · avg kept": "该竞技场解锁的法术 · 平均尝试 · 平均保留",
+"Units unlocked in the arena · avg tried · avg kept": "该竞技场解锁的单位 · 平均尝试 · 平均保留",
+"Revenue by arena — progression offers, by product": "按竞技场收入 — 进度礼包，按商品",
+"Revenue mix — IAP vs ads by calendar day, % share": "收入构成 — 按自然日 IAP 与广告，% 占比",
+"No data for “At the highest arena” in this slice": "此切片下“最高竞技场”无数据",
+"Where gems go — share of gem spend by sink · {0}": "宝石去向 — 按消耗项的宝石消耗占比 · {0}",
+"What they buy — revenue share by product family": "他们买什么 — 按商品类别的收入占比",
+"Coins: earned vs spent per active player · {0}": "金币：每活跃玩家获得 vs 消耗 · {0}",
+"Payer frequency at D{0} — share of IAP revenue": "D{0} 付费频次 — IAP 收入占比",
+"Gems: earned vs spent per active player · {0}": "宝石：每活跃玩家获得 vs 消耗 · {0}",
+"Repeat {0} — % of installs by install cohort": "复购{0} — 按安装批次占安装比例",
+"Coming later as a separate comparison tool": "稍后作为独立对比工具推出",
+"Match-by-match and arena-by-arena survival": "逐对战与逐竞技场存活",
+"Share of earnings spent, by currency · {0}": "消耗占获取比例，按货币 · {0}",
+"win rate (line; dot turns amber below {0})": "胜率（线；低于 {0} 时点变琥珀色）",
+"Payer size at D{0} — share of IAP revenue": "D{0} 付费规模 — IAP 收入占比",
+"Revenue per payer at D{0} — distribution": "D{0} 每付费玩家收入 — 分布",
+"players reaching the arena (lower panel)": "到达该竞技场的玩家（下图）",
+"Coins in the wallet at end of day · {0}": "当日结束时钱包金币 · {0}",
+"Revenue by calendar day — IAP vs ads, $": "按自然日收入 — IAP 与广告，$",
+"Gems in the wallet at end of day · {0}": "当日结束时钱包宝石 · {0}",
+"Payer frequency at D{0} — share of {1}": "D{0} 付费频次 — {1}占比",
+"Repeat purchase by first-purchase date": "按首购日期的复购",
+"Shop: build materials (paid with gems)": "商店：建筑成本（宝石购买）",
+"profit · daily · matches · units · IAP": "盈利 · 每日 · 对战 · 单位 · IAP",
+"Minutes between matches, in app (avg)": "对战之间的应用内分钟数（平均）",
+"No payer has lived D{0} in this slice": "此切片下没有付费玩家经历过 D{0}",
+"Payer conversion by day since install": "按安装后天数付费转化率",
+"Shop: cards / shards (paid with gems)": "商店：卡牌 / 碎片（宝石购买）",
+"Shop: chests / other (paid with gems)": "商店：宝箱 / 其他（宝石购买）",
+"Arena-by-arena progression retention": "逐竞技场进度留存",
+"Economy — sources, sinks and wallets": "经济 — 来源、消耗与钱包",
+"Match-by-match progression retention": "逐对战进度留存",
+"Cockpit default · nothing saved yet": "驾驶舱默认 · 尚未保存",
+"IAP deep-dive by days since install": "按安装后天数的 IAP 深度分析",
+"Cumulative IAP revenue per install": "每安装累计 IAP 收入",
+"IAP KPIs — D{0}–D{1} after install": "IAP 关键指标 — 安装后 D{0}–D{1}",
+"Level / rank / achievement rewards": "等级 / 段位 / 成就奖励",
+"Payer conversion by install cohort": "Dx 付费转化率",
+"Shop: unit shards (paid with gems)": "商店：单位碎片（宝石购买）",
+"The numbers behind the lift chart.": "提升图背后的数字。",
+"arena {0}: {1} unit(s) unlock here": "竞技场 {0}：{1} 个单位在此解锁",
+"where are the players, day by day?": "玩家逐日在哪里？",
+"= players who installed that day,": "= 当天安装的玩家，",
+"Churn rate by acquisition network": "按获客渠道的流失率",
+"Payer size at D{0} — share of {1}": "D{0} 付费规模 — {1}占比",
+"Who is playing each calendar day:": "每个自然日在玩的是谁：",
+"Earned / spent per active player": "每活跃玩家获得 / 消耗",
+"From D{0} to D{1} after install.": "安装后 D{0} 至 D{1}。",
+"Minutes in matches {0}–{1} (avg)": "第 {0}–{1} 局对战分钟数（平均）",
+"still here, active (in progress)": "仍在此处、活跃（进行中）",
+"$ per player reaching the arena": "每到达玩家 $",
+"Cell = usage rate in that arena": "格 = 该竞技场的使用率",
+"arena churn = stopped ÷ reached": "竞技场流失率 = 止步 ÷ 到达",
+"· funnel, churn, units, economy": "· 漏斗、流失、单位、经济",
+"Building upgrades · non-payers": "建筑升级 · 非付费玩家",
+"How the paying base is forming": "付费用户群是如何形成的",
+"Low-memory warnings per player": "每玩家低内存警告",
+"Payers: by first-purchase date": "付费玩家：按首购日期",
+"Top spender's share of revenue": "最高消费者的收入占比",
+"profit · daily · matches · IAP": "盈利 · 每日 · 对战 · IAP",
+"reached the arena and moved on": "到达并继续前进",
+"Not enough shards (by design)": "碎片不足（设计如此）",
+"Progression offers by product": "进度礼包，按商品",
+"Shop: coins / build materials": "商店：金币 / 建筑成本",
+"data through {0} · pulled {1}": "数据截至 {0} · 拉取于 {1}",
+"of ready heroes, coin-blocked": "可升级英雄中金币不足占比",
+"stopped here (idle {0}+ days)": "止步于此（{0}+ 天未活跃）",
+"ROAS, LTV and the ROAS curve": "ROAS、LTV 与 ROAS 曲线",
+"Ready, waiting — coins short": "可升级，等待中 — 金币不足",
+"Shop: coins (paid with gems)": "商店：金币（宝石购买）",
+"Voodoo · Midcore PvP Cockpit": "Voodoo · 中度 PvP 驾驶舱",
+"Group means after match {0}": "第 {0} 局后两组均值",
+"IAP ARPPU by install cohort": "按安装批次 IAP ARPPU",
+"Loading time (sum of steps)": "加载时间（各步之和）",
+"Ready, waiting — affordable": "可升级，等待中 — 买得起",
+"Building upgrades · payers": "建筑升级 · 付费玩家",
+"Curve by day since install": "按安装后天数曲线",
+"Players who spent any gems": "消耗过宝石的玩家",
+"Shards ready, not upgraded": "碎片够升级但未升级",
+"Terrible frames per player": "每玩家严重掉帧",
+"Unit upgrades · non-payers": "单位升级 · 非付费玩家",
+"heroes upgraded per player": "每玩家升级英雄数",
+"Health, spend and payback": "健康度、投放与回本",
+"Installs (mature cohorts)": "安装（成熟批次）",
+"State at the last session": "最后一次启动次数的状态",
+"↻ Refresh · apply filters": "↻ 刷新 · 应用筛选",
+"★ Save current as default": "★ 保存当前为默认",
+"% of owner-days, in deck": "占拥有者·天 %，在卡组",
+"CRV · installs {0} – {1}": "CRV · 安装 {0} – {1}",
+"Day by day since install": "安装后逐日表现",
+"Had a low-memory warning": "出现过低内存警告",
+"P90 (top {0} percentile)": "P90（前 {0} 百分位）",
+"Products sold (distinct)": "售出商品数（去重）",
+"Ready, upgraded that day": "可升级，当天已升级",
+"Two sources, on purpose.": "两个来源，有意为之。",
+"Unlock arena (row group)": "解锁竞技场（行分组）",
+"Watched a rewarded video": "看过激励视频",
+"profit · daily · matches": "盈利 · 每日 · 对战",
+"{0} · installs {1} – {2}": "{0} · 安装 {1} – {2}",
+"% of installs (Tableau)": "% 安装（Tableau）",
+"% of players who bought": "购买玩家占比",
+"ARPPU (revenue / payer)": "ARPPU（收入 / 付费玩家）",
+"Economy Sinks & Balance": "经济消耗与平衡",
+"IAP revenue per install": "每安装 IAP 收入",
+"Largest single purchase": "最大单笔购买",
+"Purchase days per payer": "每付费玩家购买天数",
+"Top spender (one payer)": "最高消费者（单人）",
+"Unit level · collection": "单位等级 · 收藏",
+"ready heroes per player": "每玩家可升级英雄数",
+"share of active players": "活跃玩家占比",
+"ARPDAU by calendar day": "按自然日 ARPDAU",
+"Cumulative net revenue": "累计净收入",
+"Curve by weekly cohort": "按周批次曲线",
+"Opened an IAP purchase": "打开过内购",
+"Rounds per match (avg)": "每局回合数（平均）",
+"Transactions per payer": "每付费玩家交易数",
+"Unit upgrades · payers": "单位升级 · 付费玩家",
+"bought anything (line)": "任意购买（线）",
+"how much do they play?": "他们玩了多少？",
+"what have they earned?": "他们获得了什么？",
+"Avg transaction value": "平均客单价",
+"Cards / shards earned": "获得卡牌 / 碎片",
+"Cumulative net margin": "累计净利润",
+"DAU — new vs existing": "DAU — 新玩家 vs 老玩家",
+"Hero / spell upgrades": "英雄 / 法术升级",
+"Multi Game Comparison": "多游戏对比",
+"RV prompts seen (avg)": "看到的激励视频提示（平均）",
+"Shop (paid with gems)": "商店（宝石购买）",
+"Single Game Deep Dive": "单游戏深度分析",
+"Unit / skill upgrades": "单位 / 技能升级",
+"adoption once owned →": "拥有后的使用率 →",
+"{0} (Castle Clashers)": "{0}（Castle Clashers）",
+"At the highest arena": "最高竞技场",
+"Churn rate per arena": "各竞技场流失率",
+"Payers: repeat curve": "付费玩家：复购曲线",
+"Same stretch of play": "相同的游戏区间",
+"Sessions (app opens)": "启动次数（打开应用）",
+"Trophy road / league": "圣杯之路 / 联赛",
+"Wallet at end of day": "当日结束时的钱包",
+"all purchases (line)": "全部购买（线）",
+"ARPPU of repeat {0}": "复购{0}的 ARPPU",
+"Calendar Day Window": "自然日窗口",
+"Calendar day window": "自然日窗口",
+"Castle construction": "城堡建造",
+"DAU per app version": "各版本 DAU",
+"Debugger / QA users": "调试 / QA 用户",
+"Midcore PvP Cockpit": "中度 PvP 驾驶舱",
+"Upgraded the castle": "升级过城堡",
+"Consistent cohorts": "一致的批次",
+"Days since install": "安装后天数",
+"Install date range": "安装日期范围",
+"Match length (avg)": "对战时长（平均）",
+"Players reaching A": "到达 A 的玩家",
+"Profitability only": "仅盈利性",
+"Season pass (free)": "赛季通行证（免费）",
+"Share of gem spend": "宝石消耗占比",
+"Win-rate delta (y)": "胜率差（y）",
+"…of which no coins": "…其中金币不足",
+"Abandoned a match": "放弃过对战",
+"Adjust 24h Window": "Adjust 24 小时窗口",
+"Adoption rate (x)": "使用率（x）",
+"Building upgrades": "建筑升级",
+"By install cohort": "按安装批次",
+"Cum. # of Matches": "累计对战数",
+"Daily performance": "每日表现",
+"Day since install": "安装后天数",
+"Dx Daily Playtime": "Dx 每日游戏时长",
+"Lvl gap at unlock": "解锁时等级差",
+"Not enough shards": "碎片不足",
+"Progression offer": "进度礼包",
+"Total net revenue": "净收入合计",
+"Unit level · deck": "单位等级 · 卡组",
+"pD120 (predicted)": "pD120（预测）",
+"what do they own?": "他们拥有什么？",
+"≥{0} of first {1}": "前 {1} 局中 ≥{0} 局",
+"% of player-days": "占玩家·天 %",
+"Bundles / offers": "礼包 / 优惠",
+"Cumulative spend": "累计投放",
+"Existing players": "老玩家",
+"How to read this": "如何阅读",
+"Payers / revenue": "付费玩家 / 收入",
+"Rolling {0} days": "滚动 {0} 天",
+"Spend vs revenue": "投放 vs 收入",
+"Why two sources?": "为什么两个来源？",
+"% of owner-days": "占拥有者·天 %",
+"About this view": "关于此视图",
+"Build materials": "建筑成本",
+"Dx # of Matches": "Dx 对战数",
+"IAP net revenue": "IAP 净收入",
+"Levers by arena": "按竞技场的调节手段",
+"My default view": "我的默认视图",
+"Upgraded a card": "升级过卡牌",
+"after match {0}": "第 {0} 局后",
+"Active players": "活跃玩家",
+"Calendar cards": "自然日卡",
+"Chests / boxes": "宝箱 / 箱子",
+"Heroes / units": "英雄 / 单位",
+"Install cohort": "安装批次",
+"Opened a chest": "开过宝箱",
+"Per hero · {0}": "分英雄 · {0}",
+"Relative churn": "相对流失率",
+"Rewarded video": "激励视频",
+"Unit Balancing": "单位平衡",
+"Unit balancing": "单位平衡",
+"Units & heroes": "单位与英雄",
+"active players": "活跃玩家",
+"no app_version": "无版本号",
+"other versions": "其他版本",
+"relative churn": "相对流失率",
+"Constructions": "建造",
+"Last {0} days": "最近 {0} 天",
+"Loading data…": "加载数据中…",
+"Match rewards": "对战奖励",
+"Profitability": "盈利性",
+"Reading a row": "怎么读一行",
+"Top {0} arena": "前 {0} 竞技场",
+"Unit upgrades": "单位升级",
+"left the game": "离开游戏",
+"↻ Refreshing…": "↻ 刷新中…",
+"% of revenue": "% 收入",
+">{0} matches": ">{0} 局",
+"All versions": "全部版本",
+"Calendar day": "自然日",
+"Cohort cards": "批次卡",
+"Coins earned": "获得金币",
+"Margin / day": "利润 / 天",
+"Median arena": "中位竞技场",
+"Monetization": "商业化",
+"Monthly card": "月卡",
+"Player Churn": "玩家流失",
+"Shop / event": "商店 / 活动",
+"Txns / buyer": "笔数 / 购买者",
+"dashed = {0}": "虚线 = {0}",
+"profit · IAP": "盈利 · IAP",
+"{0} installs": "{0} 次安装",
+"{0} purchase": "第 {0} 次购买",
+"% of cohort": "% 批次",
+"Adjust data": "Adjust 数据",
+"App version": "应用版本",
+"Average FPS": "平均 FPS",
+"Bubble size": "气泡大小",
+"Coming soon": "即将上线",
+"Cum D{0} FS": "累计 D{0} 插屏",
+"Cum D{0} RV": "累计 D{0} 激励视频",
+"Daily login": "每日登录",
+"Daily spend": "每日投放",
+"Definitions": "定义",
+"Entry offer": "新手礼包",
+"Game events": "游戏事件",
+"Gems earned": "获得宝石",
+"Lower panel": "下图",
+"New players": "新玩家",
+"Progression": "进度",
+"Repeat core": "复购核心",
+"Spend / day": "投放 / 天",
+"Tech Health": "技术技能健康",
+"Timer skips": "跳过倒计时",
+"Unit shards": "单位碎片",
+"Units owned": "拥有单位",
+"all players": "全部玩家",
+"arenaunlock": "竞技场解锁礼包",
+"no data yet": "暂无数据",
+"player-days": "玩家·天",
+"% of those": "占其中 %",
+"Ad revenue": "广告收入",
+"By horizon": "按周期",
+"By product": "按商品",
+"CPI vs LTV": "CPI 与 LTV",
+"Checkpoint": "节点",
+"Cumulative": "累计",
+"Daily ROAS": "每日 ROAS",
+"Engagement": "活跃",
+"Hero cards": "英雄卡",
+"IAP vs ads": "IAP 与广告",
+"Median day": "中位天数",
+"Net margin": "净利润",
+"Per hero ·": "分英雄 ·",
+"ROAS curve": "ROAS 曲线",
+"Reading it": "怎么读",
+"Role rules": "角色规则",
+"This month": "本月",
+"non-payers": "非付费玩家",
+"within 14d": "14 天内",
+"$ / buyer": "$ / 购买者",
+"Arena {0}": "竞技场 {0}",
+"Avg level": "平均等级",
+"Avg price": "均价",
+"By family": "按类别",
+"D{0} ROAS": "D{0} ROAS",
+"Hero pack": "英雄礼包",
+"IAP packs": "IAP 礼包",
+"Legendary": "传说",
+"Materials": "材料",
+"Net IAP %": "IAP 净收入 %",
+"Retention": "留存",
+"Rev share": "收入占比",
+"Revenue $": "收入 $",
+"Time rows": "时间行",
+"Wildcards": "万能卡",
+"at unlock": "解锁时",
+"boosthero": "英雄加速礼包",
+"breakeven": "盈亏平衡",
+"legendary": "传说",
+"within 1d": "1 天内",
+"within 3d": "3 天内",
+"within 7d": "7 天内",
+"↻ Refresh": "↻ 刷新",
+"% of DAU": "% DAU",
+"% of {0}": "{0}占比",
+"% repeat": "复购率",
+"Churners": "流失玩家",
+"Currency": "货币",
+"D{0} LTV": "D{0} LTV",
+"D{0} ret": "D{0} 留存",
+"D{0} {1}": "D{0} {1}",
+"D{0}–{1}": "D{0}–{1}",
+"Maturity": "成熟度",
+"Owned by": "拥有者",
+"Platform": "平台",
+"Playtime": "游戏时长",
+"Retained": "留存玩家",
+"Segments": "分组",
+"Sessions": "启动次数",
+"Trophies": "圣杯",
+"Uncommon": "优秀",
+"Upgraded": "已升级",
+"Upgrades": "升级",
+"Win rate": "胜率",
+"champion": "冠军礼包",
+"churners": "流失玩家",
+"existing": "老玩家",
+"retained": "留存玩家",
+"uncommon": "优秀",
+"win rate": "胜率",
+"% payer": "付费 %",
+"1st buy": "首次购买",
+"Benched": "未上阵",
+"Columns": "列",
+"Country": "国家",
+"Details": "明细",
+"D{0} FS": "D{0} 插屏",
+"D{0} RV": "D{0} 激励视频",
+"Economy": "经济",
+"Feature": "指标",
+"Fielded": "上阵",
+"Horizon": "周期",
+"Lvl gap": "等级差",
+"Matches": "对战",
+"Network": "渠道",
+"Non-{0}": "非{0}",
+"Payback": "回本",
+"Players": "玩家",
+"Product": "商品",
+"So what": "意义",
+"Sources": "来源",
+"Summary": "概览",
+"benched": "未上阵",
+"fielded": "上阵",
+"players": "玩家",
+"reached": "到达",
+"starter": "新手礼包",
+"Ad LTV": "广告 LTV",
+"Arenas": "竞技场",
+"Buyers": "购买人数",
+"Chests": "宝箱",
+"Colour": "颜色",
+"Common": "普通",
+"Family": "商品类别",
+"Health": "健康度",
+"Median": "中位数",
+"Metric": "指标",
+"No-ads": "去广告",
+"Owners": "拥有者",
+"Payers": "付费玩家",
+"Rarity": "稀有度",
+"Repeat": "复购",
+"Source": "来源",
+"Spells": "法术",
+"Unlock": "解锁",
+"common": "普通",
+"median": "中位数",
+"payers": "付费玩家",
+"% mix": "% 占比",
+"Arena": "竞技场",
+"Churn": "流失",
+"Coins": "金币",
+"Daily": "每日",
+"Entry": "入门",
+"Lines": "线",
+"Match": "对战",
+"Niche": "小众",
+"Other": "其他",
+"Price": "价格",
+"Reset": "重置",
+"Sinks": "消耗",
+"Spell": "法术",
+"Spend": "投放花费",
+"Total": "合计",
+"Tried": "尝试",
+"churn": "流失",
+"elite": "精英礼包",
+"Axis": "横轴",
+"Core": "核心",
+"Days": "天数",
+"Deck": "卡组",
+"Epic": "史诗",
+"Game": "游戏",
+"Gems": "宝石",
+"Hero": "英雄",
+"Kept": "保留",
+"Last": "最近",
+"Lift": "提升",
+"Meta": "养成",
+"Pass": "通行证",
+"Rare": "稀有",
+"Rest": "其他",
+"Role": "角色",
+"Shop": "商店",
+"Show": "显示",
+"Unit": "单位",
+"View": "视图",
+"Weak": "弱",
+"days": "天",
+"epic": "史诗",
+"less": "收起",
+"lift": "提升",
+"more": "展开",
+"rare": "稀有",
+"soon": "即将上线",
+"Ads": "广告",
+"All": "全部",
+"new": "新玩家",
+"US": "美国",
+"__re__": {
+"Bars: players who reached each arena (% of the cohort), split into those who moved on, those still there and active, and those who stopped there — no match cap: every match counts, unlike the chart above; installs {0} – {1}. Red line (right axis): arena churn — of the players who reached the arena, the share who stopped there — highest arena is this one and no match for {2}+ days. Players still at the arena but active in the last {3} days are in progress, not churn; to make that call fairly the card counts installs up to {4} only (every player has had {5} days to come back). Not shown for the top arena (nothing to progress to) or for arenas reached by fewer than {6} players. Lower panel: win rate of all matches played in that arena.": "^Bars: players who reached each arena \\(% of the cohort\\), split into those who moved on, those still there and active, and those who stopped there — no match cap: every match counts, unlike the chart above; installs (\\d{1,2} [A-Z][a-z]{2,4}) – (\\d{1,2} [A-Z][a-z]{2,4})\\. Red line \\(right axis\\): arena churn — of the players who reached the arena, the share who stopped there — highest arena is this one and no match for ([\\d.,]+[kKM]?|\\d+)\\+ days\\. Players still at the arena but active in the last ([\\d.,]+[kKM]?|\\d+) days are in progress, not churn; to make that call fairly the card counts installs up to (\\d{1,2} [A-Z][a-z]{2,4}) only \\(every player has had ([\\d.,]+[kKM]?|\\d+) days to come back\\)\\. Not shown for the top arena \\(nothing to progress to\\) or for arenas reached by fewer than ([\\d.,]+[kKM]?|\\d+) players\\. Lower panel: win rate of all matches played in that arena\\.$",
+"Bars: players who reached each arena (players), split into those who moved on, those still there and active, and those who stopped there — no match cap: every match counts, unlike the chart above; installs {0} – {1}. Red line (right axis): arena churn — of the players who reached the arena, the share who stopped there — highest arena is this one and no match for {2}+ days. Players still at the arena but active in the last {3} days are in progress, not churn; to make that call fairly the card counts installs up to {4} only (every player has had {5} days to come back). Not shown for the top arena (nothing to progress to) or for arenas reached by fewer than {6} players. Lower panel: win rate of all matches played in that arena.": "^Bars: players who reached each arena \\(players\\), split into those who moved on, those still there and active, and those who stopped there — no match cap: every match counts, unlike the chart above; installs (\\d{1,2} [A-Z][a-z]{2,4}) – (\\d{1,2} [A-Z][a-z]{2,4})\\. Red line \\(right axis\\): arena churn — of the players who reached the arena, the share who stopped there — highest arena is this one and no match for ([\\d.,]+[kKM]?|\\d+)\\+ days\\. Players still at the arena but active in the last ([\\d.,]+[kKM]?|\\d+) days are in progress, not churn; to make that call fairly the card counts installs up to (\\d{1,2} [A-Z][a-z]{2,4}) only \\(every player has had ([\\d.,]+[kKM]?|\\d+) days to come back\\)\\. Not shown for the top arena \\(nothing to progress to\\) or for arenas reached by fewer than ([\\d.,]+[kKM]?|\\d+) players\\. Lower panel: win rate of all matches played in that arena\\.$",
+"rolling {0} days ending {1} · All networks · arrows vs the previous rolling {2} days (±{3} or more). Cohort columns (LTV, ROAS, retention, {4}, RV / FS) use the install cohorts whose day N was completed inside the window; \"–\" = fewer than {5} installs or {6} of UA spend in that cohort set. eCPI = spend ÷ all tracked installs (organics in); Net IAP % = IAP net ÷ (IAP net + ad revenue); ROAS counts UA days (≥ {7}) only. pD120 ROAS = the Autobid model's predicted day-{8} net revenue of the window's install days ÷ their spend (install days with a prediction only).": "^rolling ([\\d.,]+[kKM]?|\\d+) days ending (\\d{1,2} [A-Z][a-z]{2,4}) · All networks · arrows vs the previous rolling ([\\d.,]+[kKM]?|\\d+) days \\(±([\\d.,]+\\s?%) or more\\)\\. Cohort columns \\(LTV, ROAS, retention, (all players|payers|non-payers), RV / FS\\) use the install cohorts whose day N was completed inside the window; \"–\" = fewer than ([\\d.,]+[kKM]?|\\d+) installs or (\\$[\\d.,]+[kKM]?) of UA spend in that cohort set\\. eCPI = spend ÷ all tracked installs \\(organics in\\); Net IAP % = IAP net ÷ \\(IAP net \\+ ad revenue\\); ROAS counts UA days \\(≥ (\\$[\\d.,]+[kKM]?)\\) only\\. pD120 ROAS = the Autobid model's predicted day-([\\d.,]+[kKM]?|\\d+) net revenue of the window's install days ÷ their spend \\(install days with a prediction only\\)\\.$",
+"this month ending {0} · All networks · arrows vs the previous month (±{1} or more). Cohort columns (LTV, ROAS, retention, {2}, RV / FS) use the install cohorts whose day N was completed inside the window; \"–\" = fewer than {3} installs or {4} of UA spend in that cohort set. eCPI = spend ÷ all tracked installs (organics in); Net IAP % = IAP net ÷ (IAP net + ad revenue); ROAS counts UA days (≥ {5}) only. pD120 ROAS = the Autobid model's predicted day-{6} net revenue of the window's install days ÷ their spend (install days with a prediction only).": "^this month ending (\\d{1,2} [A-Z][a-z]{2,4}) · All networks · arrows vs the previous month \\(±([\\d.,]+\\s?%) or more\\)\\. Cohort columns \\(LTV, ROAS, retention, (all players|payers|non-payers), RV / FS\\) use the install cohorts whose day N was completed inside the window; \"–\" = fewer than ([\\d.,]+[kKM]?|\\d+) installs or (\\$[\\d.,]+[kKM]?) of UA spend in that cohort set\\. eCPI = spend ÷ all tracked installs \\(organics in\\); Net IAP % = IAP net ÷ \\(IAP net \\+ ad revenue\\); ROAS counts UA days \\(≥ (\\$[\\d.,]+[kKM]?)\\) only\\. pD120 ROAS = the Autobid model's predicted day-([\\d.,]+[kKM]?|\\d+) net revenue of the window's install days ÷ their spend \\(install days with a prediction only\\)\\.$",
+"Distinct buyers in that arena ÷ players whose highest arena is that arena or higher (arenas with ≥ {0} such players). Lower panel: how many players reach each arena — the denominator, and the retention story behind the money. Bars stack one family (or product) on another, so a player buying two families is in two segments; the line is the share who bought anything in that arena. Progression offers only: an offer meant to sell every arena should show a bar in every arena.": "^Distinct buyers in that arena ÷ players whose highest arena is that arena or higher \\(arenas with ≥ ([\\d.,]+[kKM]?|\\d+) such players\\)\\. Lower panel: how many players reach each arena — the denominator, and the retention story behind the money\\. Bars stack one family \\(or product\\) on another, so a player buying two families is in two segments; the line is the share who bought anything in that arena\\. Progression offers only: an offer meant to sell every arena should show a bar in every arena\\.$",
+"Bars: players still playing at match n (% of the cohort), coloured by the arena they were in at that match. Red line (right axis): relative churn — of the players who played match n, the share whose last recorded match it was. Lower panel: win rate of match n (share of those matches the player won — the opponents are bots, so this is the difficulty curve). Scroll right for matches {0}–{1}; the last bar is players with {2}+ matches.": "^Bars: players still playing at match n \\(% of the cohort\\), coloured by the arena they were in at that match\\. Red line \\(right axis\\): relative churn — of the players who played match n, the share whose last recorded match it was\\. Lower panel: win rate of match n \\(share of those matches the player won — the opponents are bots, so this is the difficulty curve\\)\\. Scroll right for matches ([\\d.,]+[kKM]?|\\d+)–([\\d.,]+[kKM]?|\\d+); the last bar is players with ([\\d.,]+[kKM]?|\\d+)\\+ matches\\.$",
+"Bars: players still playing at match n (players), coloured by the arena they were in at that match. Red line (right axis): relative churn — of the players who played match n, the share whose last recorded match it was. Lower panel: win rate of match n (share of those matches the player won — the opponents are bots, so this is the difficulty curve). Scroll right for matches {0}–{1}; the last bar is players with {2}+ matches.": "^Bars: players still playing at match n \\(players\\), coloured by the arena they were in at that match\\. Red line \\(right axis\\): relative churn — of the players who played match n, the share whose last recorded match it was\\. Lower panel: win rate of match n \\(share of those matches the player won — the opponents are bots, so this is the difficulty curve\\)\\. Scroll right for matches ([\\d.,]+[kKM]?|\\d+)–([\\d.,]+[kKM]?|\\d+); the last bar is players with ([\\d.,]+[kKM]?|\\d+)\\+ matches\\.$",
+"rolling {0} days ending {1} · All networks · arrows vs the previous rolling {2} days (±{3} or more). Cohort columns (LTV, ROAS, retention, {4}, RV / FS) use the install cohorts whose day N was completed inside the window; \"–\" = fewer than {5} installs or {6} of UA spend in that cohort set. eCPI = spend ÷ all tracked installs (organics in); Net IAP % = IAP net ÷ (IAP net + ad revenue); ROAS counts UA days (≥ {7}) only.": "^rolling ([\\d.,]+[kKM]?|\\d+) days ending (\\d{1,2} [A-Z][a-z]{2,4}) · All networks · arrows vs the previous rolling ([\\d.,]+[kKM]?|\\d+) days \\(±([\\d.,]+\\s?%) or more\\)\\. Cohort columns \\(LTV, ROAS, retention, (all players|payers|non-payers), RV / FS\\) use the install cohorts whose day N was completed inside the window; \"–\" = fewer than ([\\d.,]+[kKM]?|\\d+) installs or (\\$[\\d.,]+[kKM]?) of UA spend in that cohort set\\. eCPI = spend ÷ all tracked installs \\(organics in\\); Net IAP % = IAP net ÷ \\(IAP net \\+ ad revenue\\); ROAS counts UA days \\(≥ (\\$[\\d.,]+[kKM]?)\\) only\\.$",
+"this month ending {0} · All networks · arrows vs the previous month (±{1} or more). Cohort columns (LTV, ROAS, retention, {2}, RV / FS) use the install cohorts whose day N was completed inside the window; \"–\" = fewer than {3} installs or {4} of UA spend in that cohort set. eCPI = spend ÷ all tracked installs (organics in); Net IAP % = IAP net ÷ (IAP net + ad revenue); ROAS counts UA days (≥ {5}) only.": "^this month ending (\\d{1,2} [A-Z][a-z]{2,4}) · All networks · arrows vs the previous month \\(±([\\d.,]+\\s?%) or more\\)\\. Cohort columns \\(LTV, ROAS, retention, (all players|payers|non-payers), RV / FS\\) use the install cohorts whose day N was completed inside the window; \"–\" = fewer than ([\\d.,]+[kKM]?|\\d+) installs or (\\$[\\d.,]+[kKM]?) of UA spend in that cohort set\\. eCPI = spend ÷ all tracked installs \\(organics in\\); Net IAP % = IAP net ÷ \\(IAP net \\+ ad revenue\\); ROAS counts UA days \\(≥ (\\$[\\d.,]+[kKM]?)\\) only\\.$",
+"One row per product family (buyers = distinct players who bought any product of the family; price = average paid), purchases within {0} days of install. Reach (who buys it), depth (how often, how much), role (does it create {1}; when and where it is bought), source. The role tag is rule-based (rules in the definitions) — it is a starting point for the fix / cut / test list, not a verdict on profit.": "^One row per product family \\(buyers = distinct players who bought any product of the family; price = average paid\\), purchases within ([\\d.,]+[kKM]?|\\d+) days of install\\. Reach \\(who buys it\\), depth \\(how often, how much\\), role \\(does it create (all players|payers|non-payers); when and where it is bought\\), source\\. The role tag is rule-based \\(rules in the definitions\\) — it is a starting point for the fix / cut / test list, not a verdict on profit\\.$",
+"Purchases made while the player was in that arena × the product's average price (all purchases, repeats included), ÷ players whose highest arena is that arena or higher; the line is all revenue earned in that arena per player reaching it. Lower panel: how many players reach each arena — the denominator, and the retention story behind the money. Arenas with ≥ {0} players. Progression offers only.": "^Purchases made while the player was in that arena × the product's average price \\(all purchases, repeats included\\), ÷ players whose highest arena is that arena or higher; the line is all revenue earned in that arena per player reaching it\\. Lower panel: how many players reach each arena — the denominator, and the retention story behind the money\\. Arenas with ≥ ([\\d.,]+[kKM]?|\\d+) players\\. Progression offers only\\.$",
+"Distinct buyers in that arena ÷ players whose highest arena is that arena or higher (arenas with ≥ {0} such players). Lower panel: how many players reach each arena — the denominator, and the retention story behind the money. Bars stack one family (or product) on another, so a player buying two families is in two segments; the line is the share who bought anything in that arena.": "^Distinct buyers in that arena ÷ players whose highest arena is that arena or higher \\(arenas with ≥ ([\\d.,]+[kKM]?|\\d+) such players\\)\\. Lower panel: how many players reach each arena — the denominator, and the retention story behind the money\\. Bars stack one family \\(or product\\) on another, so a player buying two families is in two segments; the line is the share who bought anything in that arena\\.$",
+"Purchases made while the player was in that arena × the product's average price (all purchases, repeats included), ÷ players whose highest arena is that arena or higher; the line is all revenue earned in that arena per player reaching it. Lower panel: how many players reach each arena — the denominator, and the retention story behind the money. Arenas with ≥ {0} players.": "^Purchases made while the player was in that arena × the product's average price \\(all purchases, repeats included\\), ÷ players whose highest arena is that arena or higher; the line is all revenue earned in that arena per player reaching it\\. Lower panel: how many players reach each arena — the denominator, and the retention story behind the money\\. Arenas with ≥ ([\\d.,]+[kKM]?|\\d+) players\\.$",
+"Purchases made while the player was in that arena × the product's average price (all purchases, repeats included); the line is all revenue earned in that arena. Lower panel: how many players reach each arena — the denominator, and the retention story behind the money. Arenas with ≥ {0} players. Progression offers only.": "^Purchases made while the player was in that arena × the product's average price \\(all purchases, repeats included\\); the line is all revenue earned in that arena\\. Lower panel: how many players reach each arena — the denominator, and the retention story behind the money\\. Arenas with ≥ ([\\d.,]+[kKM]?|\\d+) players\\. Progression offers only\\.$",
+"One row per product, purchases within {0} days of install. Reach (who buys it), depth (how often, how much), role (does it create {1}; when and where it is bought), source. The role tag is rule-based (rules in the definitions) — it is a starting point for the fix / cut / test list, not a verdict on profit.": "^One row per product, purchases within ([\\d.,]+[kKM]?|\\d+) days of install\\. Reach \\(who buys it\\), depth \\(how often, how much\\), role \\(does it create (all players|payers|non-payers); when and where it is bought\\), source\\. The role tag is rule-based \\(rules in the definitions\\) — it is a starting point for the fix / cut / test list, not a verdict on profit\\.$",
+"Per install date: cumulative IAP revenue by day N ÷ {0} who had bought by day N. A point is hidden while fewer than {1} players of that cohort have paid by day N (so a small cohort can show D{2} before D{3}). Rises with the horizon as {4} come back; a flat curve across horizons means one-and-done buying.": "^Per install date: cumulative IAP revenue by day N ÷ (all players|payers|non-payers) who had bought by day N\\. A point is hidden while fewer than ([\\d.,]+[kKM]?|\\d+) players of that cohort have paid by day N \\(so a small cohort can show D([\\d.,]+[kKM]?|\\d+) before D([\\d.,]+[kKM]?|\\d+)\\)\\. Rises with the horizon as (all players|payers|non-payers) come back; a flat curve across horizons means one-and-done buying\\.$",
+"Per install date: share of ALL installs who had made two or more purchases by day N — the Soft Launch Tableau \"Repeat Rate\" definition (repeat {0} ÷ installs). It climbs with the horizon by construction and reads together with payer conversion: repeat % ÷ conversion % = the share of {1} who repeat.": "^Per install date: share of ALL installs who had made two or more purchases by day N — the Soft Launch Tableau \"Repeat Rate\" definition \\(repeat (all players|payers|non-payers) ÷ installs\\)\\. It climbs with the horizon by construction and reads together with payer conversion: repeat % ÷ conversion % = the share of (all players|payers|non-payers) who repeat\\.$",
+"Per product: who buys it, how often, whether it creates {0}, when and where it is bought. Then the ladder (who reaches a 2nd, 3rd, 4th purchase and what it is) and purchases per {1} players by arena. Purchases within {2} days of install, same install range / platform / country as the sidebar.": "^Per product: who buys it, how often, whether it creates (all players|payers|non-payers), when and where it is bought\\. Then the ladder \\(who reaches a 2nd, 3rd, 4th purchase and what it is\\) and purchases per ([\\d.,]+[kKM]?|\\d+) players by arena\\. Purchases within ([\\d.,]+[kKM]?|\\d+) days of install, same install range / platform / country as the sidebar\\.$",
+"Per player active that day (or in that arena), {0}. Installs {1} – {2}, data from the UA start ({3}). Payer = received goods from any IAP pack at any time in the window; {4} accounts with impossible wallets (gems > {5} or coins > {6} — cheats / debug builds) are excluded from every chart.": "^Per player active that day \\(or in that arena\\), (all players|payers|non-payers)\\. Installs (\\d{1,2} [A-Z][a-z]{2,4}) – (\\d{1,2} [A-Z][a-z]{2,4}), data from the UA start \\((\\d{1,2} [A-Z][a-z]{2,4})\\)\\. Payer = received goods from any IAP pack at any time in the window; ([\\d.,]+[kKM]?|\\d+) accounts with impossible wallets \\(gems > ([\\d.,]+[kKM]?|\\d+) or coins > ([\\d.,]+[kKM]?|\\d+) — cheats / debug builds\\) are excluded from every chart\\.$",
+"Per player active that day (or in that arena), {0}. Installs {1} – {2}, data from the UA start ({3}). Payer = received goods from any IAP pack at any time in the window; {4} accounts with impossible wallets (gems > {5} or coins > {6} — cheats / debug builds) are excluded.": "^Per player active that day \\(or in that arena\\), (all players|payers|non-payers)\\. Installs (\\d{1,2} [A-Z][a-z]{2,4}) – (\\d{1,2} [A-Z][a-z]{2,4}), data from the UA start \\((\\d{1,2} [A-Z][a-z]{2,4})\\)\\. Payer = received goods from any IAP pack at any time in the window; ([\\d.,]+[kKM]?|\\d+) accounts with impossible wallets \\(gems > ([\\d.,]+[kKM]?|\\d+) or coins > ([\\d.,]+[kKM]?|\\d+) — cheats / debug builds\\) are excluded\\.$",
+"Churner = fewer than {0} finished matches and no activity for {1}+ days · retained = reached {2} matches · installs {3} – {4} (cohorts at least {5} days old). Both groups are measured on the same stretch: everything up to the end of match {6}.": "^Churner = fewer than ([\\d.,]+[kKM]?|\\d+) finished matches and no activity for ([\\d.,]+[kKM]?|\\d+)\\+ days · retained = reached ([\\d.,]+[kKM]?|\\d+) matches · installs (\\d{1,2} [A-Z][a-z]{2,4}) – (\\d{1,2} [A-Z][a-z]{2,4}) \\(cohorts at least ([\\d.,]+[kKM]?|\\d+) days old\\)\\. Both groups are measured on the same stretch: everything up to the end of match ([\\d.,]+[kKM]?|\\d+)\\.$",
+": the UA team's Autobid model's predicted net revenue of that install date at day {0} ÷ spend — the same figure as the Soft Launch Monitoring pD120 tile; it is re-estimated every day and the newest install day usually has no prediction yet.": "^: the UA team's Autobid model's predicted net revenue of that install date at day ([\\d.,]+[kKM]?|\\d+) ÷ spend — the same figure as the Soft Launch Monitoring pD120 tile; it is re-estimated every day and the newest install day usually has no prediction yet\\.$",
+"Spend-weighted ROAS at each horizon for one fixed set of install days per game (the days old enough for the deepest horizon shown), so the curve is one population paying back over time. Where it crosses {0} is the payback horizon.": "^Spend-weighted ROAS at each horizon for one fixed set of install days per game \\(the days old enough for the deepest horizon shown\\), so the curve is one population paying back over time\\. Where it crosses ([\\d.,]+\\s?%) is the payback horizon\\.$",
+"Install cohorts and calendar days in the sidebar range ({0} – {1}). Payer metrics come from the game's own validated purchase events (exact per player); spend, ad revenue and DAU from the UA data behind the Soft Launch Tableau.": "^Install cohorts and calendar days in the sidebar range \\((\\d{1,2} [A-Z][a-z]{2,4}) – (\\d{1,2} [A-Z][a-z]{2,4})\\)\\. Payer metrics come from the game's own validated purchase events \\(exact per player\\); spend, ad revenue and DAU from the UA data behind the Soft Launch Tableau\\.$",
+"Window D{0} · D{1}. Product IDs are classified by name (gems/coins/wildcards → Currency; starter/offer/pack → Bundles; hero offers & .unit → Heroes / units; battle/forge pass → Pass; no-ads). Hover for the split.": "^Window D([\\d.,]+[kKM]?|\\d+) · D([\\d.,]+[kKM]?|\\d+)\\. Product IDs are classified by name \\(gems/coins/wildcards → Currency; starter/offer/pack → Bundles; hero offers & \\.unit → Heroes / units; battle/forge pass → Pass; no-ads\\)\\. Hover for the split\\.$",
+"Where the {0} sit, and where the money sits, by what each payer had spent by day {1} (install days old enough to have lived D{2}: {3} – {4}, {5} {6}). A distribution heavier on the right has a whale tail.": "^Where the (all players|payers|non-payers) sit, and where the money sits, by what each payer had spent by day ([\\d.,]+[kKM]?|\\d+) \\(install days old enough to have lived D([\\d.,]+[kKM]?|\\d+): (\\d{1,2} [A-Z][a-z]{2,4}) – (\\d{1,2} [A-Z][a-z]{2,4}), ([\\d.,]+[kKM]?|\\d+) (all players|payers|non-payers)\\)\\. A distribution heavier on the right has a whale tail\\.$",
+"Per install date: CPI (line) against net revenue per install earned by day {0}, split into IAP net and ad revenue. Bars above the line = paid back by D{1}; the colour mix says which engine is doing it.": "^Per install date: CPI \\(line\\) against net revenue per install earned by day ([\\d.,]+[kKM]?|\\d+), split into IAP net and ad revenue\\. Bars above the line = paid back by D([\\d.,]+[kKM]?|\\d+); the colour mix says which engine is doing it\\.$",
+"x = days since install (D{0} = install day); each point = players active that day, cut to the sidebar install range, platform and country. Only cohorts old enough to have reached that day are counted.": "^x = days since install \\(D([\\d.,]+[kKM]?|\\d+) = install day\\); each point = players active that day, cut to the sidebar install range, platform and country\\. Only cohorts old enough to have reached that day are counted\\.$",
+"Bars = {0} who made an n-th purchase as a share of all {1}, stacked by product family (purchases within {2} days of install). Average wait: 2nd {3} d · 3rd {4} d · 4th+ {5} d after the previous one.": "^Bars = (all players|payers|non-payers) who made an n-th purchase as a share of all (all players|payers|non-payers), stacked by product family \\(purchases within ([\\d.,]+[kKM]?|\\d+) days of install\\)\\. Average wait: 2nd ([\\d.,]+[kKM]?|\\d+) d · 3rd ([\\d.,]+[kKM]?|\\d+) d · 4th\\+ ([\\d.,]+[kKM]?|\\d+) d after the previous one\\.$",
+"Where the {0} sit, and where the money sits, by what each payer had spent by day {1} (install days old enough to have lived D{2}: –, {3} {4}). A distribution heavier on the right has a whale tail.": "^Where the (all players|payers|non-payers) sit, and where the money sits, by what each payer had spent by day ([\\d.,]+[kKM]?|\\d+) \\(install days old enough to have lived D([\\d.,]+[kKM]?|\\d+): –, ([\\d.,]+[kKM]?|\\d+) (all players|payers|non-payers)\\)\\. A distribution heavier on the right has a whale tail\\.$",
+"Which units players field once they own them, whether fielding them wins, and whether new unlocks get adopted or dropped. Installs {0} – {1} (data from the UA start, {2}); bots included.": "^Which units players field once they own them, whether fielding them wins, and whether new unlocks get adopted or dropped\\. Installs (\\d{1,2} [A-Z][a-z]{2,4}) – (\\d{1,2} [A-Z][a-z]{2,4}) \\(data from the UA start, (\\d{1,2} [A-Z][a-z]{2,4})\\); bots included\\.$",
+"— the UA team's dataset behind the Soft Launch Tableau (Adjust-attributed installs, store-reported revenue). Same numbers the UA managers quote; only D{0} / D{1} / D{2} exist there.": "^— the UA team's dataset behind the Soft Launch Tableau \\(Adjust-attributed installs, store-reported revenue\\)\\. Same numbers the UA managers quote; only D([\\d.,]+[kKM]?|\\d+) / D([\\d.,]+[kKM]?|\\d+) / D([\\d.,]+[kKM]?|\\d+) exist there\\.$",
+"Per first-purchase date: share of that day's new {0} who bought again within {1} / {2} / {3} / {4} days. A point appears once every payer of that day has lived the window.": "^Per first-purchase date: share of that day's new (all players|payers|non-payers) who bought again within ([\\d.,]+[kKM]?|\\d+) / ([\\d.,]+[kKM]?|\\d+) / ([\\d.,]+[kKM]?|\\d+) / ([\\d.,]+[kKM]?|\\d+) days\\. A point appears once every payer of that day has lived the window\\.$",
+"Share of players (with ≥ {0} finished match, cohorts ≥ {1} days old) who churned before match {2}, by the network Adjust attributed them to. Hover for player counts.": "^Share of players \\(with ≥ ([\\d.,]+[kKM]?|\\d+) finished match, cohorts ≥ ([\\d.,]+[kKM]?|\\d+) days old\\) who churned before match ([\\d.,]+[kKM]?|\\d+), by the network Adjust attributed them to\\. Hover for player counts\\.$",
+"{0} = players spend everything they get that arena (the currency is the gate). Well below {1} = it accumulates — waiting for another currency, or nothing to buy.": "^([\\d.,]+\\s?%) = players spend everything they get that arena \\(the currency is the gate\\)\\. Well below ([\\d.,]+\\s?%) = it accumulates — waiting for another currency, or nothing to buy\\.$",
+"{0} = players spend everything they get that day (the currency is the gate). Well below {1} = it accumulates — waiting for another currency, or nothing to buy.": "^([\\d.,]+\\s?%) = players spend everything they get that day \\(the currency is the gate\\)\\. Well below ([\\d.,]+\\s?%) = it accumulates — waiting for another currency, or nothing to buy\\.$",
+"{0} player-days, {1}; pooled over the bars in the range (slider). Heroes owned by fewer than 100 player-days are hidden. Sorted by shards ready, not upgraded.": "^([\\d.,]+[kKM]?|\\d+) player-days, (all players|payers|non-payers); pooled over the bars in the range \\(slider\\)\\. Heroes owned by fewer than 100 player-days are hidden\\. Sorted by shards ready, not upgraded\\.$",
+"Bar = churners ÷ retained − {0}. Left (blue) = churners did less of it, right (orange) = more. Values on the right are the two group means / shares.": "^Bar = churners ÷ retained − ([\\d.,]+[kKM]?|\\d+)\\. Left \\(blue\\) = churners did less of it, right \\(orange\\) = more\\. Values on the right are the two group means / shares\\.$",
+"Median and quartiles of coins held after the last transaction of the day, by day since install; dashed = share of players holding fewer than {0}.": "^Median and quartiles of coins held after the last transaction of the day, by day since install; dashed = share of players holding fewer than ([\\d.,]+[kKM]?|\\d+)\\.$",
+"Calendar days and install cohorts in the sidebar range ({0} – {1}), All networks. Source: the UA data behind the Soft Launch Monitoring Tableau.": "^Calendar days and install cohorts in the sidebar range \\((\\d{1,2} [A-Z][a-z]{2,4}) – (\\d{1,2} [A-Z][a-z]{2,4})\\), All networks\\. Source: the UA data behind the Soft Launch Monitoring Tableau\\.$",
+"Median and quartiles of gems held after the last transaction of the day, by day since install; dashed = share of players holding fewer than {0}.": "^Median and quartiles of gems held after the last transaction of the day, by day since install; dashed = share of players holding fewer than ([\\d.,]+[kKM]?|\\d+)\\.$",
+"Transactions per active player per day since install: hero / spell upgrades and castle constructions, {0} vs {1}. The gap is what paying buys.": "^Transactions per active player per day since install: hero / spell upgrades and castle constructions, (all players|payers|non-payers) vs (all players|payers|non-payers)\\. The gap is what paying buys\\.$",
+"Transactions per active player per arena: hero / spell upgrades and castle constructions, {0} vs {1}. The gap is what paying buys.": "^Transactions per active player per arena: hero / spell upgrades and castle constructions, (all players|payers|non-payers) vs (all players|payers|non-payers)\\. The gap is what paying buys\\.$",
+"Same buckets, weighted by revenue. Revenue concentrating in {0}+ while most {1} buy once = a small core carrying the cohort.": "^Same buckets, weighted by revenue\\. Revenue concentrating in ([\\d.,]+[kKM]?|\\d+)\\+ while most (all players|payers|non-payers) buy once = a small core carrying the cohort\\.$",
+"Revenue per daily active user: ad, IAP net and total. Calendar-day view — {0} active that day, whatever their install date.": "^Revenue per daily active user: ad, IAP net and total\\. Calendar-day view — (all players|payers|non-payers) active that day, whatever their install date\\.$",
+"Per install date: {0} bucketed by what they had spent by day {1}. Install days with fewer than {2} {3} are skipped.": "^Per install date: (all players|payers|non-payers) bucketed by what they had spent by day ([\\d.,]+[kKM]?|\\d+)\\. Install days with fewer than ([\\d.,]+[kKM]?|\\d+) (all players|payers|non-payers) are skipped\\.$",
+"Where coins and gems come from and go per active player, wallets held, and what gems are spent on — {0} vs {1}.": "^Where coins and gems come from and go per active player, wallets held, and what gems are spent on — (all players|payers|non-payers) vs (all players|payers|non-payers)\\.$",
+"Each bar = {0} of the gems spent in that arena, split by sink. Hover for gems per active player.": "^Each bar = ([\\d.,]+\\s?%) of the gems spent in that arena, split by sink\\. Hover for gems per active player\\.$",
+"Purchase ladder — % of {0} reaching their 2nd, 3rd and 4th+ purchase, and what each purchase is": "^Purchase ladder — % of (all players|payers|non-payers) reaching their 2nd, 3rd and 4th\\+ purchase, and what each purchase is$",
+"Each bar = {0} of the gems spent that day, split by sink. Hover for gems per active player.": "^Each bar = ([\\d.,]+\\s?%) of the gems spent that day, split by sink\\. Hover for gems per active player\\.$",
+"Once a unit is owned, do players use it, and does it win? · Units & heroes · arenas {0}": "^Once a unit is owned, do players use it, and does it win\\? · Units & heroes · arenas ([\\d.,]+[kKM]?|\\d+)$",
+"Early Churn Analysis (First {0} Matches) — churned vs retained, same first matches": "^Early Churn Analysis \\(First ([\\d.,]+[kKM]?|\\d+) Matches\\) — churned vs retained, same first matches$",
+"Once a spell is owned, do players use it, and does it win? · Spells · arenas {0}": "^Once a spell is owned, do players use it, and does it win\\? · Spells · arenas ([\\d.,]+[kKM]?|\\d+)$",
+"What churners did differently through match {0} · {1} churners vs {2} retained": "^What churners did differently through match ([\\d.,]+[kKM]?|\\d+) · ([\\d.,]+[kKM]?|\\d+) churners vs ([\\d.,]+[kKM]?|\\d+) retained$",
+"Heroes owned per player — ready to upgrade, upgraded, or waiting · {0}": "^Heroes owned per player — ready to upgrade, upgraded, or waiting · (all players|payers|non-payers)$",
+"Once a unit is owned, do players use it, and does it win? · arenas {0}": "^Once a unit is owned, do players use it, and does it win\\? · arenas ([\\d.,]+[kKM]?|\\d+)$",
+"Per install date: {0} bucketed by number of purchases by day {1}.": "^Per install date: (all players|payers|non-payers) bucketed by number of purchases by day ([\\d.,]+[kKM]?|\\d+)\\.$",
+"No install day with ≥ {0} {1} that has lived D{2} in this slice": "^No install day with ≥ ([\\d.,]+[kKM]?|\\d+) (all players|payers|non-payers) that has lived D([\\d.,]+[kKM]?|\\d+) in this slice$",
+"{0} — product scorecard · {1} {2} · {3} · installs {4} – {5}": "^(.+?) — product scorecard · ([\\d.,]+[kKM]?|\\d+) (all players|payers|non-payers) · (\\$[\\d.,]+[kKM]?) · installs (\\d{1,2} [A-Z][a-z]{2,4}) – (\\d{1,2} [A-Z][a-z]{2,4})$",
+"Build materials: earned vs spent per active player · {0}": "^Build materials: earned vs spent per active player · (all players|payers|non-payers)$",
+"Left the game for {0}+ min before finishing match {1}": "^Left the game for ([\\d.,]+[kKM]?|\\d+)\\+ min before finishing match ([\\d.,]+[kKM]?|\\d+)$",
+"Unit shards: earned vs spent per active player · {0}": "^Unit shards: earned vs spent per active player · (all players|payers|non-payers)$",
+"Hero cards: earned vs spent per active player · {0}": "^Hero cards: earned vs spent per active player · (all players|payers|non-payers)$",
+"Where gems go — share of gem spend by sink · {0}": "^Where gems go — share of gem spend by sink · (all players|payers|non-payers)$",
+"Coins: earned vs spent per active player · {0}": "^Coins: earned vs spent per active player · (all players|payers|non-payers)$",
+"Payer frequency at D{0} — share of IAP revenue": "^Payer frequency at D([\\d.,]+[kKM]?|\\d+) — share of IAP revenue$",
+"Gems: earned vs spent per active player · {0}": "^Gems: earned vs spent per active player · (all players|payers|non-payers)$",
+"Repeat {0} — % of installs by install cohort": "^Repeat (all players|payers|non-payers) — % of installs by install cohort$",
+"Share of earnings spent, by currency · {0}": "^Share of earnings spent, by currency · (all players|payers|non-payers)$",
+"win rate (line; dot turns amber below {0})": "^win rate \\(line; dot turns amber below ([\\d.,]+\\s?%)\\)$",
+"Payer size at D{0} — share of IAP revenue": "^Payer size at D([\\d.,]+[kKM]?|\\d+) — share of IAP revenue$",
+"Revenue per payer at D{0} — distribution": "^Revenue per payer at D([\\d.,]+[kKM]?|\\d+) — distribution$",
+"Coins in the wallet at end of day · {0}": "^Coins in the wallet at end of day · (all players|payers|non-payers)$",
+"Gems in the wallet at end of day · {0}": "^Gems in the wallet at end of day · (all players|payers|non-payers)$",
+"Payer frequency at D{0} — share of {1}": "^Payer frequency at D([\\d.,]+[kKM]?|\\d+) — share of (all players|payers|non-payers)$",
+"No payer has lived D{0} in this slice": "^No payer has lived D([\\d.,]+[kKM]?|\\d+) in this slice$",
+"IAP KPIs — D{0}–D{1} after install": "^IAP KPIs — D([\\d.,]+[kKM]?|\\d+)–D([\\d.,]+[kKM]?|\\d+) after install$",
+"arena {0}: {1} unit(s) unlock here": "^arena ([\\d.,]+[kKM]?|\\d+): ([\\d.,]+[kKM]?|\\d+) unit\\(s\\) unlock here$",
+"Payer size at D{0} — share of {1}": "^Payer size at D([\\d.,]+[kKM]?|\\d+) — share of (all players|payers|non-payers)$",
+"From D{0} to D{1} after install.": "^From D([\\d.,]+[kKM]?|\\d+) to D([\\d.,]+[kKM]?|\\d+) after install\\.$",
+"Minutes in matches {0}–{1} (avg)": "^Minutes in matches ([\\d.,]+[kKM]?|\\d+)–([\\d.,]+[kKM]?|\\d+) \\(avg\\)$",
+"data through {0} · pulled {1}": "^data through (\\d{1,2} [A-Z][a-z]{2,4}) · pulled (\\d{1,2} [A-Z][a-z]{2,4})$",
+"stopped here (idle {0}+ days)": "^stopped here \\(idle ([\\d.,]+[kKM]?|\\d+)\\+ days\\)$",
+"Group means after match {0}": "^Group means after match ([\\d.,]+[kKM]?|\\d+)$",
+"CRV · installs {0} – {1}": "^CRV · installs (\\d{1,2} [A-Z][a-z]{2,4}) – (\\d{1,2} [A-Z][a-z]{2,4})$",
+"P90 (top {0} percentile)": "^P90 \\(top ([\\d.,]+[kKM]?|\\d+) percentile\\)$",
+"{0} · installs {1} – {2}": "^(.+?) · installs (\\d{1,2} [A-Z][a-z]{2,4}) – (\\d{1,2} [A-Z][a-z]{2,4})$",
+"{0} (Castle Clashers)": "^(.+?) \\(Castle Clashers\\)$",
+"ARPPU of repeat {0}": "^ARPPU of repeat (all players|payers|non-payers)$",
+"≥{0} of first {1}": "^≥([\\d.,]+[kKM]?|\\d+) of first ([\\d.,]+[kKM]?|\\d+)$",
+"Rolling {0} days": "^Rolling ([\\d.,]+[kKM]?|\\d+) days$",
+"after match {0}": "^after match ([\\d.,]+[kKM]?|\\d+)$",
+"Per hero · {0}": "^Per hero · (.+?)$",
+"Last {0} days": "^Last ([\\d.,]+[kKM]?|\\d+) days$",
+"Top {0} arena": "^Top ([\\d.,]+\\s?%) arena$",
+">{0} matches": "^>([\\d.,]+[kKM]?|\\d+) matches$",
+"dashed = {0}": "^dashed = (all players|payers|non-payers)$",
+"{0} installs": "^([\\d.,]+[kKM]?|\\d+) installs$",
+"{0} purchase": "^([\\d.,]+[kKM]?|\\d+) purchase$",
+"Cum D{0} FS": "^Cum D([\\d.,]+[kKM]?|\\d+) FS$",
+"Cum D{0} RV": "^Cum D([\\d.,]+[kKM]?|\\d+) RV$",
+"Arena {0}": "^Arena ([\\d.,]+[kKM]?|\\d+)$",
+"D{0} ROAS": "^D([\\d.,]+[kKM]?|\\d+) ROAS$",
+"% of {0}": "^% of (all players|payers|non-payers)$",
+"D{0} LTV": "^D([\\d.,]+[kKM]?|\\d+) LTV$",
+"D{0} ret": "^D([\\d.,]+[kKM]?|\\d+) ret$",
+"D{0} {1}": "^D([\\d.,]+[kKM]?|\\d+) (all players|payers|non-payers)$",
+"D{0}–{1}": "^D([\\d.,]+[kKM]?|\\d+)–([\\d.,]+[kKM]?|\\d+)$",
+"D{0} FS": "^D([\\d.,]+[kKM]?|\\d+) FS$",
+"D{0} RV": "^D([\\d.,]+[kKM]?|\\d+) RV$",
+"Non-{0}": "^Non-(all players|payers|non-payers)$"
+}
+};</script>
 <script>window.COCKPIT_ENC = true;</script>
 <script>
 /* Midcore PvP Cockpit — multi-game shell: sidebar filters (pending until Refresh), section 01 match-by-match by arena, section 02 IAP side by side. Data: games.json + g/<slug>/{matches,iap}.json */
@@ -283,6 +966,44 @@ const $ = (s, el) => (el || document).querySelector(s);
 const root = $('#root');
 // applied filter state (what the page renders) and pending state (what the sidebar shows until Refresh)
 const state = { mode: 'single', retView: 'cohort', games: [], from: null, to: null, lastx: 14, rangeMode: 'last', platform: 'all', country: 'all', network: 'all', versions: [], view: 'daily', guard: 30, survMode: 'share', day: { prog: 'median', eng: 'ret', meta: 'owned', eco: 'coins' }, dayMin: 20, perfMode: 'daily', ltvMode: 'total', dauMode: 'users', verMode: 'share', arenaMode: 'share', mz: 7, mtab: null, convSrc: 'events', convView: 'cohort', repView: 'cohort', sovMode: 'share', win: 7, tblView: 'summary', retDef: 'calendar', payMode: 'cum', ptab: null, churnMode: 'arena', unitLo: 1, unitHi: 99, ecoPay: 'all', ecoAxis: 'd', ecoCur: 'coins', csCp: 3, dsi: [0, 1], distMode: 'payers', tab: null };
+
+// ---- i18n: EN | 中文. ZH maps the English string (exactly as written in the code) to Chinese; keys with {0} {1} … are templates matched against
+// strings that carry numbers / names. t() is applied inside the shared helpers (card, section, legend, groups, toggles, sidebar), so the chart code stays English.
+const LANG = { cur: 'en' };
+try { LANG.cur = localStorage.getItem('cockpit_lang') || window.DEFAULT_LANG || 'en'; } catch (e) { LANG.cur = window.DEFAULT_LANG || 'en'; }
+const ZH = window.ZH_DICT || {};
+const ZH_RE = ZH.__re__ || {}; delete ZH.__re__;
+const ZH_T = Object.keys(ZH).filter(k => /\{\d\}/.test(k)).map(k => [new RegExp(ZH_RE[k] || ('^' + k.replace(/[.*+?^$()|[\]\\]/g, '\\$&').replace(/\{(\d)\}/g, '(.+?)') + '$')), ZH[k]]);
+function tr(s) {
+  if (typeof s !== 'string' || !s) return s;
+  if (window.__i18nCollect) window.__i18nCollect.add(s);
+  if (LANG.cur !== 'zh') return s;
+  const d = ZH[s]; if (d) return d;
+  for (const [re, out] of ZH_T) { const m = s.match(re); if (m) return out.replace(/\{(\d)\}/g, (_, k) => tr(m[+k + 1])); }
+  if (window.__i18nMiss) window.__i18nMiss.add(s);
+  return s;
+}
+// static text (sidebar, header, jump menu): translate text nodes in place, keeping the English in a map so switching back restores it
+const STATIC_EN = new WeakMap();
+function translateStatic() {
+  const roots = [document.querySelector('.side'), document.querySelector('header.top'), document.querySelector('#jump')].filter(Boolean);
+  for (const r of roots) {
+    const w = document.createTreeWalker(r, NodeFilter.SHOW_TEXT); let n;
+    while ((n = w.nextNode())) { if (n.parentElement && n.parentElement.closest('#f-network, #f-games, #f-versions')) continue; const en = STATIC_EN.get(n) ?? n.nodeValue; const raw = en.trim(); if (!raw) continue; if (!STATIC_EN.has(n)) STATIC_EN.set(n, en); const out = tr(raw); n.nodeValue = out === raw ? en : en.replace(raw, out); }
+    r.querySelectorAll('[title], [placeholder]').forEach(el => { for (const a of ['title', 'placeholder']) { const v = el.getAttribute(a); if (!v) continue; const key = 'attr:' + a; const en = el.dataset[key] || v; el.dataset[key] = en; el.setAttribute(a, tr(en)); } });
+  }
+  document.documentElement.lang = LANG.cur === 'zh' ? 'zh-CN' : 'en';
+}
+// translate every text node under el (exact or template match); numbers, dates and already-Chinese text fall through untouched
+function translateDom(el) {
+  if (LANG.cur !== 'zh' && !window.__i18nCollect) return;
+  const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentNode && /^(SCRIPT|STYLE|CODE)$/.test(n.parentNode.nodeName)) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT }); let n;
+  const todo = []; while ((n = w.nextNode())) todo.push(n);
+  for (const n of todo) { const raw = n.nodeValue.trim(); if (!raw || /^[\d\s.,%$€£+\-–—·:/()×≥≤<>kKM|]*$/.test(raw)) continue; const out = tr(raw); if (out !== raw) n.nodeValue = n.nodeValue.replace(raw, out); }
+  el.querySelectorAll('[title]').forEach(x => { const v = x.getAttribute('title'); if (v) x.setAttribute('title', tr(v)); });
+}
+window.__i18n = { t: tr, translateDom, translateStatic, setLang: l => setLang(l), lang: () => LANG.cur };
+function setLang(l) { LANG.cur = l; try { localStorage.setItem('cockpit_lang', l); } catch (e) {} document.querySelectorAll('#f-lang [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === l)); translateStatic(); render(); }
 let pending = null;
 let REG = null, CUR = null;          // games registry, game shown in section 01
 const DATA = {};                     // slug -> { D, ROWS, IAP }
@@ -360,7 +1081,7 @@ function niceTicks(max, n) {
 }
 function tooltipFor(plot) { let t = plot.querySelector('.tip'); if (!t) { t = document.createElement('div'); t.className = 'tip'; plot.appendChild(t); } return t; }
 function showTip(plot, tip, html, x, y) {
-  tip.innerHTML = html; tip.style.display = 'block';
+  tip.innerHTML = html; translateDom(tip); tip.style.display = 'block';
   const pw = plot.clientWidth, tw = tip.offsetWidth; let left = x + 12; if (left + tw > pw) left = x - tw - 12; if (left < 0) left = 0;
   tip.style.left = left + 'px'; tip.style.top = Math.max(0, y - 10) + 'px';
 }
@@ -398,6 +1119,7 @@ function barChart(plot, o) {
       o.series.forEach((s, j) => { const v = s.values[i]; if (v == null) return; el('rect', { x: x0 + j * (sw2 + 2), y: Y(v), width: Math.max(sw2, 1), height: Y(0) - Y(v), fill: s.color, rx: 1.5, opacity: dim ? 0.3 : 1 }, g); });
     }
     if (dim) { const tx = el('text', { x: x0 + gw / 2, y: mt + 8, 'text-anchor': 'middle', class: 'svgtext', 'font-size': 9 }, svg); tx.textContent = 'n<' + state.guard; }
+    if (o.total && !dim) { const tot = o.stacked ? o.series.reduce((a, s) => a + (s.values[i] || 0), 0) : Math.max(...o.series.map(s => s.values[i] || 0)); const tx = el('text', { x: x0 + gw / 2, y: Y(tot) - 4, 'text-anchor': 'middle', class: 'svgtext', 'font-size': 10, 'font-weight': 600 }, g); tx.textContent = o.total(i, tot); }
   }
   const tip = tooltipFor(plot);
   const hit = el('rect', { x: ml, y: mt, width: W - ml - mr, height: H - mt - mb, fill: 'transparent' }, svg);
@@ -409,6 +1131,11 @@ function barChart(plot, o) {
     showTip(plot, tip, `<b>${(o.xfull || o.xfmt || (s => s))(o.cats[i])}</b>${o.extra ? o.extra(i) : ''}${rows}`, ev.clientX - r.left, ev.clientY - r.top);
   });
   hit.addEventListener('mouseleave', () => { tip.style.display = 'none'; hl.setAttribute('opacity', 0); });
+  if (o.onClick) {   // click a bar: o.onClick(i); o.selected = index of the bar to outline
+    hit.style.cursor = 'pointer';
+    hit.addEventListener('click', ev => { const r = svg.getBoundingClientRect(); const px = (ev.clientX - r.left) * W / r.width; let i = Math.floor((px - ml) / bw); i = Math.max(0, Math.min(n - 1, i)); o.onClick(i); });
+    if (o.selected != null && o.selected >= 0 && o.selected < n) { const sel = el('rect', { x: ml + bw * o.selected + gap / 2 - 2, y: mt - 2, width: gw + 4, height: H - mt - mb + 2, fill: 'none', stroke: C.ink, 'stroke-width': 1.2, 'stroke-dasharray': '3 2', rx: 2 }, svg); sel.style.pointerEvents = 'none'; }
+  }
 }
 
 /** Line chart. o: {x, series:[{name,color,values}], yfmt, yMax, h, xfmt, xfull, maxLabels, extra(i)} */
@@ -442,13 +1169,14 @@ function lineChart(plot, o) {
 
 // ---------- render
 function card(title, sub, cls, toggles) {
+  title = tr(title); sub = tr(sub);
   const c = document.createElement('div'); c.className = 'card ' + (cls || '');
-  const seg = toggles ? `<div class="seg" style="font-size:0">${toggles.map(t => `<button class="tbtn" style="border:0;border-radius:0" aria-pressed="${t.on}" data-t="${t.v}">${t.label}</button>`).join('')}</div>` : '';
+  const seg = toggles ? `<div class="seg" style="font-size:0">${toggles.map(tg => `<button class="tbtn" style="border:0;border-radius:0" aria-pressed="${tg.on}" data-t="${tg.v}">${tr(tg.label)}</button>`).join('')}</div>` : '';
   const below = /cat-/.test(cls || '') || !/full/.test(cls || '');   // Hub-style and half-width cards: toggles on their own row under the title (the header is too narrow for them)
   c.innerHTML = `<div class="ch"><div><h3>${title}</h3>${sub ? `<div class="sub">${sub}</div>` : ''}</div>${below ? '' : seg}</div>${below ? `<div class="tgl">${seg}</div>` : ''}<div class="plot"></div><div class="legend"></div>`;
   return c;
 }
-function legend(c, items) { const el = $('.legend', c); if (!el) return; el.innerHTML = items.length > 1 ? items.map(i => `<span><i style="background:${i.color}"></i>${i.name}</span>`).join('') : ''; el.style.display = items.length > 1 ? '' : 'none'; }
+function legend(c, items) { const el = $('.legend', c); if (!el) return; el.innerHTML = items.length > 1 ? items.map(i => `<span><i style="background:${i.color}"></i>${tr(i.name)}</span>`).join('') : ''; el.style.display = items.length > 1 ? '' : 'none'; }
 function tile(k, v, d) { return `<div class="tile"><div class="k">${k}</div><div class="v">${v}</div><div class="d">${d || ''}</div></div>`; }
 
 /** Scrollable stacked-bar + line chart with two y axes.
@@ -1241,13 +1969,20 @@ function renderMonet(host, games) {
   }
   // ---- 4. IAP share of voice by calendar day (mart)
   if (P) {
-    const sovShare = state.sovMode !== 'abs';
-    const c4 = card('Revenue mix — IAP vs ads by calendar day', `Net IAP revenue and ad revenue earned each day${sovShare ? ', as a share of the day\'s total' : ''}. The IAP share rising while total revenue grows is the midcore monetisation taking over from the ad floor.`, 'full', [{ v: 'share', label: '% share', on: sovShare }, { v: 'abs', label: '$', on: !sovShare }]);
-    grid.appendChild(c4);
-    perfChart($('.plot', c4), { x: pxs, h: 260, yfmt: sovShare ? F.pct : F_usdK, yMax: sovShare ? 1 : 0, xfmt: F.date, maxLabels: 12, lines: [],
-      stack: [{ name: 'IAP net revenue', color: C.s2, values: pxs.map(d => { const o = P.get(d); return sovShare ? div(o.iap_net, o.iap_net + o.ad_rev) : o.iap_net; }) }, { name: 'Ad revenue', color: C.s1, values: pxs.map(d => { const o = P.get(d); return sovShare ? div(o.ad_rev, o.iap_net + o.ad_rev) : o.ad_rev; }) }],
-      extra: i => { const o = P.get(pxs[i]); return `<div class="row"><span><b>Total net revenue</b></span><span><b>${F_usdK(o.iap_net + o.ad_rev)}</b></span></div><div class="row" style="color:var(--muted)"><span>IAP share</span><span>${F.pct1(div(o.iap_net, o.iap_net + o.ad_rev))}</span></div>`; } });
-    legend(c4, [{ name: 'IAP net revenue', color: C.s2 }, { name: 'Ad revenue', color: C.s1 }]);
+    // two side-by-side cards (the old % / $ toggle was never wired): left = share of the day's total, right = dollars
+    const mixExtra = i => { const o = P.get(pxs[i]); return `<div class="row"><span><b>Total net revenue</b></span><span><b>${F_usdK(o.iap_net + o.ad_rev)}</b></span></div><div class="row" style="color:var(--muted)"><span>IAP share</span><span>${F.pct1(div(o.iap_net, o.iap_net + o.ad_rev))}</span></div>`; };
+    const c4a = card('Revenue mix — IAP vs ads by calendar day, % share', 'Net IAP revenue and ad revenue earned each day as a share of the day\'s total. The IAP share rising while total revenue grows is the midcore monetisation taking over from the ad floor.', '');
+    grid.appendChild(c4a);
+    perfChart($('.plot', c4a), { x: pxs, h: 260, yfmt: F.pct, yMax: 1, xfmt: F.date, maxLabels: 8, lines: [],
+      stack: [{ name: 'IAP net revenue', color: C.s2, values: pxs.map(d => { const o = P.get(d); return div(o.iap_net, o.iap_net + o.ad_rev); }) }, { name: 'Ad revenue', color: C.s1, values: pxs.map(d => { const o = P.get(d); return div(o.ad_rev, o.iap_net + o.ad_rev); }) }],
+      extra: mixExtra });
+    legend(c4a, [{ name: 'IAP net revenue', color: C.s2 }, { name: 'Ad revenue', color: C.s1 }]);
+    const c4b = card('Revenue by calendar day — IAP vs ads, $', 'Net IAP revenue and ad revenue earned each day, in dollars (stacked = total net revenue of the day).', '');
+    grid.appendChild(c4b);
+    perfChart($('.plot', c4b), { x: pxs, h: 260, yfmt: F_usdK, yMax: 0, xfmt: F.date, maxLabels: 8, lines: [],
+      stack: [{ name: 'IAP net revenue', color: C.s2, values: pxs.map(d => P.get(d).iap_net) }, { name: 'Ad revenue', color: C.s1, values: pxs.map(d => P.get(d).ad_rev) }],
+      extra: mixExtra });
+    legend(c4b, [{ name: 'IAP net revenue', color: C.s2 }, { name: 'Ad revenue', color: C.s1 }]);
   }
   // ---- 2 / 3. payer size and payer frequency at horizon H, by install date (two panels each: % of payers, % of IAP revenue)
   if (hasPayers) {
@@ -1312,7 +2047,7 @@ function renderMonet(host, games) {
     legend(c5b, MZ.map((n, i) => ({ name: `D${n}`, color: MZ_COLOR(i) })));
   }
   // card order: revenue mix · ARPDAU · ARPPU first (the money per user and where it comes from), then payer conversion and the rest
-  const firstCards = ['Revenue mix — IAP vs ads by calendar day', 'ARPDAU by calendar day', 'IAP ARPPU by install cohort'].map(t => [...grid.children].find(c => ($('h3', c) || {}).textContent === t)).filter(Boolean);
+  const firstCards = ['Revenue mix — IAP vs ads by calendar day, % share', 'Revenue by calendar day — IAP vs ads, $', 'ARPDAU by calendar day', 'IAP ARPPU by install cohort'].map(t => [...grid.children].find(c => ($('h3', c) || {}).textContent === t)).filter(Boolean);
   firstCards.reverse().forEach(c => grid.insertBefore(c, grid.firstChild));
   // revenue-per-payer distribution sits right after the repeat-payers card, before the payer size / frequency cards
   const byTitle = re => [...grid.children].find(c => re.test(($('h3', c) || {}).textContent || ''));
@@ -1337,7 +2072,7 @@ function foldText() {
   root.querySelectorAll('.card > .sub').forEach(n => fold(n, 'About this view'));
   root.querySelectorAll('.card .ch .sub, .qhead p').forEach(p => {
     if (p.dataset.tog) return; p.dataset.tog = 1;
-    if (p.scrollHeight > p.clientHeight + 2) { const b = document.createElement('button'); b.className = 'more'; b.type = 'button'; b.textContent = 'more'; p.after(b); const tog = () => { const o = p.classList.toggle('open'); b.textContent = o ? 'less' : 'more'; }; b.onclick = tog; p.onclick = tog; }
+    if (p.scrollHeight > p.clientHeight + 2) { const b = document.createElement('button'); b.className = 'more'; b.type = 'button'; b.textContent = tr('more'); p.after(b); const tog = () => { const o = p.classList.toggle('open'); b.textContent = o ? tr('less') : tr('more'); }; b.onclick = tog; p.onclick = tog; }
   });
 }
 
@@ -1354,6 +2089,7 @@ const OPEN_KEY = 'cockpit.groups';
 function isOpen(id) { try { const o = JSON.parse(localStorage.getItem(OPEN_KEY) || 'null'); if (o && id in o) return !!o[id]; } catch (e) {} return !['profitability','tech'].includes(id); }
 function setOpen(id, v) { try { const o = JSON.parse(localStorage.getItem(OPEN_KEY) || '{}'); o[id] = v; localStorage.setItem(OPEN_KEY, JSON.stringify(o)); } catch (e) {} }
 function section(num, title, sub, controlsHtml) {
+  title = tr(title); sub = tr(sub);
   const s = document.createElement('section'); s.className = 'q';
   s.innerHTML = `<div class="qhead"><div>${num ? `<div class="num">${num}</div>` : ''}<h2>${title}</h2><p>${sub}</p></div>${controlsHtml ? `<div class="qctl">${controlsHtml}</div>` : ''}</div><div class="qbody"></div>`;
   return s;
@@ -1363,9 +2099,9 @@ function render() {
   // the page is rebuilt on every toggle: keep the scroll position and the height stable while doing so, and remember which explanations were open
   const y = window.scrollY, openFolds = new Set([...root.querySelectorAll('details.fold[open]')].map(d => foldKey(d))), openBlurbs = new Set([...root.querySelectorAll('.card .ch .sub.open, .qhead p.open')].map(p => p.textContent));
   root.style.minHeight = root.offsetHeight + 'px';
-  try { renderBody(); } finally { root.style.minHeight = ''; }
+  try { renderBody(); translateDom(root); } finally { root.style.minHeight = ''; }
   root.querySelectorAll('details.fold').forEach(d => { if (openFolds.has(foldKey(d))) d.open = true; });
-  root.querySelectorAll('.card .ch .sub, .qhead p').forEach(p => { if (openBlurbs.has(p.textContent)) { p.classList.add('open'); const b = p.nextElementSibling; if (b && b.classList.contains('more')) b.textContent = 'less'; } });
+  root.querySelectorAll('.card .ch .sub, .qhead p').forEach(p => { if (openBlurbs.has(p.textContent)) { p.classList.add('open'); const b = p.nextElementSibling; if (b && b.classList.contains('more')) b.textContent = tr('less'); } });
   window.scrollTo(0, y);
 }
 const foldKey = d => { const c = d.closest('.card'); const t = c ? (c.querySelector('h3') || {}).textContent : (d.closest('section.q') || {}).id || 'sec'; return (t || '') + '|' + d.querySelector('summary').textContent; };
@@ -1390,12 +2126,12 @@ function renderBody() {
     ['tech', 'Tech Health', 'Stability (crash-free rate), frame rate, memory & thermal, server health, load time, version mix — by platform and device.', true],
   ];
   // jump menu at the top of the page: one chip per section; click opens the section and scrolls to it
-  const jump = $('#jump'); if (jump) { jump.innerHTML = GROUPS.map(([id, title, , soon]) => `<button type="button" data-jump="${id}"${soon ? ' class="soon"' : ''}>${title}</button>`).join(''); jump.querySelectorAll('[data-jump]').forEach(b => b.onclick = () => { const g = root.querySelector(`.grp[data-grp="${b.dataset.jump}"]`); if (!g) return; if (!g.classList.contains('open')) { g.classList.add('open'); g.querySelector('.grph').setAttribute('aria-expanded', 'true'); setOpen(b.dataset.jump, true); } g.scrollIntoView({ behavior: 'smooth', block: 'start' }); }); }
+  const jump = $('#jump'); if (jump) { jump.innerHTML = GROUPS.map(([id, title, , soon]) => `<button type="button" data-jump="${id}"${soon ? ' class="soon"' : ''}>${tr(title)}</button>`).join(''); jump.querySelectorAll('[data-jump]').forEach(b => b.onclick = () => { const g = root.querySelector(`.grp[data-grp="${b.dataset.jump}"]`); if (!g) return; if (!g.classList.contains('open')) { g.classList.add('open'); g.querySelector('.grph').setAttribute('aria-expanded', 'true'); setOpen(b.dataset.jump, true); } g.scrollIntoView({ behavior: 'smooth', block: 'start' }); }); }
   const grp = {};
   GROUPS.forEach(([id, title, sub, soon]) => {
     const open = isOpen(id);
     const g = document.createElement('div'); g.className = 'grp' + (open ? ' open' : '') + (soon ? ' soon' : ''); g.dataset.grp = id;
-    g.innerHTML = `<button class="grph" type="button" aria-expanded="${open}"><span class="chev">›</span><span class="t">${title}</span><span class="s">${sub}</span>${soon ? '<span class="n">Coming soon</span>' : ''}</button><div class="grpb"></div>`;
+    g.innerHTML = `<button class="grph" type="button" aria-expanded="${open}"><span class="chev">›</span><span class="t">${tr(title)}</span><span class="s">${tr(sub)}</span>${soon ? `<span class="n">${tr('Coming soon')}</span>` : ''}</button><div class="grpb"></div>`;
     g.querySelector('.grph').onclick = () => { const o = !g.classList.contains('open'); g.classList.toggle('open', o); g.querySelector('.grph').setAttribute('aria-expanded', o); setOpen(id, o); };
     root.appendChild(g); grp[id] = g.querySelector('.grpb');
   });
@@ -1464,7 +2200,7 @@ function liftChart(plot, o) {
   });
   const tip = tooltipFor(plot);
   const hit = el('rect', { x: 0, y: mt, width: W, height: H - mt - mb, fill: 'transparent' }, svg);
-  hit.addEventListener('mousemove', ev => { const rc = svg.getBoundingClientRect(); const py = (ev.clientY - rc.top) * H / rc.height; const i = Math.max(0, Math.min(o.rows.length - 1, Math.floor((py - mt) / rh))); const r = o.rows[i]; showTip(plot, tip, `<b>${r.label}</b><div class="row"><span>churners</span><span>${r.fmt(r.c)}</span></div><div class="row"><span>retained</span><span>${r.fmt(r.t)}</span></div><div class="row"><span>lift</span><span>${(r.lift - 1 >= 0 ? '+' : '') + Math.round((r.lift - 1) * 100)}%</span></div>${r.note ? `<div class="row" style="color:var(--muted)"><span>${r.note}</span><span></span></div>` : ''}`, ev.clientX - rc.left, ev.clientY - rc.top); });
+  hit.addEventListener('mousemove', ev => { const rc = svg.getBoundingClientRect(); const py = (ev.clientY - rc.top) * H / rc.height; const i = Math.max(0, Math.min(o.rows.length - 1, Math.floor((py - mt) / rh))); const r = o.rows[i]; showTip(plot, tip, `<b>${r.label}</b><div class="row"><span>churners</span><span>${r.fmt(r.c)}</span></div><div class="row"><span>retained</span><span>${r.fmt(r.t)}</span></div><div class="row"><span>lift</span><span>${(r.lift - 1 >= 0 ? '+' : '') + Math.round((r.lift - 1) * 100)}%</span></div>${r.note ? `<div class="note">${r.note}</div>` : ''}`, ev.clientX - rc.left, ev.clientY - rc.top); });
   hit.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
 }
 function renderChurnSeg(host, games) {
@@ -1539,7 +2275,7 @@ function renderChurnSeg(host, games) {
   grid.appendChild(c2);
   barChart($('.plot', c2), { cats: nets.map(([k]) => k), series: [{ name: 'churned before match 10', color: C.s2, values: nets.map(([, o]) => o.c / (o.c + o.t)) }], yfmt: F.pct, yMax: 1, h: 260, xfmt: k => k.replace(' Installs', ''), extra: i => `<div class="row" style="color:var(--muted)"><span>players</span><span>${F.int(nets[i][1].c + nets[i][1].t)}</span></div>` });
   $('.legend', c2).remove();
-  const d2 = document.createElement('div'); d2.className = 'defs'; d2.dataset.open = 1; d2.innerHTML = `<div><b>Network</b> – first <code>attribution_changed</code> event per player (Adjust tracker); "Organic" includes untracked installs. Same churner / retained definition as above, all checkpoints pooled (anyone with ≥ 1 finished match). Networks under 100 players hidden.</div><div><b>Reading it</b> – if churn differs more by network than by anything players do in the game, the early funnel is mostly a traffic-quality question, not a product one.</div>`;
+  const d2 = document.createElement('div'); d2.className = 'defs'; d2.dataset.open = 1; d2.innerHTML = `<div><b>Network</b> – last <code>attribution_changed</code> event per player that names a network (Adjust tracker); "Unattributed" = Adjust matched no tracker (and no later event resolved it), "Organic" includes untracked installs. Same churner / retained definition as above, all checkpoints pooled (anyone with ≥ 1 finished match). Networks under 100 players hidden.</div><div><b>Reading it</b> – if churn differs more by network than by anything players do in the game, the early funnel is mostly a traffic-quality question, not a product one.</div>`;
   c2.appendChild(d2);
   // means table for the record
   const c3 = card(`Group means after match ${cp}`, 'The numbers behind the lift chart.', '');
@@ -1589,8 +2325,11 @@ function mirrorChart(plot, o) {
   });
   hit.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
 }
-const GRP_LABEL = { battle: 'Match rewards', chest: 'Chests', progression: 'Trophy road / league', daily_login: 'Daily login', pass: 'Season pass (free)', rv: 'Rewarded video', iap: 'IAP packs', shop_gem: 'Shop (paid with gems)', shop_coins: 'Shop: coins (paid with gems)', shop_buildmaterials: 'Shop: build materials (paid with gems)', shop_other: 'Shop: chests / other (paid with gems)', upgrade: 'Hero / spell upgrades', building: 'Castle construction', skip_building: 'Timer skips', other: 'Other' };
-const GRP_COLOR = { battle: '#2a78d6', chest: '#1baf7a', progression: '#7a5cd6', daily_login: '#4aa3c9', pass: '#e87ba4', rv: '#eda100', iap: '#d03b3b', shop_gem: '#8a6d3b', shop_coins: '#c98500', shop_buildmaterials: '#8a6d3b', shop_other: '#5c4a2a', upgrade: '#eb6834', building: '#8a8c86', skip_building: '#e34948', other: '#9aa1ad' };
+const GRP_LABEL = { battle: 'Match rewards', chest: 'Chests', progression: 'Trophy road / league', daily_login: 'Daily login', pass: 'Season pass (free)', rv: 'Rewarded video', iap: 'IAP packs', shop_gem: 'Shop (paid with gems)', shop_coins: 'Shop: coins (paid with gems)', shop_buildmaterials: 'Shop: build materials (paid with gems)', shop_hero_card: 'Shop: cards / shards (paid with gems)', shop_other: 'Shop: chests / other (paid with gems)', upgrade: 'Hero / spell upgrades', building: 'Castle construction', skip_building: 'Timer skips', other: 'Other' };
+// per-game wording for the same flow groups (the SQL maps each game's placements onto one group set)
+const GRP_LABEL_GAME = { 'tribal-clash': { progression: 'Level / rank / achievement rewards', chest: 'Chests / boxes', pass: 'Monthly card', upgrade: 'Unit / skill upgrades', building: 'Building upgrades', shop_hero_card: 'Shop: unit shards (paid with gems)' } };
+const grpLabel = (slug, grp) => (GRP_LABEL_GAME[slug] && GRP_LABEL_GAME[slug][grp]) || GRP_LABEL[grp];
+const GRP_COLOR = { battle: '#2a78d6', chest: '#1baf7a', progression: '#7a5cd6', daily_login: '#4aa3c9', pass: '#e87ba4', rv: '#eda100', iap: '#d03b3b', shop_gem: '#8a6d3b', shop_coins: '#c98500', shop_buildmaterials: '#8a6d3b', shop_hero_card: '#a0522d', shop_other: '#5c4a2a', upgrade: '#eb6834', building: '#8a8c86', skip_building: '#e34948', other: '#9aa1ad' };
 function renderEconomy(host, games) {
   host.innerHTML = '';
   const withEc = games.filter(g => DATA[g.slug] && DATA[g.slug].EC);
@@ -1609,24 +2348,32 @@ function renderEconomy(host, games) {
   const per = (k, cur, dir, grp) => div(FL.get([k, cur, dir, grp].join('|')) || 0, ACT.get(k));
   const xfmt = k => axis === 'd' ? 'D' + k : 'A' + k, xfull = k => axis === 'd' ? `Day ${k} since install` : `Arena ${k}`;
   const payLabel = pay === 'all' ? 'all players' : pay === 'p' ? 'payers' : 'non-payers';
-  const seg = (key, opts, cur) => `<div class="seg" style="font-size:0">${opts.map(([v, l]) => `<button class="tbtn" style="border:0;border-radius:0" aria-pressed="${v === cur}" data-${key}="${v}">${l}</button>`).join('')}</div>`;
+  const seg = (key, opts, cur) => `<div class="seg" style="font-size:0">${opts.map(([v, l]) => `<button class="tbtn" style="border:0;border-radius:0" aria-pressed="${v === cur}" data-${key}="${v}">${tr(l)}</button>`).join('')}</div>`;
   const ctl = `<div class="row2"><span class="lbl">Players</span>${seg('ecopay', [['all', 'All'], ['np', 'Non-payers'], ['p', 'Payers']], pay)}</div><div class="row2"><span class="lbl">Axis</span>${seg('ecoaxis', [['d', 'Day since install'], ['a', 'Arena']], axis)}</div>`;
   const sec = section('', 'Economy — sources, sinks and wallets', `Per player active that day (or in that arena), ${payLabel}. Installs ${F.date(state.from)} – ${F.date(state.to)}, data from the UA start (${F.date(EC.meta.install_min)}). Payer = received goods from any IAP pack at any time in the window; ${F.int(EC.meta.excluded_accounts || 0)} accounts with impossible wallets (gems > 50k or coins > 5M — cheats / debug builds) are excluded.`, ctl);
   host.appendChild(sec); const body = $('.qbody', sec);
   sec.querySelectorAll('[data-ecopay]').forEach(b => b.onclick = () => { state.ecoPay = b.dataset.ecopay; render(); });
   sec.querySelectorAll('[data-ecoaxis]').forEach(b => b.onclick = () => { state.ecoAxis = b.dataset.ecoaxis; render(); });
+  // the same Players / Axis controls on every card of this section (the section header scrolls out of view)
+  const ecoCtl = c => { const row = c.querySelector('.tgl') || (() => { const t = document.createElement('div'); t.className = 'tgl'; c.insertBefore(t, $('.plot', c)); return t; })(); const d = document.createElement('div'); d.className = 'row2'; d.style.cssText = 'border:0;padding:0;margin:0;gap:14px'; d.innerHTML = `<span class="lbl">${tr('Players')}</span>${seg('ecopay', [['all', 'All'], ['np', 'Non-payers'], ['p', 'Payers']], pay)}<span class="lbl">${tr('Axis')}</span>${seg('ecoaxis', [['d', 'Day since install'], ['a', 'Arena']], axis)}`; row.appendChild(d);
+    d.querySelectorAll('[data-ecopay]').forEach(b => b.onclick = () => { state.ecoPay = b.dataset.ecopay; render(); }); d.querySelectorAll('[data-ecoaxis]').forEach(b => b.onclick = () => { state.ecoAxis = b.dataset.ecoaxis; render(); }); return c; };
+  const _ga = grid => { const orig = grid.appendChild.bind(grid); grid.appendChild = c => { orig(c); if (c.classList && c.classList.contains('card')) ecoCtl(c); return c; }; };
   const grid = document.createElement('div'); grid.className = 'grid'; body.appendChild(grid);
+  _ga(grid);
   const defs = (c, html) => { const d = document.createElement('div'); d.className = 'defs'; d.dataset.open = 1; d.innerHTML = html; c.appendChild(d); };
   const IN = EC.meta.groups.in, OUT = EC.meta.groups.out;
   // ---- 1 & 2: earned vs spent per active player — card A: coins / hero cards / build materials (selector); card B: gems (+ share of players who spent any)
-  const CUR_LABEL = { coins: 'Coins', hero_card: 'Hero cards', buildmaterials: 'Build materials', gems: 'Gems', wildcards: 'Wildcards' };
-  const curA = ['coins', 'hero_card', 'buildmaterials'].includes(state.ecoCur) ? state.ecoCur : 'coins';
+  const CUR_LABEL = { coins: 'Coins', hero_card: g.slug === 'tribal-clash' ? 'Unit shards' : 'Hero cards', buildmaterials: 'Build materials', gems: 'Gems', wildcards: 'Wildcards' };
+  // currencies present in this game's data (Castle Rivals: coins / hero cards / build materials / gems; Tribal Clash: coins / shards / gems)
+  const CURS = new Set(EC.flow.map(r => r[FI.currency]));
+  const CUR_A = ['coins', 'hero_card', 'buildmaterials'].filter(c => CURS.has(c));
+  const curA = CUR_A.includes(state.ecoCur) ? state.ecoCur : 'coins';
   const mirrorCard = (cur, toggles) => {
     const name = CUR_LABEL[cur];
     const c = card(`${name}: earned vs spent per active player · ${payLabel}`, `Above the line: ${name.toLowerCase()} earned per player active that ${axis === 'd' ? 'day' : 'arena'}, by source. Below: spent, by sink. Bars that mirror each other = players spend what they get; a growing top = they are accumulating.`, '', toggles);
     grid.appendChild(c);
-    const up = IN.map(grp => ({ name: GRP_LABEL[grp], color: GRP_COLOR[grp], values: cats.map(k => per(k, cur, 'in', grp)) })).filter(s => s.values.some(v => v));
-    const down = OUT.map(grp => ({ name: GRP_LABEL[grp], color: GRP_COLOR[grp], values: cats.map(k => per(k, cur, 'out', grp)) })).filter(s => s.values.some(v => v));
+    const up = IN.map(grp => ({ name: grpLabel(g.slug, grp), color: GRP_COLOR[grp], values: cats.map(k => per(k, cur, 'in', grp)) })).filter(s => s.values.some(v => v));
+    const down = OUT.map(grp => ({ name: grpLabel(g.slug, grp), color: GRP_COLOR[grp], values: cats.map(k => per(k, cur, 'out', grp)) })).filter(s => s.values.some(v => v));
     mirrorChart($('.plot', c), { cats, up, down, yfmt: v => F.int(Math.round(v)), xfmt, xfull, h: 280, extra: i => `<div class="row" style="color:var(--muted)"><span>active players</span><span>${F.int(ACT.get(cats[i]))}</span></div><div class="row" style="color:var(--muted)"><span>share of earnings spent</span><span>${(() => { const e = up.reduce((a, s) => a + (s.values[i] || 0), 0), o = down.reduce((a, s) => a + (s.values[i] || 0), 0); return e ? F.pct(o / e) : '–'; })()}</span></div>` });
     legend(c, [...up, ...down].map(s => ({ name: s.name, color: s.color })));
     defs(c, `<div><b>Earned / spent per active player</b> – all ${name.toLowerCase()} moved in (or out) by the <code>item_transaction</code> events of players active that ${axis === 'd' ? 'day since install' : 'arena'} ÷ those active players (any item_transaction or game_finish). Means, so a few heavy players can lift a bar; hover for the player count and the spent ÷ earned ratio.</div>
@@ -1634,7 +2381,7 @@ function renderEconomy(host, games) {
       <div><b>Reading it</b> – spent ≈ earned every day means this is the constraint: players use everything they get. Earned ≫ spent means it piles up — either nothing worth buying (gems) or waiting for another currency to afford the upgrade (cards wait for coins).</div>`);
     return c;
   };
-  const cA = mirrorCard(curA, [['coins', 'Coins'], ['hero_card', 'Hero cards'], ['buildmaterials', 'Materials']].map(([v, l]) => ({ v, label: l, on: v === curA })));
+  const cA = mirrorCard(curA, [['coins', 'Coins'], ['hero_card', CUR_LABEL.hero_card], ['buildmaterials', 'Materials']].filter(([v]) => CUR_A.includes(v)).map(([v, l]) => ({ v, label: l, on: v === curA })));
   cA.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { state.ecoCur = b.dataset.t; render(); });
   const cB = mirrorCard('gems');
   // share of active players who spent any gems that day / arena (sum over sinks, so a player using two sinks counts twice: an upper bound)
@@ -1647,11 +2394,57 @@ function renderEconomy(host, games) {
     const c = card(`Share of earnings spent, by currency · ${payLabel}`, `100 % = players spend everything they get that ${axis === 'd' ? 'day' : 'arena'} (the currency is the gate). Well below 100 % = it accumulates — waiting for another currency, or nothing to buy.`, 'full');
     grid.appendChild(c);
     const ratio = cur => cats.map(k => { const e = IN.reduce((a, grp) => a + (FL.get([k, cur, 'in', grp].join('|')) || 0), 0), o = OUT.reduce((a, grp) => a + (FL.get([k, cur, 'out', grp].join('|')) || 0), 0); return e > 0 ? o / e : null; });
-    const lines = [['coins', C.s2], ['hero_card', C.s1], ['buildmaterials', C.muted], ['gems', C.s4]].map(([cur, color]) => ({ name: CUR_LABEL[cur], color, width: cur === 'coins' || cur === 'hero_card' ? 2.4 : 1.6, values: ratio(cur) }));
+    const lines = [['coins', C.s2], ['hero_card', C.s1], ['buildmaterials', C.muted], ['gems', C.s4]].filter(([cur]) => CURS.has(cur)).map(([cur, color]) => ({ name: CUR_LABEL[cur], color, width: cur === 'coins' || cur === 'hero_card' ? 2.4 : 1.6, values: ratio(cur) }));
     perfChart($('.plot', c), { x: cats, W: 900, h: 280, yfmt: F.pct, xfmt, maxLabels: 15, ref: 1, lines, extra: i => `<div class="row" style="color:var(--muted)"><span>active players</span><span>${F.int(ACT.get(cats[i]))}</span></div>` });
     legend(c, lines.map(l => ({ name: l.name, color: l.color })));
     defs(c, `<div><b>Share of earnings spent</b> – all units of the currency moved out by the players in the slice ÷ all units moved in, per ${axis === 'd' ? 'day since install' : 'arena'}, as a percentage (pooled over players, so it is a volume ratio; above 100 % means players also dipped into what they held before). Dashed line = 100 %.</div>
       <div><b>Reading it</b> – coins at ~100 % with cards drifting down means upgrades are coin-gated: players hold the shards and wait for coins. Gems far below 100 % means gems have no sink. Where the coin line reaches 100 % is where the progression gate tightens.</div>`);
+  }
+  // ---- 2c: hero shards — heroes owned per player: ready to upgrade, upgraded, or waiting (sql/heroready.sql -> heroready.json)
+  const HR = DATA[g.slug].HR;
+  if (HR) {
+    const HI = {}; HR.meta.cols.forEach((k, i) => HI[k] = i);
+    const okH = r => r[HI.d] >= state.from && r[HI.d] <= state.to && (state.platform === 'all' || r[HI.p] === state.platform) && countryOk(r[HI.c]) && okPay(r[HI.pay]) && verOk(r[HI.v]) && r[HI.axis] === axis;
+    const agg = new Map();
+    for (const r of HR.cells) { if (!okH(r)) continue; const k = r[HI.k]; const a = agg.get(k) || { players: 0, owned: 0, upgraded: 0, ready: 0, blocked: 0 }; a.players += r[HI.players]; a.owned += r[HI.owned]; a.upgraded += r[HI.upgraded]; a.ready += r[HI.ready]; a.blocked += r[HI.blocked]; agg.set(k, a); }
+    const hcats = [...agg.keys()].filter(k => agg.get(k).players >= state.dayMin && (axis === 'd' ? k <= 14 : true)).sort((a, b) => a - b);
+    const per = (k, f) => { const a = agg.get(k); return a.players ? a[f] / a.players : 0; };
+    const c = card(`Heroes owned per player — ready to upgrade, upgraded, or waiting · ${payLabel}`, `Each bar = heroes owned by the average player active that ${axis === 'd' ? 'day' : 'arena'}. Ready = holds the shards for the next level (wildcards not counted); darker orange = ready but the coin balance is below that level's coin cost. Upgraded = upgraded that day. Not enough shards is by design — the hero cannot be upgraded yet.`, 'full');
+    grid.appendChild(c);
+    const series = [
+      { name: 'Not enough shards (by design)', color: '#c9cdd3', values: hcats.map(k => per(k, 'owned') - per(k, 'ready') - per(k, 'upgraded')) },
+      { name: 'Ready, upgraded that day', color: '#1baf7a', values: hcats.map(k => per(k, 'upgraded')) },
+      { name: 'Ready, waiting — coins short', color: '#c4541b', values: hcats.map(k => per(k, 'blocked')) },
+      { name: 'Ready, waiting — affordable', color: '#f3a35a', values: hcats.map(k => per(k, 'ready') - per(k, 'blocked')) }];
+    barChart($('.plot', c), { cats: hcats, W: 900, h: 300, stacked: true, maxLabels: 15, yfmt: v => F.n1(v), xfmt, xfull, series, total: (i, tot) => F.n1(tot),
+      extra: i => { const a = agg.get(hcats[i]); return `<div class="row" style="color:var(--muted)"><span>player-days</span><span>${F.int(a.players)}</span></div><div class="row" style="color:var(--muted)"><span>ready heroes per player</span><span>${F.n1(div(a.ready, a.players))}</span></div><div class="row" style="color:var(--muted)"><span>of ready heroes, coin-blocked</span><span>${F.pct(div(a.blocked, a.ready))}</span></div><div class="row" style="color:var(--muted)"><span>heroes upgraded per player</span><span>${F.n1(div(a.upgraded, a.players))}</span></div>`; } });
+    legend(c, series.map(s => ({ name: s.name, color: s.color })));
+    // per-hero table: pooled over the player-days of a range of bars (default: every bar on the axis); range slider, no click
+    if (HR.heroes && HR.heroes.length && hcats.length) {
+      const HH = {}; HR.meta.hcols.forEach((k, i) => HH[k] = i);
+      const kmin = hcats[0], kmax = hcats[hcats.length - 1];
+      const sel = (state.hrRange && state.hrRange[axis]) || {}; let lo = Math.max(kmin, sel.lo ?? kmin), hi = Math.min(kmax, sel.hi ?? kmax); if (lo > hi) [lo, hi] = [hi, lo];
+      const okT = r => r[HH.d] >= state.from && r[HH.d] <= state.to && (state.platform === 'all' || r[HH.p] === state.platform) && countryOk(r[HH.c]) && okPay(r[HH.pay]) && r[HH.axis] === axis && r[HH.k] >= lo && r[HH.k] <= hi;
+      const byH = new Map();
+      for (const r of HR.heroes) { if (!okT(r)) continue; const h = r[HH.hero]; const a = byH.get(h) || { owners: 0, fielded: 0, upgraded: 0, ready: 0, blocked: 0, lsum: 0 }; a.owners += r[HH.owners]; a.fielded += r[HH.fielded]; a.upgraded += r[HH.upgraded]; a.ready += r[HH.ready]; a.blocked += r[HH.blocked]; a.lsum += r[HH.level_sum]; byH.set(h, a); }
+      const pdays = hcats.filter(k => k >= lo && k <= hi).reduce((s, k) => s + agg.get(k).players, 0);
+      const rarity = h => { const u = (DATA[g.slug].UN && DATA[g.slug].UN.meta && DATA[g.slug].UN.meta.rarity) || {}; return u[h] || ''; };
+      const rows = [...byH.entries()].filter(([, a]) => a.owners >= 100).sort((a, b) => div(b[1].ready, b[1].owners) - div(a[1].ready, a[1].owners));
+      const rangeLabel = lo === kmin && hi === kmax ? (axis === 'd' ? `D${kmin}–D${kmax}` : `A${kmin}–A${kmax}`) : (axis === 'd' ? `D${lo}${hi > lo ? '–D' + hi : ''}` : `A${lo}${hi > lo ? '–A' + hi : ''}`);
+      const num = (v, f) => `<td style="text-align:right">${f(v)}</td>`;
+      const bar = (v, cls, hot) => `<td class="bar" style="text-align:right${hot ? ';font-weight:600' : ''}"><span class="${cls}" style="width:calc((100% - 12px) * ${Math.max(0, Math.min(1, v || 0))})"></span>${F.pct(v)}</td>`;
+      const t = document.createElement('div'); t.className = 'tbl'; t.style.marginTop = '8px';
+      const head = `<div style="font-size:12px;color:var(--muted);margin:2px 0 6px"><b style="color:var(--ink)"><span>Per hero ·</span> <span>${rangeLabel}</span></b><span> — </span><span>${F.int(pdays)} player-days, ${payLabel}; pooled over the bars in the range (slider). Heroes owned by fewer than 100 player-days are hidden. Sorted by shards ready, not upgraded.</span></div>`;
+      if (!rows.length) t.innerHTML = head + `<div style="font-size:12px;color:var(--muted)">Too few player-days in this range for a per-hero split — widen the range.</div>`;
+      else t.innerHTML = head + `<table style="font-size:11px;white-space:nowrap"><thead><tr><th>Hero</th><th>Rarity</th><th style="text-align:right">Owned by<br><span style="font-weight:400">% of player-days</span></th><th style="text-align:right">Avg level</th><th style="text-align:right">Fielded<br><span style="font-weight:400">% of owner-days</span></th><th style="text-align:right">Not enough shards<br><span style="font-weight:400">% of owner-days</span></th><th style="text-align:right">Shards ready, not upgraded<br><span style="font-weight:400">% of owner-days</span></th><th style="text-align:right">…of which no coins<br><span style="font-weight:400">% of those</span></th><th style="text-align:right">Upgraded<br><span style="font-weight:400">% of owner-days</span></th></tr></thead><tbody>${rows.map(([h, a]) => `<tr><td>${h}</td><td style="color:var(--muted)">${rarity(h)}</td>${num(div(a.owners, pdays), F.pct)}${num(div(a.lsum, a.owners), F.n1)}${bar(div(a.fielded, a.owners), 'b')}${bar(div(a.owners - a.ready - a.upgraded, a.owners), 'n')}${bar(div(a.ready, a.owners), 'f', true)}${num(div(a.blocked, a.ready), F.pct)}${bar(div(a.upgraded, a.owners), 'g')}</tr>`).join('')}</tbody></table>`;
+      $('.legend', c).after(t);
+      const rc = document.createElement('div'); t.insertBefore(rc, t.firstChild);
+      rangeControl(rc, axis === 'd' ? 'Days' : 'Arenas', kmin, kmax, lo, hi, k => (axis === 'd' ? 'Day ' : 'Arena ') + k, (x, y) => { state.hrRange = Object.assign({}, state.hrRange || {}, { [axis]: { lo: x, hi: y } }); render(); });
+    }
+    defs(c, `<div><b>Heroes owned</b> – every hero the player has unlocked (unlock event, any shard received, or the default hero), counted at the end of each ${axis === 'd' ? 'day since install' : 'player-day in the arena'} for players active that day, averaged per player.</div>
+      <div><b>Ready</b> – the player holds at least the shards the next level costs (studio Hero Upgrades table: 2 at level 1, 4 at 2, 5 at 3 … 29 at 14). Wildcards are not counted, so this is a lower bound. <b>Coins short</b> – the coin balance at end of day is below the gold cost of that same level (5, 8, 14 … 285). <b>Upgraded</b> – a card_upgrade of that hero that day, whatever the state at end of day.</div>
+      <div><b>Reading it</b> – a thick dark-orange band = shards are there, coins are the gate (the §5 story at hero level). A thick light-orange band = players could upgrade and don't: the upgrade is not attractive or not surfaced. A tall grey block = shards spread thin across many heroes. Hero level is counted from upgrades since install (new installs only), shard and coin balances are the last transaction of the day, carried forward.</div>
+      <div><b>Per-hero table</b> – the same states pooled over every player-day in the slider range, per hero: owned by = share of player-days owning the hero; fielded = of the owner-days, those with the hero in the deck of at least one match; not enough shards = owner-days below the shard cost of the next level (the three state columns add to 100 %); shards ready, not upgraded = owner-days holding the shards for the next level with no upgrade that day; …of which no coins = the share of those owner-days where the coin balance was below the level's gold cost; upgraded = owner-days with at least one upgrade. Heroes with fewer than 100 owner-days in the range are hidden. If the waiting heroes are the un-fielded ones, players are focusing their deck and the rest is by design; if fielded heroes also sit ready, the upgrade itself is the problem (value, surfacing, or a cap the events don't carry). Not split by app version.</div>`);
   }
   // ---- 3 & 4: wallets held at end of day (day axis only) — median and quartiles from the bucket histogram
   if (axis === 'd') {
@@ -1675,7 +2468,7 @@ function renderEconomy(host, games) {
     const c = card(`Where gems go — share of gem spend by sink · ${payLabel}`, `Each bar = 100 % of the gems spent ${axis === 'd' ? 'that day' : 'in that arena'}, split by sink. Hover for gems per active player.`, '');
     grid.appendChild(c);
     const tot = cats.map(k => OUT.reduce((a, grp) => a + (FL.get([k, 'gems', 'out', grp].join('|')) || 0), 0));
-    const series = OUT.map(grp => ({ name: GRP_LABEL[grp], color: GRP_COLOR[grp], values: cats.map((k, i) => tot[i] ? (FL.get([k, 'gems', 'out', grp].join('|')) || 0) / tot[i] : 0) })).filter(s => s.values.some(v => v));
+    const series = OUT.map(grp => ({ name: grpLabel(g.slug, grp), color: GRP_COLOR[grp], values: cats.map((k, i) => tot[i] ? (FL.get([k, 'gems', 'out', grp].join('|')) || 0) / tot[i] : 0) })).filter(s => s.values.some(v => v));
     barChart($('.plot', c), { cats, series, stacked: true, yMax: 1, yfmt: F.pct, xfmt, xfull, h: 260, extra: i => `<div class="row" style="color:var(--muted)"><span>gems spent per active player</span><span>${F.int(Math.round(div(tot[i], ACT.get(cats[i])) || 0))}</span></div>` });
     legend(c, series.map(s => ({ name: s.name, color: s.color })));
     defs(c, `<div><b>Share of gem spend</b> – gems moved out by each sink ÷ all gems moved out, among players in the slice. <b>Shop: coins / build materials</b> = gems converted into that currency in the shop (the gems-out event is paired with the inflow logged within 3 s); <b>Shop: chests / other</b> = gem spend in the shop with no coin / material inflow — premium chests (cards arrive as chest rewards) and anything else; <b>Timer skips</b> = <code>skip_building</code>; upgrades never cost gems directly.</div>
@@ -1683,18 +2476,22 @@ function renderEconomy(host, games) {
   }
   // ---- 6: upgrade cadence — hero upgrades and constructions per active player, payers vs non-payers
   {
-    const c = card('Progression pace — upgrades and constructions per active player', `Transactions per active player ${axis === 'd' ? 'per day since install' : 'per arena'}: hero / spell upgrades and castle constructions, payers vs non-payers. The gap is what paying buys.`, '');
+    // per game: what the two lines are and which currency leg identifies one transaction (an upgrade moves two currencies; count it once)
+    const TCp = g.slug === 'tribal-clash';
+    const PACE = TCp ? { title: 'Progression pace — unit and building upgrades per active player', what: 'unit / skill upgrades and building upgrades', up: 'Unit upgrades', bd: 'Building upgrades', upCur: 'coins', bdCur: 'hero_card', defs: '<code>card_upgrade</code> / <code>skill_tree_upgrade</code> (coin leg) and <code>building_upgrade</code> (shard leg; Tribal Clash buildings are upgraded with their own shards, not coins)' }
+      : { title: 'Progression pace — upgrades and constructions per active player', what: 'hero / spell upgrades and castle constructions', up: 'Upgrades', bd: 'Constructions', upCur: 'coins', bdCur: 'coins', defs: 'coin-spending <code>upgrade_hero</code> / <code>upgrade_spell</code> and <code>construction</code>' };
+    const c = card(PACE.title, `Transactions per active player ${axis === 'd' ? 'per day since install' : 'per arena'}: ${PACE.what}, payers vs non-payers. The gap is what paying buys.`, '');
     grid.appendChild(c);
     const TX = new Map();
-    for (const r of EC.flow) { if (!(r[0] >= state.from && r[0] <= state.to && (state.platform === 'all' || r[1] === state.platform) && countryOk(r[2]) && (EC.meta.fcols[EC.meta.fcols.length - 1] !== 'v' || verOk(r[r.length - 1]))) || r[FI.axis] !== axis) continue; if (r[FI.dir] !== 'out' || !['upgrade', 'building'].includes(r[FI.grp]) || !['coins'].includes(r[FI.currency])) continue; const key = [r[FI.k], r[FI.grp], r[FI.pay]].join('|'); TX.set(key, (TX.get(key) || 0) + r[FI.tx]); }
+    for (const r of EC.flow) { if (!(r[0] >= state.from && r[0] <= state.to && (state.platform === 'all' || r[1] === state.platform) && countryOk(r[2]) && (EC.meta.fcols[EC.meta.fcols.length - 1] !== 'v' || verOk(r[r.length - 1]))) || r[FI.axis] !== axis) continue; if (r[FI.dir] !== 'out' || !((r[FI.grp] === 'upgrade' && r[FI.currency] === PACE.upCur) || (r[FI.grp] === 'building' && r[FI.currency] === PACE.bdCur))) continue; const key = [r[FI.k], r[FI.grp], r[FI.pay]].join('|'); TX.set(key, (TX.get(key) || 0) + r[FI.tx]); }
     const ACTall = new Map();
     for (const r of EC.active) { if (!(r[0] >= state.from && r[0] <= state.to && (state.platform === 'all' || r[1] === state.platform) && countryOk(r[2]) && (EC.meta.acols[EC.meta.acols.length - 1] !== 'v' || verOk(r[r.length - 1]))) || r[AI.axis] !== axis) continue; const kp = r[AI.k] + '|' + r[AI.pay]; ACTall.set(kp, (ACTall.get(kp) || 0) + r[AI.users]); }
     const ser = (grp, p, name, color, dash) => ({ name, color, dash: dash ? '4 4' : null, values: cats.map(k => (ACTall.get(k + '|' + p) || 0) >= 30 ? div(TX.get([k, grp, p].join('|')) || 0, ACTall.get(k + '|' + p)) : null) });
-    const series = [ser('upgrade', 1, 'Upgrades · payers', C.s2, false), ser('upgrade', 0, 'Upgrades · non-payers', C.s2, true), ser('building', 1, 'Constructions · payers', C.s1, false), ser('building', 0, 'Constructions · non-payers', C.s1, true)];
+    const series = [ser('upgrade', 1, PACE.up + ' · payers', C.s2, false), ser('upgrade', 0, PACE.up + ' · non-payers', C.s2, true), ser('building', 1, PACE.bd + ' · payers', C.s1, false), ser('building', 0, PACE.bd + ' · non-payers', C.s1, true)];
     lineChart($('.plot', c), { x: cats, xfmt, xfull, h: 260, yfmt: v => F.int(Math.round(v)), series, extra: i => `<div class="row" style="color:var(--muted)"><span>active payers · non-payers</span><span>${F.int(ACTall.get(cats[i] + '|1') || 0)} · ${F.int(ACTall.get(cats[i] + '|0') || 0)}</span></div>` });
-    legend(c, [{ name: 'Upgrades', color: C.s2 }, { name: 'Constructions', color: C.s1 }, { name: 'dashed = non-payers', color: C.muted }]);
-    defs(c, `<div><b>Upgrades / constructions per active player</b> – coin-spending <code>upgrade_hero</code> / <code>upgrade_spell</code> and <code>construction</code> transactions ÷ players active that ${axis === 'd' ? 'day' : 'arena'}, split by payer status (not by the Players toggle above). Points with fewer than 30 active players in a group are hidden.</div>
-      <div><b>Reading it</b> – how far ahead paying puts a player in the same day of life; the upgrade cost table (studio config) will turn this into "days to the next castle level" once we have it.</div>`);
+    legend(c, [{ name: PACE.up, color: C.s2 }, { name: PACE.bd, color: C.s1 }, { name: 'dashed = non-payers', color: C.muted }]);
+    defs(c, `<div><b>${PACE.up} / ${PACE.bd.toLowerCase()} per active player</b> – ${PACE.defs} transactions ÷ players active that ${axis === 'd' ? 'day' : 'arena'}, split by payer status (not by the Players toggle above). Points with fewer than 30 active players in a group are hidden.</div>
+      <div><b>Reading it</b> – how far ahead paying puts a player in the same day of life; the upgrade cost table (studio config) will turn this into "days to the next ${TCp ? 'building' : 'castle'} level" once we have it.</div>`);
   }
 }
 
@@ -1772,6 +2569,10 @@ function renderUnits(host, games) {
   // paired delta: for each player who both fielded and benched the unit (≥2 matches each) in the same arena, their own win rate fielded − benched; averaged across those players
   const PI = {}; (UN.meta.pcols || []).forEach((k, i) => PI[k] = i); const PD = new Map();
   for (const r of UN.paired || []) { if (!ok(r) || r[PI.arena] < lo || r[PI.arena] > hi) continue; const u = r[PI.unit]; let t = PD.get(u); if (!t) { t = { n: 0, s: 0 }; PD.set(u, t); } t.n += r[PI.players]; t.s += r[PI.sum_delta]; }
+  // card groups: units & heroes (default for uncategorised cards) and spells / skills; buildings are left out of this section (they are not a deck choice)
+  const CAT = UN.meta.category || {};
+  const cardGroup = u => { const c = CAT[u] || ''; return c === 'building' ? 'building' : (c === 'skill' || c === 'spell') ? 'spell' : 'unit'; };
+  const GROUPS = [['unit', 'Units & heroes', 'unit', 'Unit'], ['spell', 'Spells', 'spell', 'Spell']].filter(([k]) => units.some(u => cardGroup(u) === k));
   const MINP = 100, MINM = 150; const pts = []; let omax = 1;
   for (const [u, o] of agg) if ((PD.has(u) && PD.get(u).n >= MINP) || (o.dg >= MINM && o.bg >= MINM)) omax = Math.max(omax, o.own);
   for (const [u, o] of agg) {
@@ -1780,7 +2581,9 @@ function renderUnits(host, games) {
     pts.push({ name: u, x: ad, y: d, r: 4 + 16 * Math.sqrt(o.own / omax), color: RARITY_COLOR[UN.meta.rarity[u]] || C.muted, hollow: !paired, label: `${u} ${d >= 0 ? '+' : ''}${(d * 100).toFixed(0)}${paired ? '' : '*'}`,
       extra: `<div class="row"><span>adoption rate · mean of owners' own rates</span><span>${F.pct1(ad)}</span></div><div class="row"><span>pooled (all fielded ÷ all owned matches)</span><span>${F.pct1(pooled(o))}</span></div><div class="row"><span>${paired ? 'paired delta · players compared' : 'pooled delta (too few paired players)'}</span><span>${(d >= 0 ? '+' : '') + (d * 100).toFixed(1)} pts${paired ? ' · ' + F.int(pdv.n) : pdv ? ' · ' + F.int(pdv.n) + ' paired' : ''}</span></div><div class="row"><span>win rate fielded · benched (all owners)</span><span>${F.pct1(div(o.dw, o.dg))} · ${F.pct1(div(o.bw, o.bg))}</span></div><div class="row"><span>owners · matches owned</span><span>${F.int(o.own)} · ${F.int(o.og)}</span></div><div class="row" style="color:var(--muted)"><span>rarity · unlock</span><span>${UN.meta.rarity[u] || '–'} · ${unlockArena(u) ? 'arena ' + unlockArena(u) : 'shop / event'}</span></div>` });
   }
-  const c1 = card(`Once a unit is owned, do players use it, and does it win? · ${lo === 1 && hi === AMAX ? 'all arenas' : 'arenas ' + lo + (hi > lo ? '–' + hi : '')}`, `One bubble per unit: x = how much its owners actually field it, y = whether fielding it wins more than benching it (same players). Right of the line = adopted; above the line = helps win.`, 'full');
+  for (const [gk, gname, word] of GROUPS) {
+  const gpts = pts.filter(p => cardGroup(p.name) === gk);
+  const c1 = card(`Once a ${word} is owned, do players use it, and does it win? · ${gname} · ${lo === 1 && hi === AMAX ? 'all arenas' : 'arenas ' + lo + (hi > lo ? '–' + hi : '')}`, `One bubble per ${word}: x = how much its owners actually field it, y = whether fielding it wins more than benching it (same players). Right of the line = adopted; above the line = helps win.${GROUPS.length > 1 ? ' Buildings are not shown.' : ''}`, 'full');
   grid.appendChild(c1);
   const d1 = document.createElement('div'); d1.className = 'defs'; d1.dataset.open = 1; d1.innerHTML = `
     <div><b>Adoption rate (x)</b> – for each player who <i>owns</i> the unit: matches in these arenas with the unit in their deck ÷ all their matches in these arenas. The chart shows the <b>average of those per-player rates</b>, so a grinder who plays 200 matches weighs the same as a player with 5. 100 % = every owner fields it every match; 25 % = owners field it one match in four. Only owners count, so a late unlock or a paid hero is not penalised for being rare. The pooled version (all fielded ÷ all owned matches) is in the tooltip.</div>
@@ -1788,8 +2591,9 @@ function renderUnits(host, games) {
     <div><b>Bubble size</b> – players who own the unit (largest single-arena owner count in the range). <b>Colour</b> – rarity. Starter units (Archer, Cannoneer) read high on x when arenas 1–2 are in range: they are the only units there. <b>Owned</b> – from the player's <code>card_unlock</code> event (starter units: first appearance in a deck); every match after that counts as owning it, <b>fielded</b> if it is in that match's deck, <b>benched</b> otherwise.</div>
     <div><b>Lines</b> – vertical at 50 % adoption, horizontal at 0 delta: they only cut the chart into four readable quadrants. With a 4-slot deck and ~10 units owned by arena 5, a unit nobody has an opinion about sits around 40 %. Bot matches are included and win/loss is nearly saturated against bots, so deltas are compressed; match length (<code>game_length</code>) would be a sharper outcome and is the next step.</div>`;
   rangeControl(c1.querySelector('.tgl') || (() => { const t = document.createElement('div'); t.className = 'tgl'; c1.insertBefore(t, $('.plot', c1)); return t; })(), 'Arenas', 1, AMAX, lo, hi, a => 'Arena ' + a, (x, y) => { state.unitLo = x; state.unitHi = y; render(); });
-  scatterChart($('.plot', c1), { pts, xfmt: F.pct, yfmt: v => (v >= 0 ? '+' : '') + (v * 100).toFixed(0), xMax: 1, yMin: -0.1, yMax: 0.1, xRef: 0.5, h: 440, xLabel: 'adoption once owned →', yLabel: 'win-rate delta, fielded − benched (pts) · paired; hollow* = pooled' });
+  scatterChart($('.plot', c1), { pts: gpts, xfmt: F.pct, yfmt: v => (v >= 0 ? '+' : '') + (v * 100).toFixed(0), xMax: 1, yMin: -0.1, yMax: 0.1, xRef: 0.5, h: 440, xLabel: 'adoption once owned →', yLabel: 'win-rate delta, fielded − benched (pts) · paired; hollow* = pooled' });
   legend(c1, Object.entries(RARITY_COLOR).map(([k, c]) => ({ name: k[0].toUpperCase() + k.slice(1), color: c }))); c1.appendChild(d1);
+  }
   // ---- 2. unit adoption heatmap: rows = units grouped by unlock arena, columns = arenas, cell = adoption once owned; row header = tried / kept after unlock
   const ST = new Map();
   for (const r of UN.stick || []) { if (!ok(r)) continue; const u = r[KI.unit]; let o = ST.get(u); if (!o) { o = { n3: 0, tr: 0, n11: 0, kp: 0 }; ST.set(u, o); } o.n3 += r[KI.owners_10plus]; o.tr += r[KI.tried_within_10]; o.n11 += r[KI.owners_10plus_b]; o.kp += r[KI.kept_fielded_over_5]; }
@@ -1798,16 +2602,21 @@ function renderUnits(host, games) {
   const lvlGap = u => { const o = LV.get(u); return o && o.n >= 30 ? (o.su - o.so) / o.n : null; };   // unit level − rest-of-deck level at first field (negative = arrives weaker)
   const gapCell = u => { const g = lvlGap(u), o = LV.get(u); if (g == null) return '<td>–</td>'; const col = g <= -3 ? 'var(--crit)' : g >= 1 ? 'var(--good-ink)' : 'inherit'; return `<td style="color:${col};font-weight:${Math.abs(g) >= 3 ? 600 : 400}" title="${u}: at the first match its owner fields it, the unit is level ${(o.su / o.n).toFixed(1)} vs ${(o.so / o.n).toFixed(1)} for the rest of the deck (${F.int(o.n)} players; ${F.pct(o.g3 / o.n)} of them 3+ levels under)">${(g >= 0 ? '+' : '') + g.toFixed(1)}</td>`; };
   const totalOwners = u => Math.max(...arenas.map(a => (UA.get(u + '|' + a) || { owners: 0 }).owners), 0);
-  const rows = units.filter(u => totalOwners(u) >= 30).map(u => ({ u, ua: unlockArena(u), owners: totalOwners(u), st: ST.get(u) || { n3: 0, tr: 0, n11: 0, kp: 0 } }))
+  {
+  const gk = GROUPS.some(([k]) => k === state.unitCat) ? state.unitCat : 'unit';
+  const [, gname, word, Word] = GROUPS.find(([k]) => k === gk) || GROUPS[0];
+  const rows = units.filter(u => cardGroup(u) === gk && totalOwners(u) >= 30).map(u => ({ u, ua: unlockArena(u), owners: totalOwners(u), st: ST.get(u) || { n3: 0, tr: 0, n11: 0, kp: 0 } }))
     .sort((p, q) => ((p.ua || 99) - (q.ua || 99)) || (q.owners - p.owners));
   const shade = v => v == null ? 'transparent' : `color-mix(in srgb, ${C.s1} ${Math.round(v * 100)}%, ${C.surface})`;
   const ink = v => v != null && v > 0.55 ? '#fff' : 'var(--ink)';
-  const c2 = card('New units by arena — do players adopt them or drop them?', `Rows = units grouped by the arena they unlock in; columns = arenas; cell = how much owners field the unit there (dark = most matches, light = rarely). Tried / kept say whether owners ever pick a new unit up and whether it stays in the deck; lvl gap says how far under the deck it arrives.`, 'full');
+  const c2 = card(`New ${word}s by arena — do players adopt them or drop them? · ${gname}`, `Rows = ${word}s grouped by the arena they unlock in; columns = arenas; cell = how much owners field the ${word} there (dark = most matches, light = rarely). Tried / kept say whether owners ever pick a new ${word} up and whether it stays in the deck; lvl gap says how far under the deck it arrives.${GROUPS.length > 1 ? ' Buildings are not shown.' : ''}`, 'full',
+    GROUPS.length > 1 ? GROUPS.map(([k, n]) => ({ v: k, label: n, on: k === gk })) : undefined);
   grid.appendChild(c2);
-  let html = `<table class="hm"><thead><tr><th>Unlock</th><th>Unit</th><th>Owners</th><th>Tried<br><span class="mini">≥1 of first 10</span></th><th>Kept<br><span class="mini">&gt;5 matches</span></th><th>Lvl gap<br><span class="mini">at unlock</span></th>${arenas.map(a => `<th>A${a}</th>`).join('')}</tr></thead><tbody>`;
-  // summary row per arena: how many units unlock there, and their average tried / kept
+  c2.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { state.unitCat = b.dataset.t; render(); });
+  let html = `<table class="hm"><thead><tr><th>Unlock</th><th>${Word}</th><th>Owners</th><th>Tried<br><span class="mini">≥1 of first 10</span></th><th>Kept<br><span class="mini">&gt;5 matches</span></th><th>Lvl gap<br><span class="mini">at unlock</span></th>${arenas.map(a => `<th>A${a}</th>`).join('')}</tr></thead><tbody>`;
+  // summary row per arena: how many cards of this group unlock there, and their average tried / kept
   const perArena = a => { const us = rows.filter(r => r.ua === a); const tr = us.map(r => div(r.st.tr, r.st.n3)).filter(v => v != null), kp = us.map(r => div(r.st.kp, r.st.n11)).filter(v => v != null); return { n: us.length, tr: tr.length ? tr.reduce((x, y) => x + y, 0) / tr.length : null, kp: kp.length ? kp.reduce((x, y) => x + y, 0) / kp.length : null }; };
-  html += `<tr class="sum"><td colspan="6">Units unlocked in the arena · avg tried · avg kept</td>${arenas.map(a => { const s = perArena(a); return `<td title="arena ${a}: ${s.n} unit(s) unlock here">${s.n ? `<b>${s.n}</b><br><span class="mini">${F.pct(s.tr)} · ${F.pct(s.kp)}</span>` : '<span class="mini">–</span>'}</td>`; }).join('')}</tr>`;
+  html += `<tr class="sum"><td colspan="6">${Word}s unlocked in the arena · avg tried · avg kept</td>${arenas.map(a => { const s = perArena(a); return `<td title="arena ${a}: ${s.n} ${word}(s) unlock here">${s.n ? `<b>${s.n}</b><br><span class="mini">${F.pct(s.tr)} · ${F.pct(s.kp)}</span>` : '<span class="mini">–</span>'}</td>`; }).join('')}</tr>`;
   let lastUa = undefined;
   for (const r of rows) {
     const grp = r.ua !== lastUa; lastUa = r.ua;
@@ -1818,13 +2627,14 @@ function renderUnits(host, games) {
   html += '</tbody></table>';
   const tb = document.createElement('div'); tb.className = 'tbl hmwrap'; tb.innerHTML = html; $('.plot', c2).replaceWith(tb); $('.legend', c2).remove();
   const d2 = document.createElement('div'); d2.className = 'defs'; d2.dataset.open = 1; d2.innerHTML = `
-    <div><b>Cell = usage rate in that arena</b> – for each player who owns the unit: their matches in that arena with the unit in deck ÷ all their matches in that arena; the cell shows the <b>average of those per-player rates</b> (so heavy players do not dominate). Dark = owners field it most of the time, light = rarely, blank = fewer than 30 owners played there. Hover a cell for owners, matches and the pooled rate.</div>
-    <div><b>Unlock arena (row group)</b> – the first arena where at least 60 % of the players there own the unit; units that never reach that are shop / event heroes. <b>Owners</b> – players who own the unit (max over arenas in the slice).</div>
-    <div><b>Tried</b> – % of owners who fielded the unit at least once in their first 10 matches after unlocking it. <b>Kept</b> – % who fielded it in more than 5 matches after unlocking. Both among owners with at least 10 matches after the unlock; matches are counted from the <code>card_unlock</code> event (unlock = usable).</div>
-    <div><b>Lvl gap at unlock</b> – the unit's level minus the average level of the rest of the deck, at the first match its owner fields it, averaged over those owners. −3.0 = the unit arrives 3 levels under the deck it joins; + = it arrives stronger (paid heroes). Measured on players who did field it, so for the players who never did the gap is at least this large. Red = 3+ levels under, green = arrives stronger.</div>
-    <div><b>Reading a row</b> – stays dark to the right: a unit players like and keep; fades within an arena or two: tried and dropped; light from the start: never adopted. Deck changes are almost entirely unlock-driven (≈ 95–99 % of players re-deck on the match after a new unit, 2 % otherwise) and losing does not trigger a re-deck, which is why this section looks at units rather than deck changes.</div>
-    <div><b>Data</b> – arena = <code>maxarenaindex</code> at the match; cut to the sidebar install range / platform / country; installs from the UA start (${F.date(UN.meta.install_min)}); bot matches included.</div>`;
+    <div><b>Cell = usage rate in that arena</b> – for each player who owns the ${word}: their matches in that arena with the ${word} in deck ÷ all their matches in that arena; the cell shows the <b>average of those per-player rates</b> (so heavy players do not dominate). Dark = owners field it most of the time, light = rarely, blank = fewer than 30 owners played there. Hover a cell for owners, matches and the pooled rate.</div>
+    <div><b>Unlock arena (row group)</b> – the first arena where at least 60 % of the players there own the ${word}; ${word}s that never reach that are shop / event ${word}s. <b>Owners</b> – players who own the ${word} (max over arenas in the slice).</div>
+    <div><b>Tried</b> – % of owners who fielded the ${word} at least once in their first 10 matches after unlocking it. <b>Kept</b> – % who fielded it in more than 5 matches after unlocking. Both among owners with at least 10 matches after the unlock; matches are counted from the <code>card_unlock</code> event (unlock = usable).</div>
+    <div><b>Lvl gap at unlock</b> – the ${word}'s level minus the average level of the rest of the deck, at the first match its owner fields it, averaged over those owners. −3.0 = the ${word} arrives 3 levels under the deck it joins; + = it arrives stronger (paid heroes). Measured on players who did field it, so for the players who never did the gap is at least this large. Red = 3+ levels under, green = arrives stronger.</div>
+    <div><b>Reading a row</b> – stays dark to the right: a ${word} players like and keep; fades within an arena or two: tried and dropped; light from the start: never adopted. Deck changes are almost entirely unlock-driven (≈ 95–99 % of players re-deck on the match after a new unit, 2 % otherwise) and losing does not trigger a re-deck, which is why this section looks at ${word}s rather than deck changes.</div>
+    <div><b>Groups</b> – units &amp; heroes and spells are separate tables (card category from the game's <code>card_unlock</code> events; uncategorised cards are listed with units); buildings are left out. <b>Data</b> – arena = <code>maxarenaindex</code> at the match; cut to the sidebar install range / platform / country; installs from the UA start (${F.date(UN.meta.install_min)}); bot matches included.</div>`;
   c2.appendChild(d2);
+  }
 }
 
 // ================= Section 02 — IAP benchmark (Castle Rivals vs Castle Clashers)
@@ -1996,7 +2806,7 @@ const fam2 = pid => { const p = (pid || '').toLowerCase();
   if (/starter/.test(p)) return 'Entry offer'; if (/boosthero|champion|elite|arenaunlock/.test(p)) return 'Progression offer'; if (/pass/.test(p)) return 'Pass';
   if (/hero/.test(p)) return 'Hero pack'; if (/gem/.test(p)) return 'Gems'; if (/wildcard/.test(p)) return 'Wildcards'; if (/no_?video|no_?ads|noads/.test(p)) return 'No-ads'; return family(pid); };
 const FAM2 = ['Entry offer', 'Progression offer', 'Pass', 'Hero pack', 'Gems', 'Wildcards', 'No-ads', 'Currency', 'Bundles / offers', 'Heroes / units', 'Other'];
-const FAM2_COLOR = { 'Entry offer': 's2', 'Progression offer': 's3', 'Pass': 's4', 'Hero pack': 's5', 'Gems': 's1', 'Wildcards': 's6', 'No-ads': 's7', 'Currency': 's1', 'Bundles / offers': 's2', 'Heroes / units': 's3', 'Other': 'muted' };
+const FAM2_COLOR = { 'Entry offer': 's2', 'Progression offer': 's3', 'Pass': 's4', 'Hero pack': 's5', 'Gems': 's1', 'Wildcards': 's6', 'No-ads': 's7', 'Currency': 's3', 'Bundles / offers': 's8', 'Heroes / units': 's6', 'Other': 'muted' };   // every family its own colour: Entry offer and Bundles / offers (TC chapter packs) sit in the same chart
 const prodLabel = pid => shortPid(pid).replace(/\.offer$/, '').replace(/\.temporary$/, ' (temp)').replace(/\./g, ' ');
 const defsBlock = (c, items, open) => { const d = document.createElement('div'); d.className = 'defs'; if (open) d.dataset.open = 1; d.innerHTML = items.map(([k, v]) => `<div><b>${k}</b> – ${v}</div>`).join(''); c.appendChild(d); };
 function renderIAPReview(host, games) {
@@ -2009,16 +2819,16 @@ function renderIAPReview(host, games) {
   let payers = 0; for (const r of ID.payers) if (ok(r)) payers += r[3];
   let installs = 0; if (IAP) for (const r of IAP.installs) { if (r.d >= state.from && r.d <= state.to && (state.platform === 'all' || r.p === state.platform) && countryOk(r.c)) installs += r.installs; }
   // products
-  const P = new Map(); const get = pid => { let o = P.get(pid); if (!o) { o = { pid, buyers: 0, txns: 0, cents: 0, first: 0, tappers: 0, taps: 0, priceW: 0, srcShop: 0, srcAll: 0, days: new Map(), arenas: new Map() }; P.set(pid, o); } return o; };
-  for (const r of ID.prod) { if (!ok(r)) continue; const o = get(r[PI.pid]); o.buyers += r[PI.buyers]; o.txns += r[PI.txns]; o.cents += r[PI.cents]; o.first += r[PI.first_buyers]; o.tappers += r[PI.tappers]; o.taps += r[PI.taps]; o.priceW += r[PI.price] * r[PI.txns]; }
+  const P = new Map(); const get = pid => { let o = P.get(pid); if (!o) { o = { pid, buyers: 0, txns: 0, cents: 0, first: 0, rep: 0, hasRep: false, tappers: 0, taps: 0, priceW: 0, srcShop: 0, srcAll: 0, days: new Map(), arenas: new Map() }; P.set(pid, o); } return o; };
+  for (const r of ID.prod) { if (!ok(r)) continue; const o = get(r[PI.pid]); o.buyers += r[PI.buyers]; o.txns += r[PI.txns]; o.cents += r[PI.cents]; o.first += r[PI.first_buyers]; o.tappers += r[PI.tappers]; o.taps += r[PI.taps]; o.priceW += r[PI.price] * r[PI.txns]; o.rep += PI.repeat_buyers != null ? (r[PI.repeat_buyers] || 0) : 0; o.hasRep = PI.repeat_buyers != null; }
   for (const r of ID.src) { if (!ok(r)) continue; const o = get(r[SI.pid]); o.srcAll += r[SI.txns]; if (/shop/i.test(r[SI.src])) o.srcShop += r[SI.txns]; }
   for (const r of ID.dist) { if (!ok(r)) continue; const o = get(r[DI.pid]); o.days.set(r[DI.db], (o.days.get(r[DI.db]) || 0) + r[DI.txns]); if (r[DI.arena] >= 0) o.arenas.set(r[DI.arena], (o.arenas.get(r[DI.arena]) || 0) + r[DI.txns]); }
   // by-family view: distinct buyers per family come from the query (ID.fam); price / day / arena / source are rolled up from the product rows
   const byFam = state.iapScore === 'fam' && ID.fam && ID.meta.fcols;
   if (byFam) {
     const FI = {}; ID.meta.fcols.forEach((k, i) => FI[k] = i); const FP = new Map();
-    const getF = f => { let o = FP.get(f); if (!o) { o = { pid: f, fam: true, buyers: 0, txns: 0, cents: 0, first: 0, tappers: 0, taps: 0, priceW: 0, srcShop: 0, srcAll: 0, days: new Map(), arenas: new Map(), n: 0 }; FP.set(f, o); } return o; };
-    for (const r of ID.fam) { if (!ok(r)) continue; const o = getF(r[FI.fam]); o.buyers += r[FI.buyers]; o.txns += r[FI.txns]; o.cents += r[FI.cents]; o.first += r[FI.first_buyers]; }
+    const getF = f => { let o = FP.get(f); if (!o) { o = { pid: f, fam: true, buyers: 0, txns: 0, cents: 0, first: 0, rep: 0, hasRep: false, tappers: 0, taps: 0, priceW: 0, srcShop: 0, srcAll: 0, days: new Map(), arenas: new Map(), n: 0 }; FP.set(f, o); } return o; };
+    for (const r of ID.fam) { if (!ok(r)) continue; const o = getF(r[FI.fam]); o.buyers += r[FI.buyers]; o.txns += r[FI.txns]; o.cents += r[FI.cents]; o.first += r[FI.first_buyers]; o.rep += FI.repeat_buyers != null ? (r[FI.repeat_buyers] || 0) : 0; o.hasRep = FI.repeat_buyers != null; }
     for (const o of P.values()) { const f = getF(fam2(o.pid)); f.priceW += o.priceW; f.srcShop += o.srcShop; f.srcAll += o.srcAll; f.n += 1;
       for (const [k, v] of o.days) f.days.set(k, (f.days.get(k) || 0) + v); for (const [k, v] of o.arenas) f.arenas.set(k, (f.arenas.get(k) || 0) + v); }
     P.clear(); for (const [k, v] of FP) P.set(k, v);
@@ -2041,12 +2851,12 @@ function renderIAPReview(host, games) {
     [{ v: 'prod', label: 'By product', on: !byFam }, { v: 'fam', label: 'By family', on: !!byFam }]);
   const t = document.createElement('div'); t.className = 'tbl'; t.style.maxHeight = 'none';
   const maxShare = plist.length ? div(plist[0].cents, revenue) || 1 : 1, maxReach = Math.max(...plist.map(p => div(p.buyers, payers) || 0), 0.01), maxFirst = Math.max(...plist.map(p => div(p.first, firstAll) || 0), 0.01);
-  t.innerHTML = `<table style="font-size:12px;white-space:nowrap"><thead><tr><th>${byFam ? 'Family' : 'Product'}</th><th>${byFam ? '' : 'Family'}</th><th title="${byFam ? 'average price paid across the family\'s products' : 'average price paid'}">${byFam ? 'Avg price' : 'Price'}</th><th>Rev share</th><th title="buyers ÷ payers (hover a value for buyers ÷ installs)">% of payers</th><th title="share of all first purchases that were this product">1st buy</th><th title="distinct players who bought it">Buyers</th><th title="transactions ÷ buyers">Txns / buyer</th><th>$ / buyer</th><th title="median day since install of its purchases">Median day</th><th title="median arena at purchase">Median arena</th><th title="share of purchases coming from the shop (vs a triggered popup)">Shop</th><th>Role</th></tr></thead><tbody>` +
-    plist.map(p => { const [tag, col, why] = role(p); const fm = p.fam ? p.pid : fam2(p.pid); return `<tr><td title="${p.fam ? p.n + ' products' : p.pid}">${p.fam ? `<span style="color:${C[FAM2_COLOR[fm]]}">■</span> ${fm} <span class="hint">· ${p.n} product${p.n === 1 ? '' : 's'}</span>` : prodLabel(p.pid)}</td><td title="${fm}">${p.fam ? '' : `<span style="color:${C[FAM2_COLOR[fm]]}">■</span> <span class="hint">${fm.replace('Progression offer', 'Progression').replace('Entry offer', 'Entry')}</span>`}</td><td>${F.usd(div(p.priceW, p.txns))}</td><td class="bar"><span style="width:calc((100% - 12px) * ${(div(p.cents, revenue) || 0) / maxShare})"></span>${F.pct1(div(p.cents, revenue))}</td><td class="bar" title="${F.pct1(div(p.buyers, installs))} of installs"><span class="b" style="width:calc((100% - 12px) * ${(div(p.buyers, payers) || 0) / maxReach})"></span>${F.pct1(div(p.buyers, payers))}</td><td class="bar"><span class="f" style="width:calc((100% - 12px) * ${(div(p.first, firstAll) || 0) / maxFirst})"></span>${F.pct1(div(p.first, firstAll))}</td><td>${F.int(p.buyers)}</td><td>${F.n2(div(p.txns, p.buyers))}</td><td>${F.usd(div(p.cents / 100, p.buyers))}</td><td>${dbLabel(median(p.days))}</td><td>${median(p.arenas) ?? '–'}</td><td>${p.srcAll ? F.pct(div(p.srcShop, p.srcAll)) : '–'}</td><td><span class="pill" style="background:${C[col]};color:#fff;padding:1px 7px;border-radius:9px;font-size:11px" title="${why}">${tag}</span></td></tr>`; }).join('') + '</tbody></table>';
+  t.innerHTML = `<table style="font-size:12px;white-space:nowrap"><thead><tr><th>${byFam ? 'Family' : 'Product'}</th><th>${byFam ? '' : 'Family'}</th><th title="${byFam ? 'average price paid across the family\'s products' : 'average price paid'}">${byFam ? 'Avg price' : 'Price'}</th><th>Rev share</th><th title="buyers ÷ payers (hover a value for buyers ÷ installs)">% of payers</th><th title="share of all first purchases that were this product">1st buy</th><th title="distinct players who bought it">Buyers</th><th title="transactions ÷ buyers">Txns / buyer</th><th title="of the players who bought it, the share who bought it again (2+ purchases of this product; by family: 2+ purchases of any product in the family)">% repeat</th><th>$ / buyer</th><th title="median day since install of its purchases">Median day</th><th title="median arena at purchase">Median arena</th><th title="share of purchases coming from the shop (vs a triggered popup)">Shop</th><th>Role</th></tr></thead><tbody>` +
+    plist.map(p => { const [tag, col, why] = role(p); const fm = p.fam ? p.pid : fam2(p.pid); return `<tr><td title="${p.fam ? p.n + ' products' : p.pid}">${p.fam ? `<span style="color:${C[FAM2_COLOR[fm]]}">■</span> ${fm} <span class="hint">· ${p.n} product${p.n === 1 ? '' : 's'}</span>` : prodLabel(p.pid)}</td><td title="${fm}">${p.fam ? '' : `<span style="color:${C[FAM2_COLOR[fm]]}">■</span> <span class="hint">${fm.replace('Progression offer', 'Progression').replace('Entry offer', 'Entry')}</span>`}</td><td>${F.usd(div(p.priceW, p.txns))}</td><td class="bar"><span style="width:calc((100% - 12px) * ${(div(p.cents, revenue) || 0) / maxShare})"></span>${F.pct1(div(p.cents, revenue))}</td><td class="bar" title="${F.pct1(div(p.buyers, installs))} of installs"><span class="b" style="width:calc((100% - 12px) * ${(div(p.buyers, payers) || 0) / maxReach})"></span>${F.pct1(div(p.buyers, payers))}</td><td class="bar"><span class="f" style="width:calc((100% - 12px) * ${(div(p.first, firstAll) || 0) / maxFirst})"></span>${F.pct1(div(p.first, firstAll))}</td><td>${F.int(p.buyers)}</td><td>${F.n2(div(p.txns, p.buyers))}</td><td title="${F.int(p.rep)} of ${F.int(p.buyers)} buyers bought again">${p.hasRep ? F.pct1(div(p.rep, p.buyers)) : '–'}</td><td>${F.usd(div(p.cents / 100, p.buyers))}</td><td>${dbLabel(median(p.days))}</td><td>${median(p.arenas) ?? '–'}</td><td>${p.srcAll ? F.pct(div(p.srcShop, p.srcAll)) : '–'}</td><td><span class="pill" style="background:${C[col]};color:#fff;padding:1px 7px;border-radius:9px;font-size:11px" title="${why}">${tag}</span></td></tr>`; }).join('') + '</tbody></table>';
   $('.plot', sc).replaceWith(t); $('.legend', sc).remove(); host.appendChild(sc);
   sc.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { state.iapScore = b.dataset.t; render(); });
   defsBlock(sc, [['% of payers', 'players who bought this product ÷ all payers in the install range (a product competes for payers\' money, not for installs)'], ['% of installs', 'the same buyers ÷ installs (penetration)'],
-    ['Txns / buyer', 'purchases ÷ buyers: 1.0 = one-and-done'], ['1st purchase', 'share of all first-ever purchases that were this product — what creates payers'], ['Median day / arena', 'the day since install (D0 = install day; D2–3 = a 2–3 day bucket) and the arena at which half of this product\'s purchases had happened'],
+    ['Txns / buyer', 'purchases ÷ buyers: 1.0 = one-and-done'], ['% repeat', 'of the players who bought this product, the share who bought it again (2+ purchases of the same product within the window; in the family view, 2+ purchases of any product in the family). "–" = the data was built before this column existed.'], ['1st purchase', 'share of all first-ever purchases that were this product — what creates payers'], ['Median day / arena', 'the day since install (D0 = install day; D2–3 = a 2–3 day bucket) and the arena at which half of this product\'s purchases had happened'],
     ['From shop', 'purchases whose source is the shop, vs a triggered popup (offer_items / source context on the purchase event)'],
     ['Role rules', 'Weak = under 3% of payers and under 2% of revenue · Entry = 25%+ of first purchases · Core = 10%+ of revenue · Repeat = 1.5+ purchases per buyer · Niche = none of these. Observational: reach, depth and role — never incremental revenue; price and trigger changes are A/B hypotheses.']], true);
 
@@ -2159,6 +2969,8 @@ function initSidebar() {
     document.querySelectorAll(`#${id} button`).forEach(b => b.onclick = () => { if (b.disabled) return; pending[key] = b.dataset.v; setSeg(id, pending[key]); markDirty(); });
   }
   $('#btn-refresh').onclick = applyFilters;
+  document.querySelectorAll('#f-lang [data-v]').forEach(b => { b.setAttribute('aria-pressed', b.dataset.v === LANG.cur); b.onclick = () => setLang(b.dataset.v); });
+  translateStatic();
   initRange();
 }
 /** App version multi-select: versions seen on the selected game's version-aware datasets (players' latest tagged app version), with the number of installs (match 1) per version in the loaded data. Empty selection = all versions. */
@@ -2205,7 +3017,7 @@ function initRange() {
 
 // ---------- saved default view (per browser; the artifact is private, so this is the viewer's own default)
 const VIEW_KEY = 'cockpit.view';
-const VIEW_FIELDS = ['mode', 'retView', 'games', 'platform', 'country', 'network', 'view', 'lastx', 'rangeMode', 'from', 'to', 'win', 'tblView', 'day', 'survMode', 'arenaMode', 'retDef', 'perfMode', 'ltvMode', 'dauMode', 'payMode', 'mz', 'convSrc', 'convView', 'repView', 'sovMode', 'tab', 'ptab', 'mtab', 'unitLo', 'unitHi', 'ecoPay', 'ecoAxis', 'ecoCur', 'csCp', 'versions', 'iapArena', 'iapArenaY', 'iapScore'];
+const VIEW_FIELDS = ['mode', 'retView', 'games', 'platform', 'country', 'network', 'view', 'lastx', 'rangeMode', 'from', 'to', 'win', 'tblView', 'day', 'survMode', 'arenaMode', 'retDef', 'perfMode', 'ltvMode', 'dauMode', 'payMode', 'mz', 'convSrc', 'convView', 'repView', 'sovMode', 'tab', 'ptab', 'mtab', 'unitLo', 'unitHi', 'ecoPay', 'ecoAxis', 'ecoCur', 'hrRange', 'unitCat', 'csCp', 'versions', 'iapArena', 'iapArenaY', 'iapScore'];
 function loadView() { try { return JSON.parse(localStorage.getItem(VIEW_KEY) || 'null'); } catch (e) { return null; } }
 function saveView() {
   const v = {}; for (const k of VIEW_FIELDS) v[k] = JSON.parse(JSON.stringify(state[k] === undefined ? null : state[k]));
@@ -2289,14 +3101,14 @@ async function loadJson(path, bust) {
 }
 async function loadGameData(slug, bust) {
   const g = REG.games.find(x => x.slug === slug); if (!g) return null;
-  const [d, iap, dy, pf, vs, un, ec, cs, idet] = await Promise.all([g.data && g.data.matches ? loadJson(`g/${slug}/matches.json`, bust) : null, g.data && g.data.iap ? loadJson(`g/${slug}/iap.json`, bust) : null, g.data && g.data.daily ? loadJson(`g/${slug}/daily.json`, bust) : null, g.data && g.data.profit ? loadJson(`g/${slug}/profit.json`, bust) : null, g.data && g.data.daily && g.events !== false ? loadJson(`g/${slug}/versions.json`, bust) : null, g.data && g.data.units ? loadJson(`g/${slug}/units.json`, bust) : null, g.data && g.data.econ ? loadJson(`g/${slug}/econ.json`, bust) : null, g.data && g.data.churnseg ? loadJson(`g/${slug}/churnseg.json`, bust) : null, g.data && g.data.iapdetail ? loadJson(`g/${slug}/iapdetail.json`, bust) : null]);
+  const [d, iap, dy, pf, vs, un, ec, cs, idet, hr] = await Promise.all([g.data && g.data.matches ? loadJson(`g/${slug}/matches.json`, bust) : null, g.data && g.data.iap ? loadJson(`g/${slug}/iap.json`, bust) : null, g.data && g.data.daily ? loadJson(`g/${slug}/daily.json`, bust) : null, g.data && g.data.profit ? loadJson(`g/${slug}/profit.json`, bust) : null, g.data && g.data.daily && g.events !== false ? loadJson(`g/${slug}/versions.json`, bust) : null, g.data && g.data.units ? loadJson(`g/${slug}/units.json`, bust) : null, g.data && g.data.econ ? loadJson(`g/${slug}/econ.json`, bust) : null, g.data && g.data.churnseg ? loadJson(`g/${slug}/churnseg.json`, bust) : null, g.data && g.data.iapdetail ? loadJson(`g/${slug}/iapdetail.json`, bust) : null, g.data && g.data.heroready ? loadJson(`g/${slug}/heroready.json`, bust) : null]);
   let rows = [];
   if (d) { const c = d.meta.cols; const ix = {}; c.forEach((k, i) => ix[k] = i); rows = d.rows.map(r => ({ d: r[ix.d], p: r[ix.p], c: r[ix.c], a: r[ix.arena], n: r[ix.n], u: r[ix.users], w: r[ix.wins], l: r[ix.last], ll: r[ix.last_loss] })); }
   let dyRows = [];
   if (dy) { const c = dy.meta.cols; const ix = {}; c.forEach((k, i) => ix[k] = i); dyRows = dy.rows.map(r => { const o = {}; c.forEach((k, i) => o[k] = r[i]); return o; }); }
   let pfRows = [];
   if (pf) { const c = pf.meta.cols; pfRows = pf.rows.map(r => { const o = {}; c.forEach((k, i) => o[k] = r[i]); return o; }); }
-  DATA[slug] = { D: d, ROWS: rows, IAP: iap, DY: dy, DYROWS: dyRows, PF: pf, PFROWS: pfRows, VS: vs, UN: un, EC: ec, CS: cs, ID: idet };
+  DATA[slug] = { D: d, ROWS: rows, IAP: iap, DY: dy, DYROWS: dyRows, PF: pf, PFROWS: pfRows, VS: vs, UN: un, EC: ec, CS: cs, ID: idet, HR: hr };
   return DATA[slug];
 }
 (ENC ? askPassphrase() : fetch('games.json', { cache: 'no-store' }).then(r => r.json())).then(async reg => {
