@@ -1,3 +1,9 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
 <title>Castle Rivals Cockpit — Salt Castle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -143,7 +149,8 @@ th,td{padding:4px 8px;text-align:right;border-bottom:1px solid var(--grid);white
 th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--surface)}
 th{color:var(--muted);font-weight:500;position:sticky;top:0;background:var(--surface);z-index:1}
 td.bar{position:relative}
-td.bar span{position:absolute;left:0;top:3px;bottom:3px;background:var(--crit);opacity:.18;border-radius:2px}
+td.bar span{position:absolute;left:6px;top:3px;bottom:3px;background:var(--crit);opacity:.18;border-radius:2px}
+td.bar span.b{background:var(--accent)}td.bar span.f{background:var(--s2)}
 .svgtext{font-family:var(--mono);font-size:11px;fill:var(--muted)}
 .card .dot{display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--cat,var(--s1));vertical-align:-1px;margin-right:7px}
 .card h3 .q{font-weight:400;color:var(--muted);font-size:12.5px;margin-left:8px}
@@ -202,7 +209,10 @@ section.q{margin-bottom:38px}
 .qhead h2{font-size:18px;font-weight:600;margin-top:4px}
 .qhead .num{display:none}
 .qhead p{margin:3px 0 0;color:var(--ink-2);max-width:88ch;font-size:13px}
-.qctl{display:flex;gap:10px;align-items:center}
+.qctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.qctl .row2{display:flex;align-items:center;gap:10px}.qctl .row2+.row2{border-left:1px solid var(--axis);padding-left:16px;margin-left:6px}
+.qctl .lbl{font:500 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.qctl .seg .tbtn{font:500 12px var(--font);padding:4px 10px}
 input[type=number]{font:400 13px var(--mono);color:var(--ink);background:var(--surface);border:1px solid var(--axis);border-radius:var(--r);padding:4px 6px}
 .fnote-inline{font:400 12px var(--mono);color:var(--ink-2);margin:-4px 0 12px}
 .fnote-top{grid-column:2;font:400 12px var(--mono);color:var(--muted);margin:-6px 0 18px}
@@ -229,6 +239,7 @@ table.hm{font:400 11.5px var(--mono);border-collapse:separate;border-spacing:2px
   .gatebox .rem{display:flex;gap:6px;align-items:center;font-size:12px;color:#555;margin:10px 0 14px}
   .gatebox button{width:100%;padding:10px;border:0;border-radius:8px;background:#2563eb;color:#fff;font-size:14px;cursor:pointer}
   .gatebox .err{margin-top:10px;color:#b91c1c;font-size:12px}
+  .card.full .tbl table{font-size:12px}.card.full .tbl th,.card.full .tbl td{padding:3px 7px}
 </style>
 
 <div class="app">
@@ -381,7 +392,7 @@ function barChart(plot, o) {
     if (o.stacked) {
       let pos = 0;
       o.series.forEach(s => { const v = s.values[i] || 0; if (!v) return; const y0 = Y(pos + v), y1 = Y(pos); pos += v; el('rect', { x: x0, y: y0, width: gw, height: Math.max(0, y1 - y0 - 0.8), fill: s.color, opacity: dim ? 0.3 : 1 }, g);
-        if (o.labels && y1 - y0 >= 15) { const t = el('text', { x: x0 + gw / 2, y: (y0 + y1) / 2 + 4, 'text-anchor': 'middle', fill: '#fff', 'font-size': 11, 'font-weight': 600, style: 'paint-order:stroke;stroke:rgba(0,0,0,.25);stroke-width:2px' }, g); t.textContent = (y1 - y0 >= 30 ? s.name + ' · ' : '') + o.yfmt(v); } });
+        if (o.labels && y1 - y0 >= 15) { const t = el('text', { x: x0 + gw / 2, y: (y0 + y1) / 2 + 4, 'text-anchor': 'middle', fill: '#fff', 'font-size': 11, 'font-weight': 600, style: 'paint-order:stroke;stroke:rgba(0,0,0,.25);stroke-width:2px' }, g); t.textContent = (y1 - y0 >= 30 && !o.valueOnly ? s.name + ' · ' : '') + o.yfmt(v); } });
     } else {
       const k = o.series.length, sw2 = (gw - (k - 1) * 2) / k;
       o.series.forEach((s, j) => { const v = s.values[i]; if (v == null) return; el('rect', { x: x0 + j * (sw2 + 2), y: Y(v), width: Math.max(sw2, 1), height: Y(0) - Y(v), fill: s.color, rx: 1.5, opacity: dim ? 0.3 : 1 }, g); });
@@ -480,9 +491,10 @@ function scrollCombo(plot, o) {
   // optional lower panel (same x slots, scrolls with the main chart): bars, own left axis
   let svg2 = null, hl2 = null;
   if (o.sub) {
-    const H2 = o.sub.h || 130, mt2 = 26, mb2 = 6, s2Max = o.sub.max || 1, s2Min = o.sub.min || 0;   // top margin leaves room for the axis label above the top tick; min > 0 zooms the axis (e.g. win rate 50–100 %)
+    const H2 = o.sub.h || 130, mt2 = 26, mb2 = 6, s2Min = o.sub.min || 0;
+    const s2Max = s2Min ? (o.sub.max || 1) : niceTicks(o.sub.max || 1, o.sub.ticks || 2).slice(-1)[0];   // snap the top of the axis to the last nice tick so no tick lands above the panel   // top margin leaves room for the axis label above the top tick; min > 0 zooms the axis (e.g. win rate 50–100 %)
     const Y2b = v => mt2 + (H2 - mt2 - mb2) * (1 - (Math.min(s2Max, Math.max(s2Min, v)) - s2Min) / (s2Max - s2Min));
-    const ticks2 = s2Min ? Array.from({ length: (o.sub.ticks || 2) + 1 }, (_, k) => s2Min + (s2Max - s2Min) * k / (o.sub.ticks || 2)) : niceTicks(s2Max, o.sub.ticks || 2);
+    const ticks2 = s2Min ? Array.from({ length: (o.sub.ticks || 2) + 1 }, (_, k) => s2Min + (s2Max - s2Min) * k / (o.sub.ticks || 2)) : niceTicks(o.sub.max || 1, o.sub.ticks || 2);
     const axCol = ax.parentNode; const ax1b = el('svg', { viewBox: `0 0 ${AW} ${H2}`, width: AW, height: H2, class: 'axis' }); axCol.insertBefore(ax1b, sc);
     // the axis column: wrap the first axis and this one in a flex column
     const col = document.createElement('div'); col.className = 'axcol'; wrap.insertBefore(col, ax); col.appendChild(ax); col.appendChild(ax1b);
@@ -544,32 +556,58 @@ function renderMatches(host) {
   c1.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { state.survMode = b.dataset.t; render(); });
   // ---- arena by arena: the same read, collapsed onto the arena ladder
   // maxarenaindex never decreases for a player, so "reached arena a" = players whose arena at their last recorded match (or at match 101 if still playing) is >= a.
-  const AR = A.arenas.filter(a => a >= 0);
-  const stop = new Map(), live = new Map(), mt = new Map(), wn = new Map();   // per arena: players whose last match was here; players past match 101 here; matches (n <= 100); wins
-  for (const n of A.ns) for (const [a, o] of at(n).arenas) { if (a < 0) continue;
-    stop.set(a, (stop.get(a) || 0) + o.l);
-    if (n >= LAST) live.set(a, (live.get(a) || 0) + o.u - o.l); else { mt.set(a, (mt.get(a) || 0) + o.u); wn.set(a, (wn.get(a) || 0) + o.w); } }
+  // Preferred source: D.arena = the uncapped ladder (sql/matches.sql acells): every match counts, "stopped" = no match for 3+ days. Fallback (older data files): derived from the capped match rows.
+  // Churn there = stopped (highest arena is a AND no match for 3+ days) ÷ reached a. So that every counted player has had 3 days to come back, the card only counts installs up to install_max - 3 days (IDLE_DAYS):
+  // a player still at arena a but active in the last 3 days is "in progress", not churn. Fallback (older data files): derived from the capped match rows, churn = last recorded match was there.
+  const IDLE_DAYS = 3;
+  const stop = new Map(), live = new Map(), here = new Map(), mt = new Map(), wn = new Map(); let AR, uncapped = false, aCohort = A.cohort, aTo = state.to;
+  if (D.arena && D.meta.acols) {
+    uncapped = true; const ix = Object.fromEntries(D.meta.acols.map((k, i) => [k, i])); aCohort = 0;
+    aTo = addDays(D.meta.install_max, -IDLE_DAYS); if (aTo > state.to) aTo = state.to;
+    for (const r of D.arena) {
+      if (!(r[ix.d] >= state.from && r[ix.d] <= aTo && (state.platform === 'all' || r[ix.p] === state.platform) && countryOk(r[ix.c]) && verOk(r[ix.v]))) continue;
+      aCohort += r[ix.players]; const a = r[ix.arena]; if (a < 0) continue;   // arena -1 (missing maxarenaindex) counts in the cohort but has no bar
+      here.set(a, (here.get(a) || 0) + r[ix.players]); stop.set(a, (stop.get(a) || 0) + r[ix.stopped]); mt.set(a, (mt.get(a) || 0) + r[ix.matches]); wn.set(a, (wn.get(a) || 0) + r[ix.wins]);
+    }
+    AR = [...here.keys()].sort((x, y) => x - y);
+    for (const [a, v] of here) live.set(a, v - (stop.get(a) || 0));   // here = players whose highest arena is a; stop = of them, idle 3+ days (churned there); live = of them, still active (in progress)
+  } else {
+    // maxarenaindex never decreases for a player, so "reached arena a" = players whose arena at their last recorded match (or at match 101 if still playing) is >= a.
+    AR = A.arenas.filter(a => a >= 0);
+    for (const n of A.ns) for (const [a, o] of at(n).arenas) { if (a < 0) continue;
+      stop.set(a, (stop.get(a) || 0) + o.l);
+      if (n >= LAST) live.set(a, (live.get(a) || 0) + o.u - o.l); else { mt.set(a, (mt.get(a) || 0) + o.u); wn.set(a, (wn.get(a) || 0) + o.w); } }
+  }
   const reached = new Map(); { let acc = 0; for (const a of [...AR].reverse()) { acc += (stop.get(a) || 0) + (live.get(a) || 0); reached.set(a, acc); } }
   const MIN_ARENA = 30, topArena = AR.length ? AR[AR.length - 1] : null;   // the top arena has nothing to progress to, so its "churn" is 100 % by construction -> not shown; thin arenas are noise
-  const aShare = a => div(reached.get(a), A.cohort), aChurn = a => a === topArena || (reached.get(a) || 0) < MIN_ARENA ? null : div(stop.get(a) || 0, reached.get(a)), aWin = a => (mt.get(a) || 0) < MIN_ARENA ? null : div(wn.get(a) || 0, mt.get(a) || 0), aMatches = a => div(mt.get(a) || 0, reached.get(a));
+  const aShare = a => div(reached.get(a), aCohort), aChurn = a => a === topArena || (reached.get(a) || 0) < MIN_ARENA ? null : div(stop.get(a) || 0, reached.get(a)), aWin = a => (mt.get(a) || 0) < MIN_ARENA ? null : div(wn.get(a) || 0, mt.get(a) || 0), aMatches = a => div(mt.get(a) || 0, reached.get(a));
   const aMode = state.arenaMode;
-  const c2 = card('Arena-by-arena progression retention', `Bars: players who reached each arena (${aMode === 'share' ? '% of the cohort' : 'players'}). Red line (right axis): arena churn — of the players who reached the arena, the share whose last recorded match was there, i.e. who never made it to the next arena. Not shown for the top arena (nothing to progress to) or for arenas reached by fewer than ${MIN_ARENA} players. Lower panel: win rate of the matches played in that arena (first 100 matches).`, 'full',
+  const churnDef = uncapped ? `the share who stopped there — highest arena is this one and no match for ${IDLE_DAYS}+ days. Players still at the arena but active in the last ${IDLE_DAYS} days are in progress, not churn; to make that call fairly the card counts installs up to ${F.date(aTo)} only (every player has had ${IDLE_DAYS} days to come back)` : 'the share whose last recorded match was there, i.e. who never made it to the next arena';
+  const c2 = card('Arena-by-arena progression retention', `Bars: players who reached each arena (${aMode === 'share' ? '% of the cohort' : 'players'})${uncapped ? `, split into those who moved on, those still there and active, and those who stopped there — no match cap: every match counts, unlike the chart above; installs ${F.date(state.from)} – ${F.date(aTo)}` : ''}. Red line (right axis): arena churn — of the players who reached the arena, ${churnDef}. Not shown for the top arena (nothing to progress to) or for arenas reached by fewer than ${MIN_ARENA} players. Lower panel: win rate of ${uncapped ? 'all matches' : 'the matches'} played in that arena${uncapped ? '' : ' (first 100 matches)'}.`, 'full',
     [{ v: 'share', label: '% of cohort', on: aMode === 'share' }, { v: 'users', label: 'players', on: aMode === 'users' }]);
   grid.appendChild(c2);
   scrollCombo($('.plot', c2), { cats: AR, h: 320, barW: 28, fit: true, xfmt: a => 'A' + a, xfull: a => arenaName(a),
-    series: [{ name: 'reached', color: C.s1, values: AR.map(a => aMode === 'share' ? aShare(a) : reached.get(a)) }],
+    series: uncapped
+      ? [{ name: 'moved on to the next arena', color: C.s1, values: AR.map(a => { const v = reached.get(a) - (stop.get(a) || 0) - (live.get(a) || 0); return aMode === 'share' ? div(v, aCohort) : v; }) },
+         { name: 'still here, active', color: '#9cc3ee', values: AR.map(a => aMode === 'share' ? div(live.get(a) || 0, aCohort) : (live.get(a) || 0)) },
+         { name: 'stopped here', color: '#e8a3a3', values: AR.map(a => aMode === 'share' ? div(stop.get(a) || 0, aCohort) : (stop.get(a) || 0)) }]
+      : [{ name: 'reached', color: C.s1, values: AR.map(a => aMode === 'share' ? aShare(a) : reached.get(a)) }],
     line: { name: 'arena churn', color: C.crit, values: AR.map(aChurn), max: 1 }, rowMin: aMode === 'share' ? 0.0005 : 1,
     yfmt: aMode === 'share' ? F.pct : F.int, yMax: aMode === 'share' ? 1 : 0, y2fmt: F.pct, yLabel: aMode === 'share' ? 'cohort' : 'players', y2Label: 'churn',
     sub: { name: 'win rate', label: 'win rate', values: AR.map(aWin), min: 0.5, max: 1, ref: 0.5, h: 140, ticks: 5, yfmt: F.pct, color: wrColor, line: true, lineColor: C.ink },
-    extra: i => { const a = AR[i]; return `<div class="row"><span>reached</span><span>${F.int(reached.get(a))} · ${F.pct1(aShare(a))} of cohort</span></div><div class="row"><span>stopped here</span><span>${F.int(stop.get(a) || 0)}</span></div><div class="row" style="color:var(--muted)"><span>matches here per player</span><span>${F.n1(aMatches(a))}</span></div>`; } });
-  legend(c2, [{ name: 'players who reached the arena', color: C.s1 }, { name: 'arena churn', color: C.crit }, { name: 'win rate (line; dot turns amber below 50 %)', color: C.ink }]);
+    extra: i => { const a = AR[i]; return `<div class="row"><span>reached</span><span>${F.int(reached.get(a))} · ${F.pct1(aShare(a))} of cohort</span></div><div class="row"><span>${uncapped ? `stopped here (idle ${IDLE_DAYS}+ days)` : 'stopped here'}</span><span>${F.int(stop.get(a) || 0)}</span></div>${uncapped ? `<div class="row" style="color:var(--muted)"><span>still here, active</span><span>${F.int(live.get(a) || 0)}</span></div>` : ''}<div class="row" style="color:var(--muted)"><span>matches here per player</span><span>${F.n1(aMatches(a))}</span></div>`; } });
+  legend(c2, uncapped
+    ? [{ name: 'reached the arena and moved on', color: C.s1 }, { name: 'still here, active (in progress)', color: '#9cc3ee' }, { name: 'stopped here (idle 3+ days)', color: '#e8a3a3' }, { name: 'arena churn = stopped ÷ reached', color: C.crit }, { name: 'win rate (line; dot turns amber below 50 %)', color: C.ink }]
+    : [{ name: 'players who reached the arena', color: C.s1 }, { name: 'arena churn', color: C.crit }, { name: 'win rate (line; dot turns amber below 50 %)', color: C.ink }]);
   c2.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { state.arenaMode = b.dataset.t; render(); });
   const notes = document.createElement('div'); notes.className = 'notes';
   notes.innerHTML = `<h2>How to read this</h2><ul>
     <li><b>Cohort</b> = ${F.int(A.cohort)} users whose <code>first_app_launch_date</code> falls in the install range and who finished ≥1 match (<code>game_finish</code>). Debugger/QA users excluded.</li>
     <li><b>Match n</b> = the n-th <code>game_finish</code> of that user, in time order. Arena = <code>maxarenaindex</code> on that event (Arena ? = missing). Each player is in exactly one arena per match, so the stacked bar is the exact player count.</li>
     <li><b>Relative churn</b> = players whose last recorded match was n ÷ players who played match n. Recent installs have not had time to come back yet, so the newest install days read high — narrow the install range to settled cohorts when comparing. No value on the last bar (101+ matches are not split further).</li>
-    <li><b>Arena by arena</b>: <code>maxarenaindex</code> never goes down, so a player has <i>reached</i> arena <i>a</i> if the arena of their last recorded match (or of match 101, if they are still playing) is ≥ <i>a</i>. Arena churn = players whose last match was in <i>a</i> ÷ players who reached <i>a</i> — the same recency caveat as above applies. Win rate here is over all matches played in that arena.</li>
+    ${uncapped
+      ? `<li><b>Arena by arena</b> has <b>no match cap</b>: every <code>game_finish</code> counts. <code>maxarenaindex</code> never goes down, so a player has <i>reached</i> arena <i>a</i> if their highest arena is ≥ <i>a</i> (the same count as the IAP "players reaching this arena" panel). Arena churn = players whose highest arena is <i>a</i> <b>and</b> who have not played for ${IDLE_DAYS}+ days ÷ players who reached <i>a</i>. Players still at <i>a</i> but active in the last ${IDLE_DAYS} days are in progress, not churn (tooltip: "still here, active"); so that every player has had ${IDLE_DAYS} days to come back, this card counts installs up to ${F.date(aTo)} only, whatever the sidebar range says. Churn for the newest cohorts still creeps up over the following days as in-progress players settle. Win rate = wins ÷ all matches played in that arena.</li>`
+      : `<li><b>Arena by arena</b>: <code>maxarenaindex</code> never goes down, so a player has <i>reached</i> arena <i>a</i> if the arena of their last recorded match (or of match 101, if they are still playing) is ≥ <i>a</i>. Arena churn = players whose last match was in <i>a</i> ÷ players who reached <i>a</i> — the same recency caveat as above applies. Win rate here is over all matches played in that arena.</li>`}
     <li>Loss = <code>lose</code> or <code>give_up</code>; draws and network timeouts count as matches but not as losses.</li>
   </ul>`;
   host.appendChild(notes);
@@ -1395,6 +1433,9 @@ function renderBody() {
     'Every selected game is cut to the same install range, platform, country and days-since-install window; only cohorts old enough to have lived the whole window are counted.',
     `<div class="fgroup"><label>Days since install</label><input type="number" id="f-dsi0" min="0" max="60" value="${state.dsi[0]}" style="width:58px"><span class="eyebrow">→</span><input type="number" id="f-dsi1" min="0" max="60" value="${state.dsi[1]}" style="width:58px"><div class="quick"><button data-dsi="0,0">D0</button><button data-dsi="0,3">D0–3</button><button data-dsi="0,7">D0–7</button><button data-dsi="0,14">D0–14</button><button data-dsi="0,30">D0–30</button></div></div>`);
   grp.monetization.appendChild(s2); renderIAP($('.qbody', s2));
+  // ---- 06: IAP review — are the products working, where the ladder breaks, where offers fire, what peers sell
+  const s3 = section('', 'IAP review — product scorecard, purchase ladder, purchases by arena', 'Per product: who buys it, how often, whether it creates payers, when and where it is bought. Then the ladder (who reaches a 2nd, 3rd, 4th purchase and what it is) and purchases per 100 players by arena. Purchases within 60 days of install, same install range / platform / country as the sidebar.');
+  grp.monetization.appendChild(s3); renderIAPReview($('.qbody', s3), sel);
   foldText();
   const d0 = $('#f-dsi0'), d1 = $('#f-dsi1');
   const setDsi = (a, b) => { a = Math.max(0, Math.min(60, a | 0)); b = Math.max(0, Math.min(60, b | 0)); if (a > b) [a, b] = [b, a]; state.dsi = [a, b]; render(); };
@@ -1548,8 +1589,8 @@ function mirrorChart(plot, o) {
   });
   hit.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
 }
-const GRP_LABEL = { battle: 'Match rewards', chest: 'Chests', progression: 'Trophy road / league', daily_login: 'Daily login', pass: 'Season pass (free)', rv: 'Rewarded video', iap: 'IAP packs', shop_gem: 'Shop (paid with gems)', upgrade: 'Hero / spell upgrades', building: 'Castle construction', skip_building: 'Timer skips', other: 'Other' };
-const GRP_COLOR = { battle: '#2a78d6', chest: '#1baf7a', progression: '#7a5cd6', daily_login: '#4aa3c9', pass: '#e87ba4', rv: '#eda100', iap: '#d03b3b', shop_gem: '#8a6d3b', upgrade: '#eb6834', building: '#8a8c86', skip_building: '#e34948', other: '#9aa1ad' };
+const GRP_LABEL = { battle: 'Match rewards', chest: 'Chests', progression: 'Trophy road / league', daily_login: 'Daily login', pass: 'Season pass (free)', rv: 'Rewarded video', iap: 'IAP packs', shop_gem: 'Shop (paid with gems)', shop_coins: 'Shop: coins (paid with gems)', shop_buildmaterials: 'Shop: build materials (paid with gems)', shop_other: 'Shop: chests / other (paid with gems)', upgrade: 'Hero / spell upgrades', building: 'Castle construction', skip_building: 'Timer skips', other: 'Other' };
+const GRP_COLOR = { battle: '#2a78d6', chest: '#1baf7a', progression: '#7a5cd6', daily_login: '#4aa3c9', pass: '#e87ba4', rv: '#eda100', iap: '#d03b3b', shop_gem: '#8a6d3b', shop_coins: '#c98500', shop_buildmaterials: '#8a6d3b', shop_other: '#5c4a2a', upgrade: '#eb6834', building: '#8a8c86', skip_building: '#e34948', other: '#9aa1ad' };
 function renderEconomy(host, games) {
   host.innerHTML = '';
   const withEc = games.filter(g => DATA[g.slug] && DATA[g.slug].EC);
@@ -1637,7 +1678,7 @@ function renderEconomy(host, games) {
     const series = OUT.map(grp => ({ name: GRP_LABEL[grp], color: GRP_COLOR[grp], values: cats.map((k, i) => tot[i] ? (FL.get([k, 'gems', 'out', grp].join('|')) || 0) / tot[i] : 0) })).filter(s => s.values.some(v => v));
     barChart($('.plot', c), { cats, series, stacked: true, yMax: 1, yfmt: F.pct, xfmt, xfull, h: 260, extra: i => `<div class="row" style="color:var(--muted)"><span>gems spent per active player</span><span>${F.int(Math.round(div(tot[i], ACT.get(cats[i])) || 0))}</span></div>` });
     legend(c, series.map(s => ({ name: s.name, color: s.color })));
-    defs(c, `<div><b>Share of gem spend</b> – gems moved out by each sink ÷ all gems moved out, among players in the slice. <b>Shop (paid with gems)</b> = gems converted into coins, materials or cards in the shop; <b>Timer skips</b> = <code>skip_building</code>; upgrades never cost gems directly.</div>
+    defs(c, `<div><b>Share of gem spend</b> – gems moved out by each sink ÷ all gems moved out, among players in the slice. <b>Shop: coins / build materials</b> = gems converted into that currency in the shop (the gems-out event is paired with the inflow logged within 3 s); <b>Shop: chests / other</b> = gem spend in the shop with no coin / material inflow — premium chests (cards arrive as chest rewards) and anything else; <b>Timer skips</b> = <code>skip_building</code>; upgrades never cost gems directly.</div>
       <div><b>Reading it</b> – if most gem spend is the shop, gems are a coin substitute and a gem pack only sells when coins run out. If timer skips grow, the castle timers have become the gem sink (the Building Time test).</div>`);
   }
   // ---- 6: upgrade cadence — hero upgrades and constructions per active player, payers vs non-payers
@@ -1928,8 +1969,8 @@ function renderIAP(host) {
     series: FAMILIES.map(f => ({ name: f, color: C[FAM_COLOR[f]], values: A.map(g => { const tot = g.plist.reduce((s2, p) => s2 + p.c, 0); return div(g.fam[f] || 0, tot); }) })) });
   legend(c4, FAMILIES.map(f => ({ name: f, color: C[FAM_COLOR[f]] })));
 
-  // product tables
-  GAMES.forEach((g, i) => {
+  // product tables: per game, side by side — only when more than one game is in view (the single-game IAP review scorecard below supersedes the one-game table)
+  if (GAMES.length > 1) GAMES.forEach((g, i) => {
     const G = A[i], first = G.plist.reduce((s, p) => s + p.f, 0);
     const c = card(`${g.name} — top products`, `Product mix window: ${G.prodWindow}${G.snapped ? '' : ' (nearest buckets — the product data is bucketed by days since install)'}. Sorted by revenue; first-purchase share = share of payers whose very first purchase was this product.`);
     grid.appendChild(c);
@@ -1947,6 +1988,143 @@ function renderIAP(host) {
     <li>Country buckets: US · MX · DE · GB · CA · AU · IN · RU · other, fixed for both games.</li>
   </ul>`;
   host.appendChild(notes);
+}
+
+
+// ================= IAP review (Monetization) — product scorecard, purchase ladder, purchases by arena, peer product ladder (sql/iap_detail.sql -> iapdetail.json)
+const fam2 = pid => { const p = (pid || '').toLowerCase();
+  if (/starter/.test(p)) return 'Entry offer'; if (/boosthero|champion|elite|arenaunlock/.test(p)) return 'Progression offer'; if (/pass/.test(p)) return 'Pass';
+  if (/hero/.test(p)) return 'Hero pack'; if (/gem/.test(p)) return 'Gems'; if (/wildcard/.test(p)) return 'Wildcards'; if (/no_?video|no_?ads|noads/.test(p)) return 'No-ads'; return family(pid); };
+const FAM2 = ['Entry offer', 'Progression offer', 'Pass', 'Hero pack', 'Gems', 'Wildcards', 'No-ads', 'Currency', 'Bundles / offers', 'Heroes / units', 'Other'];
+const FAM2_COLOR = { 'Entry offer': 's2', 'Progression offer': 's3', 'Pass': 's4', 'Hero pack': 's5', 'Gems': 's1', 'Wildcards': 's6', 'No-ads': 's7', 'Currency': 's1', 'Bundles / offers': 's2', 'Heroes / units': 's3', 'Other': 'muted' };
+const prodLabel = pid => shortPid(pid).replace(/\.offer$/, '').replace(/\.temporary$/, ' (temp)').replace(/\./g, ' ');
+const defsBlock = (c, items, open) => { const d = document.createElement('div'); d.className = 'defs'; if (open) d.dataset.open = 1; d.innerHTML = items.map(([k, v]) => `<div><b>${k}</b> – ${v}</div>`).join(''); c.appendChild(d); };
+function renderIAPReview(host, games) {
+  host.innerHTML = '';
+  const withId = games.filter(g => DATA[g.slug] && DATA[g.slug].ID);
+  if (!withId.length) { host.innerHTML = `<div class="status" style="padding:28px 0">${noDataNote(selected()[0], 'IAP review')}</div>`; return; }
+  const g = withId[0], ID = DATA[g.slug].ID, IAP = DATA[g.slug].IAP;
+  const PI = {}, LI = {}, DI = {}, RI = {}, SI = {}; ID.meta.pcols.forEach((k, i) => PI[k] = i); ID.meta.lcols.forEach((k, i) => LI[k] = i); ID.meta.dcols.forEach((k, i) => DI[k] = i); ID.meta.rcols.forEach((k, i) => RI[k] = i); ID.meta.scols.forEach((k, i) => SI[k] = i);
+  const ok = r => r[0] >= state.from && r[0] <= state.to && (state.platform === 'all' || r[1] === state.platform) && countryOk(r[2]);
+  let payers = 0; for (const r of ID.payers) if (ok(r)) payers += r[3];
+  let installs = 0; if (IAP) for (const r of IAP.installs) { if (r.d >= state.from && r.d <= state.to && (state.platform === 'all' || r.p === state.platform) && countryOk(r.c)) installs += r.installs; }
+  // products
+  const P = new Map(); const get = pid => { let o = P.get(pid); if (!o) { o = { pid, buyers: 0, txns: 0, cents: 0, first: 0, tappers: 0, taps: 0, priceW: 0, srcShop: 0, srcAll: 0, days: new Map(), arenas: new Map() }; P.set(pid, o); } return o; };
+  for (const r of ID.prod) { if (!ok(r)) continue; const o = get(r[PI.pid]); o.buyers += r[PI.buyers]; o.txns += r[PI.txns]; o.cents += r[PI.cents]; o.first += r[PI.first_buyers]; o.tappers += r[PI.tappers]; o.taps += r[PI.taps]; o.priceW += r[PI.price] * r[PI.txns]; }
+  for (const r of ID.src) { if (!ok(r)) continue; const o = get(r[SI.pid]); o.srcAll += r[SI.txns]; if (/shop/i.test(r[SI.src])) o.srcShop += r[SI.txns]; }
+  for (const r of ID.dist) { if (!ok(r)) continue; const o = get(r[DI.pid]); o.days.set(r[DI.db], (o.days.get(r[DI.db]) || 0) + r[DI.txns]); if (r[DI.arena] >= 0) o.arenas.set(r[DI.arena], (o.arenas.get(r[DI.arena]) || 0) + r[DI.txns]); }
+  // by-family view: distinct buyers per family come from the query (ID.fam); price / day / arena / source are rolled up from the product rows
+  const byFam = state.iapScore === 'fam' && ID.fam && ID.meta.fcols;
+  if (byFam) {
+    const FI = {}; ID.meta.fcols.forEach((k, i) => FI[k] = i); const FP = new Map();
+    const getF = f => { let o = FP.get(f); if (!o) { o = { pid: f, fam: true, buyers: 0, txns: 0, cents: 0, first: 0, tappers: 0, taps: 0, priceW: 0, srcShop: 0, srcAll: 0, days: new Map(), arenas: new Map(), n: 0 }; FP.set(f, o); } return o; };
+    for (const r of ID.fam) { if (!ok(r)) continue; const o = getF(r[FI.fam]); o.buyers += r[FI.buyers]; o.txns += r[FI.txns]; o.cents += r[FI.cents]; o.first += r[FI.first_buyers]; }
+    for (const o of P.values()) { const f = getF(fam2(o.pid)); f.priceW += o.priceW; f.srcShop += o.srcShop; f.srcAll += o.srcAll; f.n += 1;
+      for (const [k, v] of o.days) f.days.set(k, (f.days.get(k) || 0) + v); for (const [k, v] of o.arenas) f.arenas.set(k, (f.arenas.get(k) || 0) + v); }
+    P.clear(); for (const [k, v] of FP) P.set(k, v);
+  }
+  const median = m => { const ks = [...m.keys()].sort((a, b) => a - b); const tot = ks.reduce((s, k) => s + m.get(k), 0); let acc = 0; for (const k of ks) { acc += m.get(k); if (acc >= tot / 2) return k; } return null; };
+  const BK = ID.meta.dsi_buckets, dbLabel = k => { const b = BK[String(k)]; return !b ? '–' : b[0] === b[1] ? 'D' + b[0] : `D${b[0]}–${b[1]}`; };
+  const plist = [...P.values()].filter(p => p.buyers > 0).sort((a, b) => b.cents - a.cents);
+  const revenue = plist.reduce((s, p) => s + p.cents, 0), firstAll = plist.reduce((s, p) => s + p.first, 0);
+  const role = p => { const reach = div(p.buyers, payers) || 0, rs = div(p.cents, revenue) || 0, fs = div(p.first, firstAll) || 0, rep = div(p.txns, p.buyers) || 0;
+    if (reach < 0.03 && rs < 0.02) return ['Weak', 'r1', 'under 3% of payers and under 2% of revenue — cut, or change what triggers it'];
+    if (fs >= 0.25) return ['Entry', 's2', 'creates payers: 25%+ of first purchases'];
+    if (rs >= 0.10 && rep >= 1.5) return ['Repeat core', 's4', '10%+ of revenue, bought again and again (1.5+ purchases per buyer)'];
+    if (rs >= 0.10) return ['Core', 's3', '10%+ of revenue'];
+    if (rep >= 1.5) return ['Repeat', 's6', 'small share but bought again (1.5+ purchases per buyer)'];
+    return ['Niche', 'muted', 'neither entry, core nor repeat']; };
+
+  // ---- scorecard
+  const sc = card(`${g.name} — product scorecard · ${F.int(payers)} payers · ${F.usd(revenue / 100)} · installs ${F.date(state.from)} – ${F.date(state.to)}`,
+    `One row per ${byFam ? 'product family (buyers = distinct players who bought any product of the family; price = average paid)' : 'product'}, purchases within 60 days of install. Reach (who buys it), depth (how often, how much), role (does it create payers; when and where it is bought), source. The role tag is rule-based (rules in the definitions) — it is a starting point for the fix / cut / test list, not a verdict on profit.`, 'full',
+    [{ v: 'prod', label: 'By product', on: !byFam }, { v: 'fam', label: 'By family', on: !!byFam }]);
+  const t = document.createElement('div'); t.className = 'tbl'; t.style.maxHeight = 'none';
+  const maxShare = plist.length ? div(plist[0].cents, revenue) || 1 : 1, maxReach = Math.max(...plist.map(p => div(p.buyers, payers) || 0), 0.01), maxFirst = Math.max(...plist.map(p => div(p.first, firstAll) || 0), 0.01);
+  t.innerHTML = `<table style="font-size:12px;white-space:nowrap"><thead><tr><th>${byFam ? 'Family' : 'Product'}</th><th>${byFam ? '' : 'Family'}</th><th title="${byFam ? 'average price paid across the family\'s products' : 'average price paid'}">${byFam ? 'Avg price' : 'Price'}</th><th>Rev share</th><th title="buyers ÷ payers (hover a value for buyers ÷ installs)">% of payers</th><th title="share of all first purchases that were this product">1st buy</th><th title="distinct players who bought it">Buyers</th><th title="transactions ÷ buyers">Txns / buyer</th><th>$ / buyer</th><th title="median day since install of its purchases">Median day</th><th title="median arena at purchase">Median arena</th><th title="share of purchases coming from the shop (vs a triggered popup)">Shop</th><th>Role</th></tr></thead><tbody>` +
+    plist.map(p => { const [tag, col, why] = role(p); const fm = p.fam ? p.pid : fam2(p.pid); return `<tr><td title="${p.fam ? p.n + ' products' : p.pid}">${p.fam ? `<span style="color:${C[FAM2_COLOR[fm]]}">■</span> ${fm} <span class="hint">· ${p.n} product${p.n === 1 ? '' : 's'}</span>` : prodLabel(p.pid)}</td><td title="${fm}">${p.fam ? '' : `<span style="color:${C[FAM2_COLOR[fm]]}">■</span> <span class="hint">${fm.replace('Progression offer', 'Progression').replace('Entry offer', 'Entry')}</span>`}</td><td>${F.usd(div(p.priceW, p.txns))}</td><td class="bar"><span style="width:calc((100% - 12px) * ${(div(p.cents, revenue) || 0) / maxShare})"></span>${F.pct1(div(p.cents, revenue))}</td><td class="bar" title="${F.pct1(div(p.buyers, installs))} of installs"><span class="b" style="width:calc((100% - 12px) * ${(div(p.buyers, payers) || 0) / maxReach})"></span>${F.pct1(div(p.buyers, payers))}</td><td class="bar"><span class="f" style="width:calc((100% - 12px) * ${(div(p.first, firstAll) || 0) / maxFirst})"></span>${F.pct1(div(p.first, firstAll))}</td><td>${F.int(p.buyers)}</td><td>${F.n2(div(p.txns, p.buyers))}</td><td>${F.usd(div(p.cents / 100, p.buyers))}</td><td>${dbLabel(median(p.days))}</td><td>${median(p.arenas) ?? '–'}</td><td>${p.srcAll ? F.pct(div(p.srcShop, p.srcAll)) : '–'}</td><td><span class="pill" style="background:${C[col]};color:#fff;padding:1px 7px;border-radius:9px;font-size:11px" title="${why}">${tag}</span></td></tr>`; }).join('') + '</tbody></table>';
+  $('.plot', sc).replaceWith(t); $('.legend', sc).remove(); host.appendChild(sc);
+  sc.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { state.iapScore = b.dataset.t; render(); });
+  defsBlock(sc, [['% of payers', 'players who bought this product ÷ all payers in the install range (a product competes for payers\' money, not for installs)'], ['% of installs', 'the same buyers ÷ installs (penetration)'],
+    ['Txns / buyer', 'purchases ÷ buyers: 1.0 = one-and-done'], ['1st purchase', 'share of all first-ever purchases that were this product — what creates payers'], ['Median day / arena', 'the day since install (D0 = install day; D2–3 = a 2–3 day bucket) and the arena at which half of this product\'s purchases had happened'],
+    ['From shop', 'purchases whose source is the shop, vs a triggered popup (offer_items / source context on the purchase event)'],
+    ['Role rules', 'Weak = under 3% of payers and under 2% of revenue · Entry = 25%+ of first purchases · Core = 10%+ of revenue · Repeat = 1.5+ purchases per buyer · Niche = none of these. Observational: reach, depth and role — never incremental revenue; price and trigger changes are A/B hypotheses.']], true);
+
+  const grid = document.createElement('div'); grid.className = 'grid'; host.appendChild(grid);
+  // ---- purchase ladder
+  const L = new Map(); const hours = [0, 0, 0, 0, 0], nprev = [0, 0, 0, 0, 0];
+  for (const r of ID.ladder) { if (!ok(r)) continue; const k = r[LI.rank] + '|' + fam2(r[LI.pid]); L.set(k, (L.get(k) || 0) + r[LI.buyers]); hours[r[LI.rank]] += r[LI.sum_hours]; nprev[r[LI.rank]] += r[LI.n_prev]; }
+  const rankTot = [0, 0, 0, 0, 0]; for (const r of (ID.lrank || [])) if (ok(r)) rankTot[r[3]] += r[4];   // distinct payers per rank
+  const rankSum = [0, 0, 0, 0, 0]; for (const [k, v] of L) rankSum[+k.split('|')[0]] += v;             // buyers summed over products (a 4th+ payer can appear under several products) — used only for the family split
+  const ranks = [1, 2, 3, 4], famsL = FAM2.filter(f => ranks.some(r => L.get(r + '|' + f)));
+  const c1 = card('Purchase ladder — % of payers reaching their 2nd, 3rd and 4th+ purchase, and what each purchase is', `Bars = payers who made an n-th purchase as a share of all payers, stacked by product family (purchases within 60 days of install). Average wait: ${[2, 3, 4].map(r => `${r === 4 ? '4th+' : r + (r === 2 ? 'nd' : 'rd')} ${nprev[r] ? F.n1(hours[r] / nprev[r] / 24) + ' d' : '–'}`).join(' · ')} after the previous one.`);
+  grid.appendChild(c1);
+  barChart($('.plot', c1), { cats: ranks, xfmt: r => r === 4 ? '4th+' : r === 1 ? '1st' : r === 2 ? '2nd' : '3rd', stacked: true, labels: true, valueOnly: true, h: 260, yfmt: F.pct, yMax: 1,
+    series: famsL.map(f => ({ name: f, color: C[FAM2_COLOR[f]], values: ranks.map(r => (div(L.get(r + '|' + f) || 0, rankSum[r]) || 0) * (div(rankTot[r], payers) || 0)) })),
+    extra: i => `<div class="row"><span>payers reaching this step</span><span>${F.int(rankTot[ranks[i]])} · ${F.pct(div(rankTot[ranks[i]], payers))}</span></div>` });
+  legend(c1, famsL.map(f => ({ name: f, color: C[FAM2_COLOR[f]] })));
+  defsBlock(c1, [['Rank', 'a payer\'s purchases ordered by time; 4th+ = the 4th and every later purchase. Bar height = distinct payers who reached that step ÷ all payers; the family split shares out that height by what was bought at that step'], ['So what', 'where the bars collapse is where the ladder breaks: the family that carries the 2nd purchase is the depth product; if nothing carries it, there is no ladder']]);
+  // ---- purchases by arena per 100 players who reached it
+  const RM = new Map(); for (const r of ID.reach) { if (!ok(r)) continue; RM.set(r[RI.max_arena], (RM.get(r[RI.max_arena]) || 0) + r[RI.players]); }
+  const arenasAll = [...RM.keys()].filter(a => a >= 1).sort((a, b) => a - b); const reached = new Map(); let cum = 0;
+  for (const a of [...arenasAll].reverse()) { cum += RM.get(a); reached.set(a, cum); }   // players who reached arena a = players whose highest arena is ≥ a
+  const byProd = state.iapArena === 'prod';   // toggle: families, or the progression offers one product at a time (does Arena Unlock / Boost Hero sell in every arena?)
+  const AI2 = {}; ID.meta.acols.forEach((k, i) => AI2[k] = i);
+  const AB = new Map(), ANY = new Map();   // distinct buyers per arena × family / product, and per arena any product
+  for (const r of (ID.abuy || [])) { if (!ok(r)) continue; const a = r[AI2.arena], kind = r[AI2.kind], k = r[AI2.k], n = r[AI2.buyers];
+    if (kind === 'any') ANY.set(a, (ANY.get(a) || 0) + n);
+    else if (!byProd && kind === 'fam') AB.set(a + '|' + k, (AB.get(a + '|' + k) || 0) + n);
+    else if (byProd && kind === 'pid' && fam2(k) === 'Progression offer') AB.set(a + '|' + prodLabel(k), (AB.get(a + '|' + prodLabel(k)) || 0) + n); }
+  const arenas = arenasAll.filter(a => (reached.get(a) || 0) >= 100);
+  const PROD_PAL = ['s3', 's1', 's4', 's6', 's5', 's2', 's7', 's8'];
+  const keysA = byProd ? [...new Set([...AB.keys()].map(k => k.split('|')[1]))].sort() : FAM2.filter(f => arenas.some(a => AB.get(a + '|' + f)));
+  const colorA = (k, i) => byProd ? C[PROD_PAL[i % PROD_PAL.length]] : C[FAM2_COLOR[k]];
+  const c2 = card(byProd ? '% of players reaching each arena who bought there — progression offers, by product' : '% of players reaching each arena who bought there, by product family',
+    'Distinct buyers in that arena ÷ players whose highest arena is that arena or higher (arenas with ≥ 100 such players). Bars stack one family (or product) on another, so a player buying two families is in two segments; the line is the share who bought anything in that arena.' + (byProd ? ' Progression offers only: an offer meant to sell every arena should show a bar in every arena.' : ''),
+    'full', [{ v: 'fam', label: 'By family', on: !byProd }, { v: 'prod', label: 'Progression offers by product', on: byProd }]);
+  grid.appendChild(c2);
+  // $ view: revenue in that arena = purchases in the arena × the product's average price (the per-arena cells carry purchases, not cents)
+  const usd = state.iapArenaY === 'usd' || state.iapArenaY === 'ppu', ppu = state.iapArenaY === 'ppu';   // $ view, or $ per player reaching the arena
+  const priceOf = new Map(); for (const p of plist) priceOf.set(p.pid, div(p.priceW, p.txns) || 0);
+  const RV = new Map(), RVany = new Map();
+  if (usd) for (const r of ID.dist) { if (!ok(r) || r[DI.arena] < 1) continue; const a = r[DI.arena], pid = r[DI.pid], v = r[DI.txns] * (priceOf.get(pid) || 0);
+    RVany.set(a, (RVany.get(a) || 0) + v); const kk = byProd ? (fam2(pid) === 'Progression offer' ? prodLabel(pid) : null) : fam2(pid); if (kk) RV.set(a + '|' + kk, (RV.get(a + '|' + kk) || 0) + v); }
+  const den = a => ppu ? reached.get(a) : 1;
+  const anyVals = arenas.map(a => usd ? (div(RVany.get(a) || 0, den(a)) || 0) : (div(ANY.get(a) || 0, reached.get(a)) || 0));
+  const serA = keysA.map((k, i) => ({ name: k, color: colorA(k, i), values: arenas.map(a => usd ? (div(RV.get(a + '|' + k) || 0, den(a)) || 0) : (div(AB.get(a + '|' + k) || 0, reached.get(a)) || 0)) }));
+  const stackMax = Math.max(0, ...arenas.map((a, i) => serA.reduce((s, x) => s + (x.values[i] || 0), 0)));
+  const yT = niceTicks(Math.max(usd ? (ppu ? 0.1 : 10) : 0.05, Math.max(stackMax, ...anyVals) * 1.05), 4), yTop = yT[yT.length - 1] || 0.05;   // one scale for bars and line (same tick set on both axes)
+  const yf = usd ? F.usd : F.pct;
+  const ysel = document.createElement('div'); ysel.className = 'tgl'; ysel.innerHTML = `<div class="row2"><span class="lbl">Show</span><div class="seg" style="font-size:0"><button class="tbtn" style="border:0;border-radius:0" aria-pressed="${!usd}" data-y="pct">% of players who bought</button><button class="tbtn" style="border:0;border-radius:0" aria-pressed="${usd && !ppu}" data-y="usd">Revenue $</button><button class="tbtn" style="border:0;border-radius:0" aria-pressed="${ppu}" data-y="ppu">$ per player reaching the arena</button></div></div>`;
+  c2.insertBefore(ysel, $('.plot', c2));
+  if (usd) { $('h3', c2).textContent = (ppu ? 'Revenue per player reaching each arena' : 'Revenue by arena') + (byProd ? ' — progression offers, by product' : ', by product family'); $('.sub', c2).textContent = 'Purchases made while the player was in that arena × the product\'s average price (all purchases, repeats included)' + (ppu ? ', ÷ players whose highest arena is that arena or higher' : '') + '; the line is all revenue earned in that arena' + (ppu ? ' per player reaching it' : '') + '. Lower panel: how many players reach each arena — the denominator, and the retention story behind the money. Arenas with ≥ 100 players.' + (byProd ? ' Progression offers only.' : ''); }
+  else $('.sub', c2).textContent = $('.sub', c2).textContent.replace('Bars stack', 'Lower panel: how many players reach each arena — the denominator, and the retention story behind the money. Bars stack');
+  const reachA1 = reached.get(arenas[0]) || 1;
+  scrollCombo($('.plot', c2), { cats: arenas, xfmt: a => 'A' + a, h: 280, fit: true, yfmt: yf, y2fmt: yf, yMax: yTop, yLabel: '', y2Label: '',
+    series: serA,
+    line: { name: usd ? (ppu ? 'all purchases, per player reaching' : 'all purchases in this arena') : 'bought anything in this arena', color: C.ink, values: anyVals, max: yTop },
+    sub: { h: 120, values: arenas.map(a => reached.get(a) || 0), max: Math.max(...arenas.map(a => reached.get(a) || 0)), yfmt: v => v >= 1000 ? (v / 1000).toFixed(v >= 10000 ? 0 : 1) + 'k' : F.int(v), label: '', color: () => C.muted, name: 'players reaching this arena', ticks: 4 },
+    extra: i => `<div class="row"><span>share of A${arenas[0]} players still here</span><span>${F.pct(div(reached.get(arenas[i]), reachA1))}</span></div><div class="row"><span>${usd ? (ppu ? 'revenue per player here' : 'revenue in this arena') : 'bought anything here'}</span><span>${usd ? F.usd(anyVals[i]) : F.pct1(anyVals[i])}</span></div>` });
+  legend(c2, [...keysA.map((k, i) => ({ name: k, color: colorA(k, i) })), { name: usd ? 'all purchases (line)' : 'bought anything (line)', color: C.ink }, { name: 'players reaching the arena (lower panel)', color: C.muted }]);
+  c2.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { state.iapArena = b.dataset.t; render(); });
+  c2.querySelectorAll('[data-y]').forEach(b => b.onclick = () => { state.iapArenaY = b.dataset.y; render(); });
+  defsBlock(c2, [['Arena', 'maxarenaindex on the purchase event'], ['Players reaching A', 'from game_finish: players whose highest arena in the window is ≥ A'], ['Buyers', 'distinct players with ≥ 1 purchase of that family / product while in that arena — repeat purchases count once'], ['Revenue $', 'purchases made in that arena × the product\'s average USD price (all purchases, repeats included)'], ['$ per player', 'that revenue ÷ players reaching the arena — where an offer earns most per player it can reach'], ['Lower panel', 'players reaching each arena (highest arena ≥ A); the tooltip gives it as a share of the players who reached the first arena shown'], ['Progression offers by product', 'Arena Unlock, Boost Hero, Champion, Elite one by one — an offer meant to renew every arena should sell in every arena'], ['So what', 'a product that peaks in one arena is triggered there; one that fades while players still churn there is a trigger gap']]);
+  // peer product ladder (renderPeerLadder) is reserved for the Multi Game Comparison tool — the single-game tool shows this game's facts only
+}
+async function renderPeerLadder(host, g) {
+  const peers = REG.games.filter(x => x.slug !== g.slug && x.data && x.data.iap && !x.skip);
+  const c = card('Peer product ladder — families, price points and revenue share, same days-since-install window', 'Castle Rivals against the other games whose IAP data is in the cockpit. Price points = distinct store prices sold in the window; revenue and transaction share within each game. Families missing or thinner than peers are the "add new" candidates; the price points next to them are the pricing reference.', 'full');
+  host.appendChild(c); $('.plot', c).innerHTML = '<div class="status">Loading peer IAP data…</div>';
+  const DS = [{ name: g.name, ds: DATA[g.slug].IAP }];
+  for (const p of peers) { const d = DATA[p.slug] && DATA[p.slug].IAP || await loadJson(`g/${p.slug}/iap.json`); if (d) DS.push({ name: p.name, ds: d }); }
+  const A = DS.map(x => { const a = iapAggregate(x.ds); const fam = {}; for (const p of a.plist) { const f = family(p.pid); const o = fam[f] || (fam[f] = { c: 0, t: 0, prices: new Set(), n: 0 }); o.c += p.c; o.t += p.t; o.n++; const pr = div(p.c / 100, p.t); if (pr) o.prices.add(Math.round(pr * 100) / 100); } return { name: x.name, a, fam }; });
+  const tot = A.map(x => x.a.plist.reduce((s, p) => s + p.c, 0)), totT = A.map(x => x.a.plist.reduce((s, p) => s + p.t, 0));
+  const tb = document.createElement('div'); tb.className = 'tbl';
+  tb.innerHTML = `<table><thead><tr><th>Family</th>${A.map(x => `<th>${x.name}<br><span class="hint">${F.int(x.a.payers)} payers · ${x.a.prodWindow}</span></th>`).join('')}</tr></thead><tbody>` +
+    FAMILIES.map(f => `<tr><td><span style="color:${C[FAM_COLOR[f]]}">■</span> ${f}</td>${A.map((x, i) => { const o = x.fam[f]; if (!o) return '<td style="color:var(--muted)">—</td>'; const ps = [...o.prices].sort((a, b) => a - b); return `<td><b>${F.pct(div(o.c, tot[i]))}</b> of revenue · ${F.pct(div(o.t, totT[i]))} of txns<br><span class="hint">${o.n} product${o.n > 1 ? 's' : ''} · ${ps.length > 6 ? ps.slice(0, 3).map(F.usd).join(' ') + ' … ' + ps.slice(-2).map(F.usd).join(' ') : ps.map(F.usd).join(' · ')}</span></td>`; }).join('')}</tr>`).join('') + '</tbody></table>';
+  $('.plot', c).replaceWith(tb); $('.legend', c).remove();
+  defsBlock(c, [['Window', 'the Days-since-install window above, applied to every game; cohorts old enough to have lived it'], ['Families', 'product ids classified by name (see "What they buy")'], ['Not shown', 'buyers per family (the product file carries transactions and revenue, not distinct buyers) — the scorecard above has it for the selected game']]);
+  foldText();
 }
 
 // ---------- filters
@@ -2027,7 +2205,7 @@ function initRange() {
 
 // ---------- saved default view (per browser; the artifact is private, so this is the viewer's own default)
 const VIEW_KEY = 'cockpit.view';
-const VIEW_FIELDS = ['mode', 'retView', 'games', 'platform', 'country', 'network', 'view', 'lastx', 'rangeMode', 'from', 'to', 'win', 'tblView', 'day', 'survMode', 'arenaMode', 'retDef', 'perfMode', 'ltvMode', 'dauMode', 'payMode', 'mz', 'convSrc', 'convView', 'repView', 'sovMode', 'tab', 'ptab', 'mtab', 'unitLo', 'unitHi', 'ecoPay', 'ecoAxis', 'ecoCur', 'csCp', 'versions'];
+const VIEW_FIELDS = ['mode', 'retView', 'games', 'platform', 'country', 'network', 'view', 'lastx', 'rangeMode', 'from', 'to', 'win', 'tblView', 'day', 'survMode', 'arenaMode', 'retDef', 'perfMode', 'ltvMode', 'dauMode', 'payMode', 'mz', 'convSrc', 'convView', 'repView', 'sovMode', 'tab', 'ptab', 'mtab', 'unitLo', 'unitHi', 'ecoPay', 'ecoAxis', 'ecoCur', 'csCp', 'versions', 'iapArena', 'iapArenaY', 'iapScore'];
 function loadView() { try { return JSON.parse(localStorage.getItem(VIEW_KEY) || 'null'); } catch (e) { return null; } }
 function saveView() {
   const v = {}; for (const k of VIEW_FIELDS) v[k] = JSON.parse(JSON.stringify(state[k] === undefined ? null : state[k]));
@@ -2077,7 +2255,9 @@ async function deriveKey(pass, salt) {
 async function decryptText(b64, pass) {
   const raw = b64d(b64.trim()); const salt = raw.slice(0, 16), iv = raw.slice(16, 28), ct = raw.slice(28);
   const key = await deriveKey(pass, salt);
-  return new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct));
+  const plain = new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct));
+  if (plain[0] === 0x1f && plain[1] === 0x8b) return new Response(new Blob([plain]).stream().pipeThrough(new DecompressionStream('gzip'))).text();   // gzip-then-encrypt builds
+  return new TextDecoder().decode(plain);
 }
 async function fetchJsonMaybeEnc(path, bust) {
   const q = bust ? '?t=' + Date.now() : '';
@@ -2109,14 +2289,14 @@ async function loadJson(path, bust) {
 }
 async function loadGameData(slug, bust) {
   const g = REG.games.find(x => x.slug === slug); if (!g) return null;
-  const [d, iap, dy, pf, vs, un, ec, cs] = await Promise.all([g.data && g.data.matches ? loadJson(`g/${slug}/matches.json`, bust) : null, g.data && g.data.iap ? loadJson(`g/${slug}/iap.json`, bust) : null, g.data && g.data.daily ? loadJson(`g/${slug}/daily.json`, bust) : null, g.data && g.data.profit ? loadJson(`g/${slug}/profit.json`, bust) : null, g.data && g.data.daily && g.events !== false ? loadJson(`g/${slug}/versions.json`, bust) : null, g.data && g.data.units ? loadJson(`g/${slug}/units.json`, bust) : null, g.data && g.data.econ ? loadJson(`g/${slug}/econ.json`, bust) : null, g.data && g.data.churnseg ? loadJson(`g/${slug}/churnseg.json`, bust) : null]);
+  const [d, iap, dy, pf, vs, un, ec, cs, idet] = await Promise.all([g.data && g.data.matches ? loadJson(`g/${slug}/matches.json`, bust) : null, g.data && g.data.iap ? loadJson(`g/${slug}/iap.json`, bust) : null, g.data && g.data.daily ? loadJson(`g/${slug}/daily.json`, bust) : null, g.data && g.data.profit ? loadJson(`g/${slug}/profit.json`, bust) : null, g.data && g.data.daily && g.events !== false ? loadJson(`g/${slug}/versions.json`, bust) : null, g.data && g.data.units ? loadJson(`g/${slug}/units.json`, bust) : null, g.data && g.data.econ ? loadJson(`g/${slug}/econ.json`, bust) : null, g.data && g.data.churnseg ? loadJson(`g/${slug}/churnseg.json`, bust) : null, g.data && g.data.iapdetail ? loadJson(`g/${slug}/iapdetail.json`, bust) : null]);
   let rows = [];
   if (d) { const c = d.meta.cols; const ix = {}; c.forEach((k, i) => ix[k] = i); rows = d.rows.map(r => ({ d: r[ix.d], p: r[ix.p], c: r[ix.c], a: r[ix.arena], n: r[ix.n], u: r[ix.users], w: r[ix.wins], l: r[ix.last], ll: r[ix.last_loss] })); }
   let dyRows = [];
   if (dy) { const c = dy.meta.cols; const ix = {}; c.forEach((k, i) => ix[k] = i); dyRows = dy.rows.map(r => { const o = {}; c.forEach((k, i) => o[k] = r[i]); return o; }); }
   let pfRows = [];
   if (pf) { const c = pf.meta.cols; pfRows = pf.rows.map(r => { const o = {}; c.forEach((k, i) => o[k] = r[i]); return o; }); }
-  DATA[slug] = { D: d, ROWS: rows, IAP: iap, DY: dy, DYROWS: dyRows, PF: pf, PFROWS: pfRows, VS: vs, UN: un, EC: ec, CS: cs };
+  DATA[slug] = { D: d, ROWS: rows, IAP: iap, DY: dy, DYROWS: dyRows, PF: pf, PFROWS: pfRows, VS: vs, UN: un, EC: ec, CS: cs, ID: idet };
   return DATA[slug];
 }
 (ENC ? askPassphrase() : fetch('games.json', { cache: 'no-store' }).then(r => r.json())).then(async reg => {
@@ -2148,3 +2328,5 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => REG 
 })();
 
 </script>
+
+</html>
